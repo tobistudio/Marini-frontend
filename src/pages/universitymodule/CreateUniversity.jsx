@@ -20,7 +20,7 @@ export function CreateUniversity() {
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isViewMode, setIsViewMode] = useState(true);
-  const [preview, setPreview] = useState("");
+  // const [preview, setPreview] = useState("");
   const universitieData = useSelector(
     (state) => state?.universitiesReducer?.viewsUniversity
   );
@@ -169,38 +169,7 @@ export function CreateUniversity() {
     // navigate("university")
   };
 
-  let [universityImg, setuniversityImg] = useState(
-    preview ||
-      (formValues?.logo && `${ENV.imageUrl}${formValues?.logo}`) ||
-      universityLogo
-  );
-  useEffect(() => {
-    setuniversityImg(
-      preview ||
-        (formValues?.logo && `${ENV.imageUrl}${formValues?.logo}`) ||
-        universityLogo
-    );
-  }, [formValues]);
-  useEffect(() => {
-    fetch(universityImg, { mode: "no-cors" })
-      .then((res) => {
-        if (res.status === 200) {
-          setuniversityImg(res.url);
-
-          // console.log("URURURURURLL", res.url);
-        } else {
-          setuniversityImg("/public/img/universityLogo.svg");
-        }
-        return res.text();
-      })
-      .then((data) => {
-        return data;
-      })
-      .catch((err) => {
-        // console.log("The Errrrooorrr", err);
-        return setuniversityImg("/public/img/universityLogo.svg");
-      });
-  }, [formValues?.logo && `${ENV.imageUrl}${formValues?.logo}`, universityImg]);
+  console.log(formValues);
 
   return (
     <>
@@ -215,7 +184,16 @@ export function CreateUniversity() {
                 : params.action == 2
                 ? "Edit University"
                 : "Create University"}
+              <p className=" font text-base text-[#9898A3]">
+                {/* Create or edit university */}
+                {params.action == 1
+                  ? "view University"
+                  : params.action == 2
+                  ? "Edit University"
+                  : "create University"}
+              </p>
             </p>
+
             {/* <NavLink to="university"> */}
             <Button className="rounded-[15px]  bg-[#280559]">
               <div className="flex flex-row items-center justify-center">
@@ -228,14 +206,6 @@ export function CreateUniversity() {
             {/* </NavLink> */}
           </div>
         </div>
-        <p className=" font text-base text-[#9898A3]">
-          {/* Create or edit university */}
-          {params.action == 1
-            ? "view University"
-            : params.action == 2
-            ? "Edit University"
-            : "create University"}
-        </p>
       </div>
       <form onSubmit={handleSubmit}>
         <div className="mr-8 rounded-[34px] bg-white p-[39px]">
@@ -251,7 +221,14 @@ export function CreateUniversity() {
                 id="university-logo"
                 className="width:156px mb-3 rounded-2xl"
                 style={{ width: "156px" }}
-                src={universityImg}
+                src={
+                  formValues?.logo
+                    ? `${ENV.imageUrl}${formValues?.logo}`
+                    : universityLogo
+                }
+                onError={() => {
+                  this.src = universityLogo;
+                }}
                 // src={
                 //   preview ||
                 //   (formValues?.logo && `${ENV.imageUrl}${formValues?.logo}`) ||
