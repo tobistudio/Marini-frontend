@@ -525,7 +525,18 @@ export function User() {
                 <label className="mb-2 block text-sm font-semibold text-[#333333]">
                   Position
                 </label>
-                <select
+                {/* Anasite - Edits: Turn Position input into "text" instead of "select" & Adding Calender to "Date" Input */}
+                <input
+                  type="text"
+                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="Position"
+                  required
+                  name="Position"
+                  defaultValue={formValues.position}
+                  onChange={handleChange}
+                  disabled={isViewMode}
+                />
+                {/* <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   name="position"
                   defaultValue={formValues.position}
@@ -536,14 +547,14 @@ export function User() {
                   <option>First Position</option>
                   <option>Second Position</option>
                   <option>Third Position</option>
-                </select>
+                </select> */}
               </div>
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#333333]">
                   Date
                 </label>
                 <input
-                  type="text"
+                  type="date"
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="DD/MM/YYYY"
                   required
@@ -551,6 +562,8 @@ export function User() {
                   defaultValue={formValues.date}
                   onChange={handleChange}
                   disabled={isViewMode}
+                  min="1997-01-01"
+                  max="2030-12-31"
                 />
               </div>
               <div>
@@ -569,16 +582,22 @@ export function User() {
             </div>
 
             {/* <NavLink to=""> */}
-            <Button className="rounded-[15px]  bg-[#280559]">
+            <Button
+              className="rounded-[15px]  bg-[#280559]"
+              type="submit"
+              disabled={isViewMode}
+            >
               <div className="flex flex-row items-center justify-center">
                 <img src={saveIcon} alt="..." />
-                <button
+                {/* <button
                   className="p-1 px-[11px] text-base font-medium normal-case text-white"
                   type="submit"
                   disabled={isViewMode}
-                >
+                > */}
+                <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
                   Save Changes
-                </button>
+                </p>
+                {/* </button> */}
               </div>
             </Button>
           </form>

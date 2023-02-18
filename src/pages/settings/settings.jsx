@@ -29,11 +29,9 @@ export function Settings() {
     (state) => state?.universitiesReducer?.activities
   );
 
-  
   const pagination = useSelector(
     (state) => state?.universitiesReducer?.activities?.data?.pagination
   );
-
 
   console.log("activities array in logactivities module ==>", activitiesData);
   return (
@@ -134,12 +132,19 @@ export function Settings() {
                       <Checkbox />
                     </td>
                     <td className="whitespace-nowrap py-4 text-lg font-normal text-[#333]">
-                      {/* {date} */}
-                      {ele?.createdAt}
+                      {/* {date} Anasite - Edits: Put Date on Time and Vice Versa */}
+                      {ele?.createdAt
+                        ? new Date(ele.createdAt).toLocaleDateString("en-GB")
+                        : ""}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-lg font-normal text-[#333]">
                       {/* {time} */}
-                      {ele?.createdAt}
+                      {ele?.createdAt
+                        ? new Date(ele.createdAt).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : ""}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-lg text-[#333]">
                       {ele?.action}
@@ -160,7 +165,6 @@ export function Settings() {
           </div>
 
           <Paginate pagination={pagination} method={listActivities} />
-
         </div>
       </div>
     </div>
