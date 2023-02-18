@@ -24,10 +24,10 @@ export function CreateUniversity() {
   const universitieData = useSelector(
     (state) => state?.universitiesReducer?.viewsUniversity
   );
-  console.log(
-    "university data for view form in view Universities component",
-    universitieData
-  );
+  // console.log(
+  //   "university data for view form in view Universities component",
+  //   universitieData
+  // );
 
   const initialValues = {
     name: "",
@@ -88,7 +88,7 @@ export function CreateUniversity() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log("formValues =======>", formValues);
+    // console.log("formValues =======>", formValues);
     setFormValues({ ...formValues, [name]: value });
   };
   const handeCampusChange = (e) => {
@@ -98,12 +98,12 @@ export function CreateUniversity() {
     let campusVal = campusValues;
     campusVal[index][key] = value;
 
-    console.log("campusVal", key, index, campusVal);
+    // console.log("campusVal", key, index, campusVal);
     setCampusValues([...campusVal]);
   };
 
   const handlefileChange = (file) => {
-    console.log("file image", file);
+    // console.log("file image", file);
     setFile(file);
 
     let reader = new FileReader();
@@ -119,7 +119,7 @@ export function CreateUniversity() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log("handle submit", formValues);
+    // console.log("handle submit", formValues);
     const {
       name,
       type,
@@ -174,20 +174,20 @@ export function CreateUniversity() {
       (formValues?.logo && `${ENV.imageUrl}${formValues?.logo}`) ||
       universityLogo
   );
-  console.log(
-    "URURURURURLL",
-    preview ||
-      (formValues?.logo && `${ENV.imageUrl}${formValues?.logo}`) ||
-      universityLogo
-  );
-  // setuniversityImg("/public/img/universityLogo.svg");
+  useEffect(() => {
+    setuniversityImg(
+      preview ||
+        (formValues?.logo && `${ENV.imageUrl}${formValues?.logo}`) ||
+        universityLogo
+    );
+  }, [formValues]);
   useEffect(() => {
     fetch(universityImg, { mode: "no-cors" })
       .then((res) => {
         if (res.status === 200) {
           setuniversityImg(res.url);
 
-          console.log("URURURURURLL", res.url);
+          // console.log("URURURURURLL", res.url);
         } else {
           setuniversityImg("/public/img/universityLogo.svg");
         }
@@ -197,21 +197,16 @@ export function CreateUniversity() {
         return data;
       })
       .catch((err) => {
-        console.log("The Errrrooorrr", err);
+        // console.log("The Errrrooorrr", err);
         return setuniversityImg("/public/img/universityLogo.svg");
       });
-  }, [
-    preview ||
-      (formValues?.logo && `${ENV.imageUrl}${formValues?.logo}`) ||
-      universityLogo,
-    universityImg,
-  ]);
+  }, [formValues?.logo && `${ENV.imageUrl}${formValues?.logo}`, universityImg]);
 
   return (
     <>
       {isLoading && <FullPageLoader />}
       <div className="mt-12 w-full bg-[#E8E9EB] font-display">
-        {console.log("campusValues", campusValues)}
+        {/* {console.log("campusValues", campusValues)} */}
         <div className="my-10">
           <div className="mr-8 flex items-center justify-between">
             <p className=" text-4xl font-semibold text-[#280559]">
