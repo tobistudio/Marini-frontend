@@ -166,7 +166,7 @@ export function Commission() {
                 {Commission_voice_data.map(
                   ({
                     ID,
-                    Date,
+                    ItemDate,
                     Recipient,
                     Email,
                     Service,
@@ -182,7 +182,9 @@ export function Commission() {
                         {ID}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-lg font-normal text-[#333]">
-                        {Date}
+                        {new Date(ItemDate).toLocaleDateString(undefined, {
+                          dateStyle: "medium",
+                        })}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-lg font-medium text-[#333]">
                         {Recipient}

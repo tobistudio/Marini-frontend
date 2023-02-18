@@ -215,7 +215,12 @@ export function Leads() {
                             {/* 2 */}
                           </td>
                           <td className="whitespace-nowrap py-4 text-lg font-normal text-[#333]">
-                            {ele?.createdAt}
+                            {new Date(ele?.createdAt).toLocaleDateString(
+                              undefined,
+                              {
+                                dateStyle: "medium",
+                              }
+                            )}
                           </td>
                           <td className="whitespace-nowrap px-6 py-4 text-lg font-medium text-[#333]">
                             {ele?.name}
