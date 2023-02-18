@@ -434,9 +434,11 @@ export function User() {
       >
         <div className="mb-5">
           <p className=" mb-2 text-4xl font-semibold text-[#280559]">
-            Add New User
+            {isViewMode ? "View User" : "Add New User"}
           </p>
-          <p className=" font text-base text-[#9898A3]">Add new user</p>
+          <p className=" font text-base text-[#9898A3]">
+            {isViewMode ? "View User" : "Add New User"}
+          </p>
         </div>
         <div className="rounded-[34px] bg-white p-[39px]">
           <p className="mb-8 text-2xl font-semibold text-[#333333]">
@@ -566,43 +568,62 @@ export function User() {
                   max="2030-12-31"
                 />
               </div>
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#333333]">
-                  Add Field
-                </label>
-                <button
-                  onClick={() => setOpenModal(true)}
-                  type="button"
-                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                >
-                  Click to add more field
-                </button>
-                <AddField open={openModal} close={() => setOpenModal(false)} />
-              </div>
+              {isViewMode ? (
+                ""
+              ) : (
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-[#333333]">
+                    Add Field
+                  </label>
+                  <button
+                    onClick={() => setOpenModal(true)}
+                    type="button"
+                    className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                  >
+                    Click to add more field
+                  </button>
+                  <AddField
+                    open={openModal}
+                    close={() => setOpenModal(false)}
+                  />
+                </div>
+              )}
             </div>
 
-            {/* <NavLink to=""> */}
-            <Button
-              className="rounded-[15px]  bg-[#280559]"
-              type="submit"
-              disabled={isViewMode}
-            >
-              <div className="flex flex-row items-center justify-center">
-                <img src={saveIcon} alt="..." />
-                {/* <button
+            {isViewMode ? (
+              <Button onClick={() => navigate(-1)}>
+                <div className="flex flex-row items-center justify-center">
+                  <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                    Back
+                  </p>
+                </div>
+              </Button>
+            ) : (
+              <>
+                {/* <NavLink to=""> */}
+                <Button
+                  className="rounded-[15px]  bg-[#280559]"
+                  type="submit"
+                  disabled={isViewMode}
+                >
+                  <div className="flex flex-row items-center justify-center">
+                    <img src={saveIcon} alt="..." />
+                    {/* <button
                   className="p-1 px-[11px] text-base font-medium normal-case text-white"
                   type="submit"
                   disabled={isViewMode}
                 > */}
-                <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
-                  Save Changes
-                </p>
-                {/* </button> */}
-              </div>
-            </Button>
+                    <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                      Save Changes
+                    </p>
+                    {/* </button> */}
+                  </div>
+                </Button>
+                {/* </NavLink> */}
+              </>
+            )}
           </form>
         </div>
-        {/* </NavLink> */}
       </div>
     </>
   );

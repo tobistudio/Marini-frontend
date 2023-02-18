@@ -195,14 +195,24 @@ export function CreateUniversity() {
             </p>
 
             {/* <NavLink to="university"> */}
-            <Button className="rounded-[15px]  bg-[#280559]">
-              <div className="flex flex-row items-center justify-center">
-                <img src={saveIcon} alt="..." />
-                <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
-                  Save Changes
-                </p>
-              </div>
-            </Button>
+            {isViewMode ? (
+              <Button onClick={() => navigate(-1)}>
+                <div className="flex flex-row items-center justify-center">
+                  <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                    Back
+                  </p>
+                </div>
+              </Button>
+            ) : (
+              <Button className="rounded-[15px]  bg-[#280559]">
+                <div className="flex flex-row items-center justify-center">
+                  <img src={saveIcon} alt="..." />
+                  <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                    Save Changes
+                  </p>
+                </div>
+              </Button>
+            )}
             {/* </NavLink> */}
           </div>
         </div>
@@ -226,8 +236,9 @@ export function CreateUniversity() {
                     ? `${ENV.imageUrl}${formValues?.logo}`
                     : universityLogo
                 }
-                onError={() => {
-                  this.src = universityLogo;
+                onError={(e) => {
+                  console.log("aowiefoafmn", e.target, "ojoij", this);
+                  e.target.src = universityLogo;
                 }}
                 // src={
                 //   preview ||
@@ -236,8 +247,9 @@ export function CreateUniversity() {
                 // }
                 alt="..."
               />
+              {/* Anasite - Edits: removeing the "upload file" */}
               {isViewMode ? (
-                "Upload Logo"
+                ""
               ) : (
                 <FileUploader
                   multiple={true}
@@ -350,17 +362,21 @@ export function CreateUniversity() {
                 required
               />
             </div>
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-[#333333]">
-                Add Field
-              </label>
-              <button
-                type="button"
-                className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-              >
-                Click to add more field
-              </button>
-            </div>
+            {isViewMode ? (
+              ""
+            ) : (
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-[#333333]">
+                  Add Field
+                </label>
+                <button
+                  type="button"
+                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                >
+                  Click to add more field
+                </button>
+              </div>
+            )}
           </div>
           {/* </form> */}
           {/* </div> */}
@@ -446,17 +462,21 @@ export function CreateUniversity() {
                   required
                 />
               </div>
-              <div>
-                <label className="mb-2 block text-sm font-semibold">
-                  &nbsp;
-                </label>
-                <button
-                  type="button"
-                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                >
-                  Click to add more field
-                </button>
-              </div>
+              {isViewMode ? (
+                ""
+              ) : (
+                <div>
+                  <label className="mb-2 block text-sm font-semibold">
+                    &nbsp;
+                  </label>
+                  <button
+                    type="button"
+                    className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                  >
+                    Click to add more field
+                  </button>
+                </div>
+              )}
             </div>
             {/* </form> */}
           </div>
@@ -541,30 +561,38 @@ export function CreateUniversity() {
                   required
                 />
               </div>
-              <div>
-                <label className="mb-2 block text-sm font-semibold">
-                  &nbsp;
-                </label>
-                <button
-                  type="button"
-                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                >
-                  Click to add more field
-                </button>
-              </div>
+              {isViewMode ? (
+                ""
+              ) : (
+                <div>
+                  <label className="mb-2 block text-sm font-semibold">
+                    &nbsp;
+                  </label>
+                  <button
+                    type="button"
+                    className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                  >
+                    Click to add more field
+                  </button>
+                </div>
+              )}
             </div>
           </div>
-          <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]">
-            <p className="mb-8 text-2xl font-semibold text-[#333333]">
-              Add Campus
-            </p>
-            <button
-              type="button"
-              className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-            >
-              Click to add more campus
-            </button>
-          </div>
+          {isViewMode ? (
+            ""
+          ) : (
+            <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]">
+              <p className="mb-8 text-2xl font-semibold text-[#333333]">
+                Add Campus
+              </p>
+              <button
+                type="button"
+                className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+              >
+                Click to add more campus
+              </button>
+            </div>
+          )}
           <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]">
             <p className="mb-8 text-2xl font-semibold text-[#333333]">
               Fees and Commissions
@@ -647,32 +675,46 @@ export function CreateUniversity() {
                   <option value={"_60days"}>60 Days</option>
                 </select>
               </div>
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#333333]">
-                  Add More Field
-                </label>
-                <button
-                  type="button"
-                  className="w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                >
-                  Click to add more field
-                </button>
-              </div>
+              {isViewMode ? (
+                ""
+              ) : (
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-[#333333]">
+                    Add More Field
+                  </label>
+                  <button
+                    type="button"
+                    className="w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                  >
+                    Click to add more field
+                  </button>
+                </div>
+              )}
             </div>
           </div>
           {/* <NavLink to="university"> */}
-          <Button
-            className="rounded-[15px]  bg-[#280559]"
-            type="submit"
-            disabled={isViewMode}
-          >
-            <div className="flex flex-row items-center justify-center">
-              <img src={saveIcon} alt="..." />
-              <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
-                Save Changes
-              </p>
-            </div>
-          </Button>
+          {isViewMode ? (
+            <Button onClick={() => navigate(-1)}>
+              <div className="flex flex-row items-center justify-center">
+                <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                  Back
+                </p>
+              </div>
+            </Button>
+          ) : (
+            <Button
+              className="rounded-[15px]  bg-[#280559]"
+              type="submit"
+              disabled={isViewMode}
+            >
+              <div className="flex flex-row items-center justify-center">
+                <img src={saveIcon} alt="..." />
+                <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                  Save Changes
+                </p>
+              </div>
+            </Button>
+          )}
         </div>
       </form>
       {/* </NavLink> */}

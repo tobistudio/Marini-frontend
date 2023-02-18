@@ -351,10 +351,13 @@ export function AddNewApplication() {
                       `${ENV.imageUrl}${formValues?.image}`) ||
                     universityLogo
                   }
+                  onError={(e) => {
+                    e.target.src = universityLogo;
+                  }}
                   alt="..."
                 />
                 {isViewMode ? (
-                  "Upload"
+                  ""
                 ) : (
                   <FileUploader
                     multiple={true}
@@ -392,17 +395,21 @@ export function AddNewApplication() {
                   required
                 />
               </div>
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#333333]">
-                  Add Field
-                </label>
-                <button
-                  type="button"
-                  class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                >
-                  Click to add more field
-                </button>
-              </div>
+              {isViewMode ? (
+                ""
+              ) : (
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-[#333333]">
+                    Add Field
+                  </label>
+                  <button
+                    type="button"
+                    class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                  >
+                    Click to add more field
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -703,99 +710,127 @@ export function AddNewApplication() {
                   <option>Status done</option>
                 </select>
               </div>
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#333333]">
-                  Add Field
-                </label>
-                <button
-                  type="button"
-                  class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                >
-                  Click to add more field
-                </button>
-              </div>
+              {isViewMode ? (
+                ""
+              ) : (
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-[#333333]">
+                    Add Field
+                  </label>
+                  <button
+                    type="button"
+                    class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                  >
+                    Click to add more field
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="my-[30px] rounded-[34px] bg-white p-[39px] ">
-            <p className="mb-8 text-2xl font-semibold text-[#333333]">
-              Upload Document
-            </p>
-            <div className="grid grid-cols-1 gap-[20px] xl:grid-cols-2">
-              <img
-                className="h-full w-auto rounded-lg object-cover"
-                src={upload}
-                alt="..."
-                // src={
-                //   preview ||
-                //   (formValues?.image &&
-                //     `${ENV.imageUrl}${formValues?.image}`) ||
-                //   universityLogo
-                // }
-              />
-
-              <div className="w-full items-center">
-                <div className=" border-b-4 border-deep-purple-900">
-                  <p className=" text-sm font-semibold text-[#92929D]">
-                    Uploading - 3/3 files
-                  </p>
-                  <div className=" relative my-7 flex flex-row items-center justify-between rounded-lg p-3 outline outline-1 outline-[#E3E3E3]">
-                    <p className="text-sm text-black ">your-file-here.PDF</p>
-                    <button>
-                      <img className="flex justify-end" src={esc} alt="..." />
-                    </button>
-                  </div>
-                </div>
-                <div className="my-5">
-                  <p className=" text-sm font-semibold text-[#92929D]">
-                    Uploading{" "}
-                  </p>
-                  <div className="my-7 flex flex-row items-center justify-between rounded-lg p-3 outline outline-1 outline-[#11AF22]">
-                    <p className="text-xs text-black ">document-name.PDF</p>
-                  </div>
-                  <div className="my-7 flex flex-row items-center justify-between rounded-lg p-3 outline outline-1 outline-[#11AF22]">
-                    <p className="text-xs text-black ">
-                      image-name-goes-here.png
-                    </p>
-                  </div>
-                </div>
-                <Button className="rounded-[15px]  bg-[#280559]">
-                  <div className="flex flex-row items-center justify-center">
-                    <img src={up} alt="..." />
-                    <FileUploader
-                      multiple={true}
-                      handleChange={handlefileChange}
-                      name="file"
-                      types={fileTypes}
-                    >
-                      <button
-                        className="p-1 px-[11px] text-base font-medium normal-case text-white"
-                        disabled={isViewMode}
-                      >
-                        Upload Document
-                      </button>
-                    </FileUploader>
-                  </div>
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* <NavLink to="leads"> */}
-          <Button
-            className="rounded-[15px]  bg-[#280559]"
-            type="submit"
-            disabled={isViewMode}
-          >
-            <div className="flex flex-row items-center justify-center">
-              <img src={saveIcon} alt="..." />
-              <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
-                Save Changes
+          {isViewMode ? (
+            ""
+          ) : (
+            <div className="my-[30px] rounded-[34px] bg-white p-[39px] ">
+              <p className="mb-8 text-2xl font-semibold text-[#333333]">
+                Upload Document
               </p>
+              <div className="grid grid-cols-1 gap-[20px] xl:grid-cols-2">
+                <img
+                  className="h-full w-auto rounded-lg object-cover"
+                  src={upload}
+                  alt="..."
+                  // src={
+                  //   preview ||
+                  //   (formValues?.image &&
+                  //     `${ENV.imageUrl}${formValues?.image}`) ||
+                  //   universityLogo
+                  // }
+                />
+
+                <div className="w-full items-center">
+                  <div className=" border-b-4 border-deep-purple-900">
+                    <p className=" text-sm font-semibold text-[#92929D]">
+                      Uploading - 3/3 files
+                    </p>
+                    <div className=" relative my-7 flex flex-row items-center justify-between rounded-lg p-3 outline outline-1 outline-[#E3E3E3]">
+                      <p className="text-sm text-black ">your-file-here.PDF</p>
+                      <button>
+                        <img className="flex justify-end" src={esc} alt="..." />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="my-5">
+                    {isViewMode ? (
+                      ""
+                    ) : (
+                      <p className=" text-sm font-semibold text-[#92929D]">
+                        Uploading{" "}
+                      </p>
+                    )}
+                    <div className="my-7 flex flex-row items-center justify-between rounded-lg p-3 outline outline-1 outline-[#11AF22]">
+                      <p className="text-xs text-black ">document-name.PDF</p>
+                    </div>
+                    <div className="my-7 flex flex-row items-center justify-between rounded-lg p-3 outline outline-1 outline-[#11AF22]">
+                      <p className="text-xs text-black ">
+                        image-name-goes-here.png
+                      </p>
+                    </div>
+                  </div>
+                  {isViewMode ? (
+                    ""
+                  ) : (
+                    <Button className="rounded-[15px]  bg-[#280559]">
+                      <div className="flex flex-row items-center justify-center">
+                        <img src={up} alt="..." />
+
+                        <FileUploader
+                          multiple={true}
+                          handleChange={handlefileChange}
+                          name="file"
+                          types={fileTypes}
+                        >
+                          <button
+                            className="p-1 px-[11px] text-base font-medium normal-case text-white"
+                            disabled={isViewMode}
+                          >
+                            Upload Document
+                          </button>
+                        </FileUploader>
+                      </div>
+                    </Button>
+                  )}
+                </div>
+              </div>
             </div>
-          </Button>
+          )}
+          {isViewMode ? (
+            <Button onClick={() => navigate(-1)}>
+              <div className="flex flex-row items-center justify-center">
+                <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                  Back
+                </p>
+              </div>
+            </Button>
+          ) : (
+            <>
+              {/* <NavLink to="leads"> */}
+              <Button
+                className="rounded-[15px]  bg-[#280559]"
+                type="submit"
+                disabled={isViewMode}
+              >
+                <div className="flex flex-row items-center justify-center">
+                  <img src={saveIcon} alt="..." />
+                  <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                    Save Changes
+                  </p>
+                </div>
+              </Button>
+            </>
+          )}
+          {/* </NavLink> */}
         </form>
-        {/* </NavLink> */}
       </div>
     </>
   );

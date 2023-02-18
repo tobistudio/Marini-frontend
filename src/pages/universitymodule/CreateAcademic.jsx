@@ -604,16 +604,26 @@ const CreateAcademic = () => {
                 ? "Edit Programme"
                 : "Create Programme"}
             </p>
-            <NavLink to="university">
-              <Button className="rounded-[15px]  bg-[#280559]">
+            {isViewMode ? (
+              <Button onClick={() => navigate(-1)}>
                 <div className="flex flex-row items-center justify-center">
-                  <img src={saveIcon} alt="..." />
                   <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
-                    Save Changes
+                    Back
                   </p>
                 </div>
               </Button>
-            </NavLink>
+            ) : (
+              <NavLink to="university">
+                <Button className="rounded-[15px]  bg-[#280559]">
+                  <div className="flex flex-row items-center justify-center">
+                    <img src={saveIcon} alt="..." />
+                    <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                      Save Changes
+                    </p>
+                  </div>
+                </Button>
+              </NavLink>
+            )}
           </div>
           <p className=" font text-base text-[#9898A3]">
             {/* Create or edit program */}
@@ -852,17 +862,21 @@ const CreateAcademic = () => {
                   </div>
                   <p className="text-red-500">{formErrors.otherFee}</p>
                 </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium">
-                    Add Field
-                  </label>
-                  <button
-                    type="button"
-                    class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                  >
-                    Click to add more field
-                  </button>
-                </div>
+                {isViewMode ? (
+                  ""
+                ) : (
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">
+                      Add Field
+                    </label>
+                    <button
+                      type="button"
+                      class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                    >
+                      Click to add more field
+                    </button>
+                  </div>
+                )}
               </div>
               {/* </form> */}
             </div>
@@ -920,44 +934,62 @@ const CreateAcademic = () => {
                   ></textarea>
                   <p className="text-red-500">{formErrors.engRequirement}</p>
                 </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium">
-                    Add Field
-                  </label>
-                  <button
-                    type="button"
-                    class="block w-3/5 rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                  >
-                    Click to add more field
-                  </button>
-                </div>
+                {isViewMode ? (
+                  ""
+                ) : (
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">
+                      Add Field
+                    </label>
+                    <button
+                      type="button"
+                      class="block w-3/5 rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                    >
+                      Click to add more field
+                    </button>
+                  </div>
+                )}
               </div>
               {/* </form> */}
             </div>
-            <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]">
-              <p className="mb-8 text-2xl font-semibold text-[#333333]">
-                Add Campus
-              </p>
-              <button
-                type="button"
-                class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-              >
-                Click to add more campus
-              </button>
-            </div>
-            {/* <NavLink to="university"> */}
-            <Button
-              className="rounded-[15px]  bg-[#280559]"
-              type="submit"
-              disabled={isViewMode}
-            >
-              <div className="flex flex-row items-center justify-center px-[33px] py-[10px]">
-                <img src={saveIcon} alt="..." />
-                <p className="px-[11px] text-base font-medium normal-case text-white">
-                  Save Changess
+            {isViewMode ? (
+              ""
+            ) : (
+              <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]">
+                <p className="mb-8 text-2xl font-semibold text-[#333333]">
+                  Add Campus
                 </p>
+                <button
+                  type="button"
+                  class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                >
+                  Click to add more campus
+                </button>
               </div>
-            </Button>
+            )}
+            {/* <NavLink to="university"> */}
+            {isViewMode ? (
+              <Button onClick={() => navigate(-1)}>
+                <div className="flex flex-row items-center justify-center">
+                  <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                    Back
+                  </p>
+                </div>
+              </Button>
+            ) : (
+              <Button
+                className="rounded-[15px]  bg-[#280559]"
+                type="submit"
+                disabled={isViewMode}
+              >
+                <div className="flex flex-row items-center justify-center px-[33px] py-[10px]">
+                  <img src={saveIcon} alt="..." />
+                  <p className="px-[11px] text-base font-medium normal-case text-white">
+                    Save Changess
+                  </p>
+                </div>
+              </Button>
+            )}
           </div>
         </form>
         {/* </NavLink> */}

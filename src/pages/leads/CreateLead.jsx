@@ -26,15 +26,15 @@
 //   const only_numbers = unique_id.replace(/[^0-9]/g, "");
 //   const first_9_digits = only_numbers.substring(0, 9);
 
-//   // console.log(first_9_digits);
+// console.log(first_9_digits);
 //   // const uuidFixedLength = unique_id.substring(0, 9);
 
-//   // console.log("unique id ==>", uuidFixedLength);
+// console.log("unique id ==>", uuidFixedLength);
 
 //   const leadData = useSelector(
 //     (state) => state?.universitiesReducer?.viewLeads
 //   );
-//   console.log(
+// console.log(
 //     "lead data for update,view,delete in create lead compo",
 //     leadData
 //   );
@@ -88,7 +88,7 @@
 //   // viewLeads
 
 //   const handlefileChange = (file) => {
-//     console.log("file", file);
+// console.log("file", file);
 //     setFile(file);
 //     //
 //     let reader = new FileReader();
@@ -103,14 +103,14 @@
 
 //   const handleChange = (e) => {
 //     const { name, value } = e.target;
-//     console.log("formValues ==>", formValues);
+// console.log("formValues ==>", formValues);
 //     setFormValues({ ...formValues, [name]: value });
 //   };
 
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
 //     setIsLoading(true);
-//     console.log("handle submit", formValues);
+// console.log("handle submit", formValues);
 //     const {
 //       name,
 //       passportNo,
@@ -129,7 +129,7 @@
 //       comments,
 //     } = formValues;
 
-//     console.log("Front Image", file);
+// console.log("Front Image", file);
 //     let formData = new FormData();
 //     formData.append("name", name);
 //     formData.append("passportNo", passportNo);
@@ -165,7 +165,7 @@
 //     );
 
 //     setIsLoading(false);
-//     console.log("lEAD created ", apiCall);
+// console.log("lEAD created ", apiCall);
 
 //     if (apiCall.data?.success) {
 //       let { message } = apiCall.data;
@@ -185,7 +185,7 @@
 //         <div className="my-10">
 //           <div className="mr-8 flex items-center justify-between">
 //             <p className=" text-4xl font-semibold text-[#280559]">
-//               {console.log("params ==>", params.action, params.id)}
+// {console.log("params ==>", params.action, params.id)}
 //               {/* Create Lead */}
 //               {params.action == 1
 //                 ? "View Lead"
@@ -484,12 +484,12 @@
 //             </div>
 //             <div className="mb-6 grid gap-6 md:grid-cols-2">
 //               <div>
-//                 <label class="mb-2 block text-sm font-semibold text-[#333]">
+//                 <label className="mb-2 block text-sm font-semibold text-[#333]">
 //                   Comments With Date
 //                 </label>
 //                 <textarea
 //                   rows="6"
-//                   class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-sm text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
+//                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-sm text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
 //                   placeholder="Comments With Date"
 //                   name="comments" //
 //                   value={formValues?.comments}
@@ -586,7 +586,7 @@
 
 // export default CreateLead;
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, isValidElement } from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "@material-tailwind/react/components/Button";
 import universityLogo from "../../../public/img/universityLogo.svg";
@@ -616,10 +616,10 @@ export function CreateLead() {
   const leadData = useSelector(
     (state) => state?.universitiesReducer?.viewLeads
   );
-  console.log(
-    "lead data for update,view,delete in create lead compo",
-    leadData
-  );
+  // console.log(
+  // "lead data for update,view,delete in create lead compo",
+  // leadData
+  // );
 
   const initialValues = {
     // image: filename,
@@ -671,7 +671,7 @@ export function CreateLead() {
   }, [leadData?.lead?.programmeDetails]);
 
   const handlefileChange = (file) => {
-    console.log("file", file);
+    // console.log("file", file);
     setFile(file);
     //
     let reader = new FileReader();
@@ -686,16 +686,16 @@ export function CreateLead() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log("formValues ==>", formValues);
+    // console.log("formValues ==>", formValues);
     setFormValues({ ...formValues, [name]: value });
-    console.log("programeDetailsValues", ProgrameDetailValues);
+    // console.log("programeDetailsValues", ProgrameDetailValues);
     setProgrameDetailsValues({ ...ProgrameDetailValues, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log("handle submit", formValues);
+    // console.log("handle submit", formValues);
     const {
       name,
       passportNo,
@@ -715,7 +715,7 @@ export function CreateLead() {
       cert,
       comments,
     } = ProgrameDetailValues;
-    console.log("Front Image", file);
+    // console.log("Front Image", file);
     let formData = new FormData();
     formData.append("name", name);
     formData.append("passportNo", passportNo);
@@ -747,7 +747,7 @@ export function CreateLead() {
     );
 
     setIsLoading(false);
-    console.log("lEAD created ", apiCall);
+    // console.log("lEAD created ", apiCall);
 
     if (apiCall.data?.success) {
       let { message } = apiCall.data;
@@ -767,7 +767,7 @@ export function CreateLead() {
         <div className="my-10">
           <div className="mr-8 flex items-center justify-between">
             <p className=" text-4xl font-semibold text-[#280559]">
-              {console.log("params ==>", params.action, params.id)}
+              {/* {console.log("params ==>", params.action, params.id)} */}
               {/* Create Lead */}
               {params.action == 1
                 ? "View Lead"
@@ -775,18 +775,28 @@ export function CreateLead() {
                 ? "Edit Lead"
                 : "Create Lead"}
             </p>
-            <div className="hidden sm:block">
-              <NavLink to="">
-                <Button className="rounded-[15px]  bg-[#280559]">
-                  <div className="flex flex-row items-center justify-center">
-                    <img src={saveIcon} alt="..." />
-                    <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
-                      Save Changes
-                    </p>
-                  </div>
-                </Button>
-              </NavLink>
-            </div>
+            {isViewMode ? (
+              <Button onClick={() => navigate(-1)}>
+                <div className="flex flex-row items-center justify-center">
+                  <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                    Back
+                  </p>
+                </div>
+              </Button>
+            ) : (
+              <div className="hidden sm:block">
+                <NavLink to="">
+                  <Button className="rounded-[15px]  bg-[#280559]">
+                    <div className="flex flex-row items-center justify-center">
+                      <img src={saveIcon} alt="..." />
+                      <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                        Save Changes
+                      </p>
+                    </div>
+                  </Button>
+                </NavLink>
+              </div>
+            )}
           </div>
           <p className=" font text-base text-[#9898A3]">
             {/* Create or edit lead */}
@@ -796,18 +806,22 @@ export function CreateLead() {
               ? "Edit Lead"
               : "Create Lead"}
           </p>
-          <div className="ml-auto mr-8 mt-6 w-fit sm:hidden">
-            <NavLink to="">
-              <Button className="rounded-[15px]  bg-[#280559]">
-                <div className="flex items-center justify-center">
-                  <img src={saveIcon} alt="..." />
-                  <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
-                    Save Changes
-                  </p>
-                </div>
-              </Button>
-            </NavLink>
-          </div>
+          {isViewMode ? (
+            ""
+          ) : (
+            <div className="ml-auto mr-8 mt-6 w-fit sm:hidden">
+              <NavLink to="">
+                <Button className="rounded-[15px]  bg-[#280559]">
+                  <div className="flex items-center justify-center">
+                    <img src={saveIcon} alt="..." />
+                    <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                      Save Changes
+                    </p>
+                  </div>
+                </Button>
+              </NavLink>
+            </div>
+          )}
         </div>
         <form onSubmit={handleSubmit}>
           <div className="mr-8 rounded-[34px] bg-white p-[39px]">
@@ -828,10 +842,13 @@ export function CreateLead() {
                         `${ENV.imageUrl}${formValues?.image}`) ||
                       universityLogo
                     }
+                    onError={function (e) {
+                      e.target.src = universityLogo;
+                    }}
                     alt="..."
                   />
                   {isViewMode ? (
-                    "Upload Logo"
+                    ""
                   ) : (
                     <FileUploader
                       multiple={true}
@@ -906,7 +923,7 @@ export function CreateLead() {
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
-                  <option selected="true">Select Group</option>
+                  <option>Select Group</option>
                   <option>social media</option>
                   <option> Event</option>
                   <option> Walk In</option>
@@ -923,7 +940,7 @@ export function CreateLead() {
                   onChange={handleChange}
                   disabled={isViewMode}
                 >
-                  <option selected>Select Country</option>
+                  <option>Select Country</option>
                   <option>pakistan</option>
                   <option>India</option>
                 </select>
@@ -959,17 +976,21 @@ export function CreateLead() {
                   disabled={isViewMode}
                 />
               </div>
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#333333]">
-                  Add Field
-                </label>
-                <button
-                  type="button"
-                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                >
-                  Click to add more field
-                </button>
-              </div>
+              {isViewMode ? (
+                ""
+              ) : (
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-[#333333]">
+                    Add Field
+                  </label>
+                  <button
+                    type="button"
+                    className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                  >
+                    Click to add more field
+                  </button>
+                </div>
+              )}
             </div>
             {/* </form> */}
           </div>
@@ -1005,7 +1026,7 @@ export function CreateLead() {
                   onChange={handleChange}
                   disabled={isViewMode}
                 >
-                  <option selected="true">Select Qualification</option>
+                  <option>Select Qualification</option>
                   <option>Somali Cert</option>
                   <option>IGCSE</option>
                   <option>KCSE</option>
@@ -1025,7 +1046,7 @@ export function CreateLead() {
                   onChange={handleChange}
                   disabled={isViewMode}
                 >
-                  <option selected>Select University</option>
+                  <option>Select University</option>
                   <option>punjab University</option>
                   <option>virtual University</option>
                 </select>
@@ -1041,7 +1062,7 @@ export function CreateLead() {
                   onChange={handleChange}
                   disabled={isViewMode}
                 >
-                  <option selected>Select Program</option>
+                  <option>Select Program</option>
                   <option>becholars</option>
                   <option>masters</option>
                 </select>
@@ -1057,7 +1078,7 @@ export function CreateLead() {
                   onChange={handleChange}
                   disabled={isViewMode}
                 >
-                  <option selected="true">Select Status</option>
+                  <option>Select Status</option>
                   <option> Warm </option>
                   <option> Hot</option>
                   <option> Qualified</option>
@@ -1081,12 +1102,12 @@ export function CreateLead() {
             </div>
             <div className="mb-6 grid gap-6 md:grid-cols-2">
               <div>
-                <label class="mb-2 block text-sm font-semibold text-[#333]">
+                <label className="mb-2 block text-sm font-semibold text-[#333]">
                   Comments With Date
                 </label>
                 <textarea
                   rows="6"
-                  class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-sm text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
+                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-sm text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Comments With Date"
                   name="comments" //
                   value={ProgrameDetailValues?.comments}
@@ -1096,19 +1117,23 @@ export function CreateLead() {
                 />
               </div>
             </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#333333]">
-                  Add Field
-                </label>
-                <button
-                  type="button"
-                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                >
-                  Click to add more field
-                </button>
+            {isViewMode ? (
+              ""
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-[#333333]">
+                    Add Field
+                  </label>
+                  <button
+                    type="button"
+                    className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                  >
+                    Click to add more field
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
             {/* </form> */}
           </div>
           <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]">
@@ -1148,34 +1173,50 @@ export function CreateLead() {
                   disabled={isViewMode}
                 />
               </div>
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#333333]">
-                  Add Field
-                </label>
-                <button
-                  type="button"
-                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                >
-                  Click to add more field
-                </button>
-              </div>
+              {isViewMode ? (
+                ""
+              ) : (
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-[#333333]">
+                    Add Field
+                  </label>
+                  <button
+                    type="button"
+                    className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                  >
+                    Click to add more field
+                  </button>
+                </div>
+              )}
             </div>
             {/* </form> */}
           </div>
-          {/* <NavLink to="university"> */}
-          <Button
-            className="rounded-[15px]  bg-[#280559]"
-            type="submit"
-            disabled={isViewMode}
-          >
-            <div className="flex flex-row items-center justify-center">
-              <img src={saveIcon} alt="..." />
-              <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
-                Save Changes
-              </p>
-            </div>
-          </Button>
-          {/* </NavLink> */}
+          {isViewMode ? (
+            <Button onClick={() => navigate(-1)}>
+              <div className="flex flex-row items-center justify-center">
+                <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                  Back
+                </p>
+              </div>
+            </Button>
+          ) : (
+            <>
+              {/* <NavLink to="university"> */}
+              <Button
+                className="rounded-[15px]  bg-[#280559]"
+                type="submit"
+                disabled={isViewMode}
+              >
+                <div className="flex flex-row items-center justify-center">
+                  <img src={saveIcon} alt="..." />
+                  <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                    Save Changes
+                  </p>
+                </div>
+              </Button>
+              {/* </NavLink> */}
+            </>
+          )}
         </form>
       </div>
     </>
