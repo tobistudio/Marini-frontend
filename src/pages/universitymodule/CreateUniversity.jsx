@@ -169,6 +169,44 @@ export function CreateUniversity() {
     // navigate("university")
   };
 
+  let [universityImg, setuniversityImg] = useState(
+    preview ||
+      (formValues?.logo && `${ENV.imageUrl}${formValues?.logo}`) ||
+      universityLogo
+  );
+  console.log(
+    "URURURURURLL",
+    preview ||
+      (formValues?.logo && `${ENV.imageUrl}${formValues?.logo}`) ||
+      universityLogo
+  );
+  // setuniversityImg("/public/img/universityLogo.svg");
+  useEffect(() => {
+    fetch(universityImg, { mode: "no-cors" })
+      .then((res) => {
+        if (res.status === 200) {
+          setuniversityImg(res.url);
+
+          console.log("URURURURURLL", res.url);
+        } else {
+          setuniversityImg("/public/img/universityLogo.svg");
+        }
+        return res.text();
+      })
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        console.log("The Errrrooorrr", err);
+        return setuniversityImg("/public/img/universityLogo.svg");
+      });
+  }, [
+    preview ||
+      (formValues?.logo && `${ENV.imageUrl}${formValues?.logo}`) ||
+      universityLogo,
+    universityImg,
+  ]);
+
   return (
     <>
       {isLoading && <FullPageLoader />}
@@ -218,11 +256,12 @@ export function CreateUniversity() {
                 id="university-logo"
                 className="width:156px mb-3 rounded-2xl"
                 style={{ width: "156px" }}
-                src={
-                  preview ||
-                  (formValues?.logo && `${ENV.imageUrl}${formValues?.logo}`) ||
-                  universityLogo
-                }
+                src={universityImg}
+                // src={
+                //   preview ||
+                //   (formValues?.logo && `${ENV.imageUrl}${formValues?.logo}`) ||
+                //   universityLogo
+                // }
                 alt="..."
               />
               {isViewMode ? (
