@@ -196,7 +196,10 @@ export function CreateUniversity() {
 
             {/* <NavLink to="university"> */}
             {isViewMode ? (
-              <Button onClick={() => navigate(-1)}>
+              <Button
+                onClick={() => navigate(-1)}
+                className="rounded-[15px]  bg-[#280559]"
+              >
                 <div className="flex flex-row items-center justify-center">
                   <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
                     Back
@@ -694,7 +697,10 @@ export function CreateUniversity() {
           </div>
           {/* <NavLink to="university"> */}
           {isViewMode ? (
-            <Button onClick={() => navigate(-1)}>
+            <Button
+              onClick={() => navigate(-1)}
+              className="rounded-[15px]  bg-[#280559]"
+            >
               <div className="flex flex-row items-center justify-center">
                 <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
                   Back
