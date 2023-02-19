@@ -129,7 +129,9 @@ export function LeadsByStatus() {
                         <Checkbox />
                       </td>
                       <td className="whitespace-nowrap py-4 text-lg font-normal text-[#333]">
-                        {date}
+                        {new Date(date).toLocaleDateString(undefined, {
+                          dateStyle: "medium",
+                        })}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-lg font-bold text-[#333]">
                         {name}

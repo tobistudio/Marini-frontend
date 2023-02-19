@@ -96,7 +96,9 @@ export function LogActivities() {
                       <Checkbox />
                     </td>
                     <td className="whitespace-nowrap py-4 text-lg font-normal text-[#333]">
-                      {date}
+                      {new Date(date).toLocaleDateString(undefined, {
+                        dateStyle: "medium",
+                      })}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-lg font-normal text-[#333]">
                       {time}
@@ -178,7 +180,7 @@ export function LogActivities() {
                 </svg>
               </button>
             </div>
-          </div> 
+          </div>
         </div>
       </div>
     </div>
