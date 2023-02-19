@@ -17,6 +17,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { viewApplication } from "@/redux/actions/actions";
+import { listApplications } from "@/redux/actions/actions";
 
 // import [useSelector]
 export function AddNewApplication() {
@@ -35,10 +36,24 @@ export function AddNewApplication() {
     "applications datta in create application module",
     applicationsData
   );
+  // list all applications
+  useEffect(() => {
+    dispatch(listApplications());
 
-  const applicantData = useSelector(
-    (state) => state?.universitiesReducer?.applications
-  );
+    if (applicationsData?.success == true) {
+      let { message } = applicationsData;
+      toast.success(message, {
+        position: toast.POSITION.TOP_RIGHT,
+        hideProgressBar: false,
+        autoClose: 3000,
+      });
+    }
+  }, []);
+
+  const applicantData = useSelector((state) => {
+    console.log("wssstwatatee", state);
+    return state?.universitiesReducer?.applications;
+  });
 
   console.log("applicantData ==>", applicantData);
 
@@ -103,7 +118,6 @@ export function AddNewApplication() {
   }, [params.id]);
 
   useEffect(() => {
-    console.log("ojawfomwapojiweafoaewf", applicantData.applicant);
     if (applicationsData?.applicant) setFormValues(applicationsData?.applicant);
   }, [applicationsData.applicant]);
 
@@ -203,6 +217,27 @@ export function AddNewApplication() {
       });
     }
   };
+  const handleFullNameChange = (e) => {
+    const { name, value } = e.target;
+    if (value === "" && name === "fullName")
+      return setFormValues(initialValues);
+    if (value === "") return;
+    console.log("formValues ===>", formValues);
+    setFormValues({ ...formValues, [name]: value });
+    console.log("appDetailValues ===>", appDetailValues);
+    setAppDetailValue({ ...appDetailValues, [name]: value });
+    // Anasite - Edits: showing applicant info.
+    let newFormValues = { ...formValues, [name]: value };
+    Object.keys(newFormValues).forEach((key) => {
+      console.log("keeeeyyyy", key, applicantData?.data?.faqs[value][key]);
+      newFormValues[key] = applicantData?.data?.faqs
+        ? applicantData?.data?.faqs[value][key]
+        : "";
+    });
+    newFormValues = { ...newFormValues, [name]: value };
+    console.log("ooooooookkkkkkkkmmmmmmm", newFormValues);
+    setFormValues(newFormValues);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -249,12 +284,15 @@ export function AddNewApplication() {
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Full Name"
                   name="fullName"
-                  defaultValue={formValues?.fullName}
+                  value={formValues?.fullName}
                   disabled={isViewMode}
-                  onChange={handleChange}
+                  onChange={handleFullNameChange}
                 >
+                  <option value="">Select Option</option>
                   {applicantData?.data?.faqs?.map((ele, ind) => (
-                    <option>{ele?.fullName}</option>
+                    <option key={ele?.fullName + ind} value={ind}>
+                      {ele?.fullName}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -326,13 +364,13 @@ export function AddNewApplication() {
                 <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   name="country"
-                  defaultValue={formValues?.country}
+                  value={formValues?.country}
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
                   <option value={""}>Select Country</option>
-                  <option>pakistan</option>
-                  <option>india</option>
+                  <option value={"pakistan"}>pakistan</option>
+                  <option value={"india"}>india</option>
                 </select>
               </div>
             </div>
@@ -426,7 +464,7 @@ export function AddNewApplication() {
                 <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   name="applicationLevel"
-                  defaultValue={appDetailValues?.applicationLevel}
+                  value={appDetailValues?.applicationLevel}
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
@@ -444,11 +482,11 @@ export function AddNewApplication() {
                 <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   name="interestedProgramme"
-                  defaultValue={appDetailValues?.interestedProgramme}
+                  value={appDetailValues?.interestedProgramme}
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
-                  <option>Select Programme</option>
+                  <option value={""}>Select Programme</option>
                   <option>Master</option>
                   <option>Becholars</option>
                   <option>Intermediate</option>
@@ -478,7 +516,7 @@ export function AddNewApplication() {
                 <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   name="qualificationType"
-                  defaultValue={appDetailValues?.qualificationType}
+                  value={appDetailValues?.qualificationType}
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
@@ -499,7 +537,7 @@ export function AddNewApplication() {
                 <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   name="selectUniversity"
-                  defaultValue={appDetailValues?.selectUniversity}
+                  value={appDetailValues?.selectUniversity}
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
@@ -530,7 +568,7 @@ export function AddNewApplication() {
                 <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   name="selectUniversity"
-                  defaultValue={appDetailValues?.selectUniversity}
+                  value={appDetailValues?.selectUniversity}
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
@@ -547,11 +585,11 @@ export function AddNewApplication() {
                 <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   name="programmeLevel"
-                  defaultValue={appDetailValues?.programmeLevel}
+                  value={appDetailValues?.programmeLevel}
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
-                  <option>Select Programme</option>
+                  <option value={""}>Select Programme</option>
                   <option>Master</option>
                   <option>Becholars</option>
                   <option>Intermediate</option>
@@ -702,7 +740,7 @@ export function AddNewApplication() {
                 <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   name="status"
-                  defaultValue={appDetailValues?.status}
+                  value={appDetailValues?.status}
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
