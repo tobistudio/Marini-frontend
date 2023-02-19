@@ -8,28 +8,39 @@ import { Sidenav } from "@/widgets/layout";
 import { roles } from ".";
 
 const ApplicantDashboard = () => {
-    const { navbar } = useContext(NavbarCtx);
-    
-    return (
-        <div className="min-h-screen overflow-y-auto bg-[#E8E9EB]">
-            <Sidenav routes={routes} role={roles['applicant']} lay={'applicant'} />
-            <div className={`p-8 pr-0 bg-[#E8E9EB] ${(navbar.isMobile && navbar.mobileExpand && !navbar.overlap) || (!navbar.isMobile && !navbar.desktopExpand && !navbar.overlap) || (!navbar.isMobile && navbar.desktopExpand && navbar.overlap) || (!navbar.isMobile && !navbar.desktopExpand && navbar.overlap) ? 'ml-[100px]' : (!navbar.isMobile && navbar.desktopExpand && !navbar.overlap) || ((!navbar.isMobile && navbar.desktopExpand && navbar.overlap)) ? 'ml-[350px]' : 'ml-0'}`}>
-            <Routes>
-            <Route path="/" element={<ApplicantHome />} />
+  const { navbar } = useContext(NavbarCtx);
+
+  return (
+    <div className="min-h-screen overflow-y-auto bg-[#E8E9EB]">
+      <Sidenav routes={routes} role={roles["applicant"]} lay={"applicant"} />
+      <div
+        className={`bg-[#E8E9EB] p-8 pr-0 ${
+          (navbar.isMobile && navbar.mobileExpand && !navbar.overlap) ||
+          (!navbar.isMobile && !navbar.desktopExpand && !navbar.overlap) ||
+          (!navbar.isMobile && navbar.desktopExpand && navbar.overlap) ||
+          (!navbar.isMobile && !navbar.desktopExpand && navbar.overlap)
+            ? "ml-[100px]"
+            : (!navbar.isMobile && navbar.desktopExpand && !navbar.overlap) ||
+              (!navbar.isMobile && navbar.desktopExpand && navbar.overlap)
+            ? "ml-[350px]"
+            : "ml-0"
+        }`}
+      >
+        <Routes>
+          <Route path="/" element={<ApplicantHome />} />
           {routes.map(
             ({ layout, pages }) =>
               layout === "applicant" &&
               pages
-                .filter(({ id }) => roles['applicant'].includes(id))
+                .filter(({ id }) => roles["applicant"].includes(id))
                 .map(({ path, element }) => (
                   <Route path={path} element={element} />
                 ))
           )}
-          </Routes>
-            </div>
-          </div>
-        );
-      }
-      
-      
-      export default ApplicantDashboard;
+        </Routes>
+      </div>
+    </div>
+  );
+};
+
+export default ApplicantDashboard;

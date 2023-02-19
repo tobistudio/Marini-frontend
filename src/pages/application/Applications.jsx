@@ -86,7 +86,7 @@ export function Applications() {
                 <p className="text-2xl font-bold text-black sm:text-3xl">
                   Applications
                 </p>
-                <NavLink to="createLead">
+                <NavLink to="createApplicant">
                   <Button className="ml-auto flex h-[60px] flex-row items-center rounded-2xl bg-[#280559] p-2 sm:py-3 sm:px-6">
                     <img className="m-1 w-[20px]" src={plus} alt="..." />
                     <p className="m-1 text-sm font-medium normal-case text-white sm:text-base">

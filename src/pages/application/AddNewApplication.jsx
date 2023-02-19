@@ -103,6 +103,7 @@ export function AddNewApplication() {
   }, [params.id]);
 
   useEffect(() => {
+    console.log("ojawfomwapojiweafoaewf", applicantData.applicant);
     if (applicationsData?.applicant) setFormValues(applicationsData?.applicant);
   }, [applicationsData.applicant]);
 
@@ -329,7 +330,7 @@ export function AddNewApplication() {
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
-                  <option selected>Select Country</option>
+                  <option value={""}>Select Country</option>
                   <option>pakistan</option>
                   <option>india</option>
                 </select>
@@ -404,7 +405,7 @@ export function AddNewApplication() {
                   </label>
                   <button
                     type="button"
-                    class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                    className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
                   >
                     Click to add more field
                   </button>
@@ -429,7 +430,7 @@ export function AddNewApplication() {
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
-                  <option selected="true">Select Type</option>
+                  <option value={""}>Select Type</option>
                   <option>undergraduate</option>
                   <option>Postgraduate</option>
                   <option>Transfer Student</option>
@@ -447,7 +448,7 @@ export function AddNewApplication() {
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
-                  <option selected="true">Select Programme</option>
+                  <option>Select Programme</option>
                   <option>Master</option>
                   <option>Becholars</option>
                   <option>Intermediate</option>
@@ -481,7 +482,7 @@ export function AddNewApplication() {
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
-                  <option selected>Select Type</option>
+                  <option value={""}>Select Type</option>
                   <option>Somali Cert</option>
                   <option>IGCSE</option>
                   <option>KCSE</option>
@@ -502,7 +503,7 @@ export function AddNewApplication() {
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
-                  <option selected>Select University</option>
+                  <option value={""}>Select University</option>
                   <option>punjab University</option>
                   <option>virtual University</option>
                 </select>
@@ -533,7 +534,7 @@ export function AddNewApplication() {
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
-                  <option selected>Select University</option>
+                  <option value={""}>Select University</option>
                   <option>punjab University</option>
                   <option>virtual University</option>
                 </select>
@@ -550,7 +551,7 @@ export function AddNewApplication() {
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
-                  <option selected="true">Select Programme</option>
+                  <option>Select Programme</option>
                   <option>Master</option>
                   <option>Becholars</option>
                   <option>Intermediate</option>
@@ -705,7 +706,7 @@ export function AddNewApplication() {
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
-                  <option selected>Select Status</option>
+                  <option value={""}>Select Status</option>
                   <option>status ok</option>
                   <option>Status done</option>
                 </select>
@@ -719,7 +720,7 @@ export function AddNewApplication() {
                   </label>
                   <button
                     type="button"
-                    class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                    className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
                   >
                     Click to add more field
                   </button>
@@ -780,7 +781,10 @@ export function AddNewApplication() {
                   {isViewMode ? (
                     ""
                   ) : (
-                    <Button className="rounded-[15px]  bg-[#280559]">
+                    <Button
+                      className="rounded-[15px]  bg-[#280559]"
+                      disabled={isViewMode}
+                    >
                       <div className="flex flex-row items-center justify-center">
                         <img src={up} alt="..." />
 
@@ -790,12 +794,9 @@ export function AddNewApplication() {
                           name="file"
                           types={fileTypes}
                         >
-                          <button
-                            className="p-1 px-[11px] text-base font-medium normal-case text-white"
-                            disabled={isViewMode}
-                          >
+                          <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
                             Upload Document
-                          </button>
+                          </p>
                         </FileUploader>
                       </div>
                     </Button>

@@ -130,38 +130,48 @@ export function Dashboard() {
             element={<CreateUniversity />}
           />
           <Route
+            path="/university_module/*/createUniversity"
+            element={<CreateUniversity />}
+          />
+          <Route
             path="/university_module/:action/:id"
             element={<CreateUniversity />}
           />
           <Route path="/university_module/:id" element={<University />} />
           <Route path="/Leadsmodule/:action/:id" element={<CreateLead />} />
           <Route
-          path= "/settingsManagement/property/:action/:id"
-           element= {<AddProperty/>} />,
+            path="/settingsManagement/property/:action/:id"
+            element={<AddProperty />}
+          />
+          ,
           {/* <Route path="/Leadsmodule/:action/:id" element={<CreateLead />} /> */}
           <Route path="/Leadsmodule/:id" element={<Leads />} />
           <Route path="/system/:file" element={<System />} />
-
           {/* System */}
           <Route
             path="/CurrencyManagement/:action/:id"
             element={<Currency />}
           />
-
           <Route
             path="/settingsManagement/branch/:action/:id"
             element={<Branch />}
           />
           {/* <Route path="/settingsManagement/branch" element={<Branch />} /> */}
-
           <Route
             path="/settingsManagement/user/:action/:id"
             element={<User />}
           />
-
           {/* CreateLead */}
           <Route
             path="/university_module/createAcademic"
+            element={<CreateAcademic />}
+          />
+          <Route
+            path="/university_module/*/createAcademic"
+            element={<CreateAcademic />}
+          />
+          <Route
+            path="/university_module/*/createAcademic"
             element={<CreateAcademic />}
           />
           <Route
@@ -171,22 +181,28 @@ export function Dashboard() {
           <Route path="/university_module/a/:id" element={<Academic />} />
           {/* // */}
           <Route
-            path="/ApplicationModule/createLead"
+            path="/ApplicationModule/*/createApplicant"
             element={<AddNewApplication />}
           />
-
+          <Route
+            path="/ApplicationModule/createApplicant"
+            element={<AddNewApplication />}
+          />
           <Route
             path="/ApplicationModule/:action/:id"
             element={<AddNewApplication />}
           />
           <Route path="/ApplicationModule/:id" element={<Applications />} />
-
           <Route
             path="/InvoiceManagement/createInvoice"
             element={<CreateInvoice />}
           />
           <Route
-            path="/InvoiceManagement/CreateMailing"
+            path="/InvoiceManagement/*/createInvoice"
+            element={<CreateInvoice />}
+          />
+          <Route
+            path="/InvoiceManagement/*/CreateMailing"
             element={<CreateMailing />}
           />
         </Routes>

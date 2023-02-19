@@ -8,26 +8,26 @@ import {
   MenuItem,
 } from "@material-tailwind/react";
 const Paginate = ({ pagination, method }) => {
-  console.log("pagination", pagination);
+  // console.log("pagination", pagination);
   const dispatch = useDispatch();
   const onPageClick = (pageNo) => {
-    console.log("onPaginate", pagination);
+    // console.log("onPaginate", pagination);
     const { limit } = pagination;
     let qs = ENV.objectToQueryString({
       page: +pageNo,
       limit: limit,
     });
-    console.log("qqqqqqqqqqqs", qs);
+    // console.log("qqqqqqqqqqqs", qs);
     dispatch(method(qs));
   };
   const onPaginate = (action) => {
-    console.log("onPaginate", pagination);
+    // console.log("onPaginate", pagination);
     const { page, limit } = pagination;
     let qs = ENV.objectToQueryString({
       page: action == "inc" ? page + 1 : page - 1,
       limit: limit,
     });
-    console.log("qqqqqqqqqqqs", qs);
+    // console.log("qqqqqqqqqqqs", qs);
     dispatch(method(qs));
   };
   // console.log("paginationnnnnnnn", pagination);
@@ -37,7 +37,7 @@ const Paginate = ({ pagination, method }) => {
     ? Math.ceil(pagination?.total / pagination?.limit)
     : 0;
   NoOfPages.fill(0);
-  console.log("HEYYY", NoOfPages);
+  // console.log("HEYYY", NoOfPages);
   return (
     <>
       <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-[20px] bg-[#F8F9FB] py-4 px-6 md:flex-row md:gap-0">
