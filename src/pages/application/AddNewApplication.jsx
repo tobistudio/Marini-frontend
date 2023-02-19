@@ -18,6 +18,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { viewApplication } from "@/redux/actions/actions";
 import { listApplications } from "@/redux/actions/actions";
+import { data } from "autoprefixer";
 
 // import [useSelector]
 export function AddNewApplication() {
@@ -51,11 +52,10 @@ export function AddNewApplication() {
   }, []);
 
   const applicantData = useSelector((state) => {
-    console.log("wssstwatatee", state);
     return state?.universitiesReducer?.applications;
   });
 
-  console.log("applicantData ==>", applicantData);
+  // console.log("applicantData ==>", applicantData);
 
   const handlefileChange = (file) => {
     console.log("file", file);
@@ -80,6 +80,7 @@ export function AddNewApplication() {
     address2: "",
     country: "",
     passportNo: "",
+    id: "",
 
     //
   };
@@ -219,31 +220,46 @@ export function AddNewApplication() {
   };
   const handleFullNameChange = (e) => {
     const { name, value } = e.target;
+    // console.log(">>>>>>>>>>>>>>>>>>>>>>", value);
     if (value === "" && name === "fullName")
       return setFormValues(initialValues);
     if (value === "") return;
-    console.log("formValues ===>", formValues);
-    setFormValues({ ...formValues, [name]: value });
-    console.log("appDetailValues ===>", appDetailValues);
-    setAppDetailValue({ ...appDetailValues, [name]: value });
     // Anasite - Edits: showing applicant info.
     let newFormValues = { ...formValues, [name]: value };
-    Object.keys(newFormValues).forEach((key) => {
-      console.log("keeeeyyyy", key, applicantData?.data?.faqs[value][key]);
-      newFormValues[key] = applicantData?.data?.faqs
-        ? applicantData?.data?.faqs[value][key]
-        : "";
-    });
-    newFormValues = { ...newFormValues, [name]: value };
-    console.log("ooooooookkkkkkkkmmmmmmm", newFormValues);
-    setFormValues(newFormValues);
+    let newAppDetailValues = { ...appDetailValues };
+    fetch(`${ENV.baseUrl}/applicants/get/${value}`)
+      .then((res) => res.json())
+      .then((data) => {
+        const { applicant } = data;
+        Object.keys(newFormValues).forEach((key) => {
+          newFormValues[key] =
+            applicant[key] !== undefined && applicant[key] !== null
+              ? applicant[key]
+              : "";
+        });
+        setFormValues(newFormValues);
+        Object.keys(newAppDetailValues).forEach((key) => {
+          newAppDetailValues[key] =
+            (applicant["programmeDetails"][key] !== undefined) &
+            (applicant["programmeDetails"][key] !== null)
+              ? applicant["programmeDetails"][key]
+              : "";
+        });
+        setAppDetailValue(newAppDetailValues);
+      })
+      .catch((err) => {
+        //
+      });
+    // newFormValues = { ...newFormValues, [name]: value };
+    // console.log("ooooooookkkkkkkkmmmmmmm", newFormValues);
+    // setFormValues(newFormValues);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log("formValues ===>", formValues);
+    // console.log("formValues ===>", formValues);
     setFormValues({ ...formValues, [name]: value });
-    console.log("appDetailValues ===>", appDetailValues);
+    // console.log("appDetailValues ===>", appDetailValues);
     setAppDetailValue({ ...appDetailValues, [name]: value });
   };
 
@@ -283,14 +299,19 @@ export function AddNewApplication() {
                 <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Full Name"
-                  name="fullName"
-                  value={formValues?.fullName}
+                  name="id"
+                  value={formValues?.id}
                   disabled={isViewMode}
                   onChange={handleFullNameChange}
+                  data-index={formValues?.index}
                 >
                   <option value="">Select Option</option>
                   {applicantData?.data?.faqs?.map((ele, ind) => (
-                    <option key={ele?.fullName + ind} value={ind}>
+                    <option
+                      key={ele?.fullName + ind}
+                      value={ele?.id}
+                      data-index={ind}
+                    >
                       {ele?.fullName}
                     </option>
                   ))}
@@ -364,7 +385,7 @@ export function AddNewApplication() {
                 <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   name="country"
-                  value={formValues?.country}
+                  value={formValues?.country || ""}
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
@@ -464,7 +485,7 @@ export function AddNewApplication() {
                 <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   name="applicationLevel"
-                  value={appDetailValues?.applicationLevel}
+                  value={appDetailValues?.applicationLevel || ""}
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
@@ -482,7 +503,7 @@ export function AddNewApplication() {
                 <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   name="interestedProgramme"
-                  value={appDetailValues?.interestedProgramme}
+                  value={appDetailValues?.interestedProgramme || ""}
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
@@ -516,7 +537,7 @@ export function AddNewApplication() {
                 <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   name="qualificationType"
-                  value={appDetailValues?.qualificationType}
+                  value={appDetailValues?.qualificationType || ""}
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
@@ -556,7 +577,7 @@ export function AddNewApplication() {
                   placeholder="Cert and Transcript / Completion Letter"
                   required
                   name="completionLetter"
-                  value={appDetailValues?.completionLetter}
+                  value={appDetailValues?.completionLetter || ""}
                   disabled={isViewMode}
                   onChange={handleChange}
                 />
@@ -568,7 +589,7 @@ export function AddNewApplication() {
                 <select
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   name="selectUniversity"
-                  value={appDetailValues?.selectUniversity}
+                  value={appDetailValues?.selectUniversity || ""}
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
