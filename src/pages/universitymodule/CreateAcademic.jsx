@@ -263,8 +263,8 @@
 //                   <label className="mb-2 block text-sm font-medium text-[#333333]">
 //                     Tuition Fees
 //                   </label>
-//                   <div class="relative">
-//                     <span class="absolute left-0 top-0 flex h-full items-center rounded-xl bg-[#E5E8ED] p-3 text-base font-medium uppercase text-[#333]">
+//                   <div className="relative">
+//                     <span className="absolute left-0 top-0 flex h-full items-center rounded-xl bg-[#E5E8ED] p-3 text-base font-medium uppercase text-[#333]">
 //                       usd:
 //                     </span>
 //                     <input
@@ -283,8 +283,8 @@
 //                   <label className="mb-2 block text-sm font-medium text-[#333333]">
 //                     Other Fees
 //                   </label>
-//                   <div class="relative">
-//                     <span class="absolute left-0 top-0 flex h-full items-center rounded-xl bg-[#E5E8ED] p-3 text-base font-medium uppercase text-[#333]">
+//                   <div className="relative">
+//                     <span className="absolute left-0 top-0 flex h-full items-center rounded-xl bg-[#E5E8ED] p-3 text-base font-medium uppercase text-[#333]">
 //                       usd:
 //                     </span>
 //                     <input
@@ -305,7 +305,7 @@
 //                   </label>
 //                   <button
 //                     type="button"
-//                     class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+//                     className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
 //                   >
 //                     Click to add more field
 //                   </button>
@@ -320,12 +320,12 @@
 //               {/* <form> */}
 //               <div className="mt-12 mb-6 grid gap-6 md:grid-cols-2">
 //                 <div>
-//                   <label class="mb-2 block text-sm font-medium text-[#333]">
+//                   <label className="mb-2 block text-sm font-medium text-[#333]">
 //                     Entry Requirements
 //                   </label>
 //                   <textarea
 //                     rows="6"
-//                     class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-sm text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
+//                     className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-sm text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
 //                     placeholder="Entry Requirements"
 //                     name="entryRequirement" //
 //                     value={formValues?.entryRequirement}
@@ -335,12 +335,12 @@
 //                   ></textarea>
 //                 </div>
 //                 <div>
-//                   <label class="mb-2 block text-sm font-medium text-[#333]">
+//                   <label className="mb-2 block text-sm font-medium text-[#333]">
 //                     English Requirements
 //                   </label>
 //                   <textarea
 //                     rows="6"
-//                     class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-sm text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
+//                     className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-sm text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
 //                     placeholder="English Requirements"
 //                     name="engRequirement" //
 //                     value={formValues?.engRequirement}
@@ -355,7 +355,7 @@
 //                   </label>
 //                   <button
 //                     type="button"
-//                     class="block w-3/5 rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+//                     className="block w-3/5 rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
 //                   >
 //                     Click to add more field
 //                   </button>
@@ -370,7 +370,7 @@
 
 //               <button
 //                 type="button"
-//                 class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+//                 className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
 //               >
 //                 Click to add more campus
 //               </button>
@@ -402,6 +402,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "@material-tailwind/react/components/Button";
 import saveIcon from "../../../public/img/saveIcon.svg";
+import AddField from "@/helpers/Addfield";
 import axios from "axios";
 // import Loader from "@/loader";
 import FullPageLoader from "@/FullPageLoader/FullPageLoader";
@@ -413,6 +414,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { viewProgramme } from "@/redux/actions/actions";
 
 const CreateAcademic = () => {
+  /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
+  // const [openModal, setOpenModal] = useState(false);
+  // const [CreateAcademicState, setCreateAcademicState] = useState(true);
+  const [openCreateAcademicAddModal, setOpenCreateAcademicAddModal] =
+    useState(false);
+  const [CreateAcademicNewFields, setCreateAcademicNewFields] = useState([]);
+
+  const [
+    openSecondCreateAcademicAddModal,
+    setOpenSecondCreateAcademicAddModal,
+  ] = useState(false);
+  const [SecondCreateAcademicNewFields, setSecondCreateAcademicNewFields] =
+    useState([]);
+
+  const [
+    openCampusCreateAcademicAddModal,
+    setOpenCampusCreateAcademicAddModal,
+  ] = useState(false);
+  const [CampusCreateAcademicNewFields, setCampusCreateAcademicNewFields] =
+    useState([]);
+  /*
+  const [allFormsData, setAllFormsData] = useState({});
+  const handleAllFormsDataChange = (e) => {
+    let { name, value } = e.target;
+    setAllFormsData({ ...allFormsData, [name]: value });
+  };
+  */
+  // End
   const initialValues = {
     name: "",
     selectUniversity: "",
@@ -811,8 +840,8 @@ const CreateAcademic = () => {
                   <label className="mb-2 block text-sm font-medium text-[#333333]">
                     Tuition Fees
                   </label>
-                  <div class="relative">
-                    <span class="absolute left-0 top-0 flex h-full items-center rounded-xl bg-[#E5E8ED] p-3 text-base font-medium uppercase text-[#333]">
+                  <div className="relative">
+                    <span className="absolute left-0 top-0 flex h-full items-center rounded-xl bg-[#E5E8ED] p-3 text-base font-medium uppercase text-[#333]">
                       usd:
                     </span>
                     <input
@@ -840,8 +869,8 @@ const CreateAcademic = () => {
                   <label className="mb-2 block text-sm font-medium text-[#333333]">
                     Other Fees
                   </label>
-                  <div class="relative">
-                    <span class="absolute left-0 top-0 flex h-full items-center rounded-xl bg-[#E5E8ED] p-3 text-base font-medium uppercase text-[#333]">
+                  <div className="relative">
+                    <span className="absolute left-0 top-0 flex h-full items-center rounded-xl bg-[#E5E8ED] p-3 text-base font-medium uppercase text-[#333]">
                       usd:
                     </span>
                     <input
@@ -868,18 +897,29 @@ const CreateAcademic = () => {
                 {isViewMode ? (
                   ""
                 ) : (
-                  <div>
+                  <AddField
+                    open={openCreateAcademicAddModal}
+                    close={() => setOpenCreateAcademicAddModal(false)}
+                    toAdd={CreateAcademicNewFields}
+                    setOpenAddModal={setOpenCreateAcademicAddModal}
+                    setToAdd={setCreateAcademicNewFields}
+                    formsData={formValues}
+                    setFormsData={setFormValues}
+                    handleFormsDataChange={handleChange}
+                    section={"university-CreateAcademic"}
+                  />
+                )}
+                {/* <div>
                     <label className="mb-2 block text-sm font-medium">
                       Add Field
                     </label>
                     <button
                       type="button"
-                      class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                      className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
                     >
                       Click to add more field
                     </button>
-                  </div>
-                )}
+                  </div> */}
               </div>
               {/* </form> */}
             </div>
@@ -890,12 +930,12 @@ const CreateAcademic = () => {
               {/* <form> */}
               <div className="mt-12 mb-6 grid gap-6 md:grid-cols-2">
                 <div>
-                  <label class="mb-2 block text-sm font-medium text-[#333]">
+                  <label className="mb-2 block text-sm font-medium text-[#333]">
                     Entry Requirements
                   </label>
                   <textarea
                     rows="6"
-                    class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-sm text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
+                    className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-sm text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                     placeholder="Entry Requirements"
                     name="entryRequirement" //
                     value={formValues?.entryRequirement}
@@ -914,12 +954,12 @@ const CreateAcademic = () => {
                   <p className="text-red-500">{formErrors.entryRequirement}</p>
                 </div>
                 <div>
-                  <label class="mb-2 block text-sm font-medium text-[#333]">
+                  <label className="mb-2 block text-sm font-medium text-[#333]">
                     English Requirements
                   </label>
                   <textarea
                     rows="6"
-                    class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-sm text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
+                    className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-sm text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                     placeholder="English Requirements"
                     name="engRequirement" //
                     value={formValues?.engRequirement}
@@ -940,18 +980,29 @@ const CreateAcademic = () => {
                 {isViewMode ? (
                   ""
                 ) : (
-                  <div>
+                  <AddField
+                    open={openSecondCreateAcademicAddModal}
+                    close={() => setOpenSecondCreateAcademicAddModal(false)}
+                    toAdd={SecondCreateAcademicNewFields}
+                    setOpenAddModal={setOpenSecondCreateAcademicAddModal}
+                    setToAdd={setSecondCreateAcademicNewFields}
+                    formsData={formValues}
+                    setFormsData={setFormValues}
+                    handleFormsDataChange={handleChange}
+                    section={"university-SecondCreateAcademic"}
+                  />
+                )}
+                {/* <div>
                     <label className="mb-2 block text-sm font-medium">
                       Add Field
                     </label>
                     <button
                       type="button"
-                      class="block w-3/5 rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                      className="block w-3/5 rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
                     >
                       Click to add more field
                     </button>
-                  </div>
-                )}
+                  </div> */}
               </div>
               {/* </form> */}
             </div>
@@ -959,17 +1010,30 @@ const CreateAcademic = () => {
               ""
             ) : (
               <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]">
+                <AddField
+                  open={openCampusCreateAcademicAddModal}
+                  close={() => setOpenCampusCreateAcademicAddModal(false)}
+                  toAdd={CampusCreateAcademicNewFields}
+                  setOpenAddModal={setOpenCampusCreateAcademicAddModal}
+                  setToAdd={setCampusCreateAcademicNewFields}
+                  formsData={formValues}
+                  setFormsData={setFormValues}
+                  handleFormsDataChange={handleChange}
+                  section={"university-CampusCreateAcademic"}
+                />
+              </div>
+            )}
+            {/* <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]">
                 <p className="mb-8 text-2xl font-semibold text-[#333333]">
                   Add Campus
                 </p>
                 <button
                   type="button"
-                  class="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
                 >
                   Click to add more campus
                 </button>
-              </div>
-            )}
+              </div> */}
             {/* <NavLink to="university"> */}
             {isViewMode ? (
               <Button

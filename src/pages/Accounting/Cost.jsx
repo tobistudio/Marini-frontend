@@ -12,14 +12,22 @@ import plus from "../../../public/img/plus.svg";
 import filterIcon from "../../../public/img/filterIcon.svg";
 import saveIcon from "../../../public/img/saveIcon.svg";
 import Sales_recording_data from "@/data/Sales-recording-data";
-import AddField from "./AddField";
+import AddField from "@/helpers/Addfield";
 import { NavLink } from "react-router-dom";
 import print from "../../../public/img/print.svg";
 import dropdown from "../../../public/img/dropdown.svg";
 
 export function Cost() {
+  /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
+  // const [openModal, setOpenModal] = useState(false);
   const [costState, setCostState] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
+  const [openCostAddModal, setOpenCostAddModal] = useState(false);
+  const [costNewFields, setCostNewFields] = useState([]);
+  const [allFormsData, setAllFormsData] = useState({});
+  const handleAllFormsDataChange = (e) => {
+    let { name, value } = e.target;
+    setAllFormsData({ ...allFormsData, [name]: value });
+  };
 
   return (
     <>
@@ -330,7 +338,7 @@ export function Cost() {
                   required
                 />
               </div>
-              <div>
+              {/* <div>
                 <label className="mb-2 block text-sm font-semibold text-[#333333]">
                   Add Field
                 </label>
@@ -342,7 +350,18 @@ export function Cost() {
                   Click to add more field
                 </button>
                 <AddField open={openModal} close={() => setOpenModal(false)} />
-              </div>
+              </div> */}
+              <AddField
+                open={openCostAddModal}
+                close={() => setOpenCostAddModal(false)}
+                toAdd={costNewFields}
+                setOpenAddModal={setOpenCostAddModal}
+                setToAdd={setCostNewFields}
+                formsData={allFormsData}
+                setFormsData={setAllFormsData}
+                handleFormsDataChange={handleAllFormsDataChange}
+                section={"Accounting-Cost"}
+              />
             </div>
           </form>
         </div>

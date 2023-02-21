@@ -702,7 +702,7 @@ import StatusData from "@/data/status-props";
 import { NavLink } from "react-router-dom";
 import DatePicker from "@/components/DatePicker";
 import dropdown from "../../../public/img/dropdown.svg";
-import AddField from "./Addfield";
+import AddField from "@/helpers/Addfield";
 import { useSelector, useDispatch } from "react-redux";
 import { listCurrencies } from "@/redux/actions/actions";
 import axios from "axios";
@@ -724,6 +724,17 @@ export function Currency() {
   const viewCur = useSelector(
     (state) => state?.universitiesReducer?.viewCurrency
   );
+
+  /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
+  // const [openModal, setOpenModal] = useState(false);
+  // const [costState, setCostState] = useState(true);
+  const [openCostAddModal, setOpenCostAddModal] = useState(false);
+  const [costNewFields, setCostNewFields] = useState([]);
+  const [allFormsData, setAllFormsData] = useState({});
+  const handleAllFormsDataChange = (e) => {
+    let { name, value } = e.target;
+    setAllFormsData({ ...allFormsData, [name]: value });
+  };
 
   const pagination = useSelector(
     (state) => state?.universitiesReducer?.currency?.data?.pagination
@@ -1361,22 +1372,35 @@ export function Currency() {
                 ""
               ) : (
                 <div className="mt-4 mb-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  <div>
-                    <label className="mb-2 block text-sm font-semibold text-[#333333]">
-                      Add Field
-                    </label>
-                    <button
-                      onClick={() => setOpenModal(true)}
-                      type="button"
-                      className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                    >
-                      Click to add more field
-                    </button>
-                    <AddField
-                      open={openModal}
-                      close={() => setOpenModal(false)}
-                    />
-                  </div>
+                  {/* // <div className="mt-4 mb-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                //   <div>
+                //     <label className="mb-2 block text-sm font-semibold text-[#333333]">
+                //       Add Field
+                //     </label>
+                //     <button
+                //       onClick={() => setOpenModal(true)}
+                //       type="button"
+                //       className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                //     >
+                //       Click to add more field
+                //     </button>
+                //     <AddField
+                //       open={openModal}
+                //       close={() => setOpenModal(false)}
+                //     />
+                //   </div>
+                // </div> */}
+                  <AddField
+                    open={openCostAddModal}
+                    close={() => setOpenCostAddModal(false)}
+                    toAdd={costNewFields}
+                    setOpenAddModal={setOpenCostAddModal}
+                    setToAdd={setCostNewFields}
+                    formsData={allFormsData}
+                    setFormsData={setAllFormsData}
+                    handleFormsDataChange={handleAllFormsDataChange}
+                    section={"Accounting-Cost"}
+                  />
                 </div>
               )}
 

@@ -137,6 +137,8 @@ export function Dashboard() {
             path="/university_module/:action/:id"
             element={<CreateUniversity />}
           />
+          <Route path="/Leadsmodule/*/createLead" element={<CreateLead />} />
+          <Route path="/Leadsmodule/createLead" element={<CreateLead />} />
           <Route path="/university_module/:id" element={<University />} />
           <Route path="/Leadsmodule/:action/:id" element={<CreateLead />} />
           <Route

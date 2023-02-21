@@ -14,8 +14,61 @@ import { ENV } from "@/config";
 import { useNavigate, useParams } from "react-router-dom";
 // import { viewUniversity } from "@/redux/actions/actions";
 import { viewUniversity } from "@/redux/actions/actions";
+import AddField from "@/helpers/Addfield";
 
 export function CreateUniversity() {
+  /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
+  // const [openModal, setOpenModal] = useState(false);
+  // const [CreateUniversityState, setCreateUniversityState] = useState(true);
+  const [openCreateUniversityAddModal, setOpenCreateUniversityAddModal] =
+    useState(false);
+  const [CreateUniversityNewFields, setCreateUniversityNewFields] = useState(
+    []
+  );
+
+  const [
+    openSecondCreateUniversityAddModal,
+    setOpenSecondCreateUniversityAddModal,
+  ] = useState(false);
+  const [SecondCreateUniversityNewFields, setSecondCreateUniversityNewFields] =
+    useState([]);
+
+  const [
+    openThirdCreateUniversityAddModal,
+    setOpenThirdCreateUniversityAddModal,
+  ] = useState(false);
+  const [ThirdCreateUniversityNewFields, setThirdCreateUniversityNewFields] =
+    useState([]);
+
+  const [
+    openFourthCreateUniversityAddModal,
+    setOpenFourthCreateUniversityAddModal,
+  ] = useState(false);
+  const [FourthCreateUniversityNewFields, setFourthCreateUniversityNewFields] =
+    useState([]);
+
+  const [
+    openFifthCreateUniversityAddModal,
+    setOpenFifthCreateUniversityAddModal,
+  ] = useState(false);
+  const [FifthCreateUniversityNewFields, setFifthCreateUniversityNewFields] =
+    useState([]);
+
+  const [
+    openCampusCreateUniversityAddModal,
+    setOpenCampusCreateUniversityAddModal,
+  ] = useState(false);
+  const [CampusCreateUniversityNewFields, setCampusCreateUniversityNewFields] =
+    useState([]);
+  /*
+  const [allFormsData, setAllFormsData] = useState({});
+  const handleAllFormsDataChange = (e) => {
+    let { name, value } = e.target;
+    setAllFormsData({ ...allFormsData, [name]: value });
+  };
+  */
+  // End
+  // End
   const fileTypes = ["JPEG", "PNG", "GIF"];
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,14 +93,17 @@ export function CreateUniversity() {
     qetcFee: "",
     commisionDuration: "",
   };
-  const [formValues, setFormValues] = useState(initialValues);
   const campusInitialValues = {
-    name: "",
-    address1: "",
-    address2: "",
-    phone: "",
-    email: "",
+    campus_name: "",
+    campus_address1: "",
+    campus_address2: "",
+    campus_phone: "",
+    campus_email: "",
   };
+  const [formValues, setFormValues] = useState({
+    ...initialValues,
+    ...campusInitialValues,
+  });
 
   const [campusValues, setCampusValues] = useState([
     {
@@ -184,14 +240,14 @@ export function CreateUniversity() {
                 : params.action == 2
                 ? "Edit University"
                 : "Create University"}
-              <p className=" font text-base text-[#9898A3]">
+              <span className="font block text-base text-[#9898A3]">
                 {/* Create or edit university */}
                 {params.action == 1
                   ? "view University"
                   : params.action == 2
                   ? "Edit University"
                   : "create University"}
-              </p>
+              </span>
             </p>
 
             {/* <NavLink to="university"> */}
@@ -368,7 +424,19 @@ export function CreateUniversity() {
             {isViewMode ? (
               ""
             ) : (
-              <div>
+              <AddField
+                open={openCreateUniversityAddModal}
+                close={() => setOpenCreateUniversityAddModal(false)}
+                toAdd={CreateUniversityNewFields}
+                setOpenAddModal={setOpenCreateUniversityAddModal}
+                setToAdd={setCreateUniversityNewFields}
+                formsData={formValues}
+                setFormsData={setFormValues}
+                handleFormsDataChange={handleChange}
+                section={"university-CreateUniversity"}
+              />
+            )}
+            {/* <div>
                 <label className="mb-2 block text-sm font-semibold text-[#333333]">
                   Add Field
                 </label>
@@ -378,8 +446,7 @@ export function CreateUniversity() {
                 >
                   Click to add more field
                 </button>
-              </div>
-            )}
+              </div> */}
           </div>
           {/* </form> */}
           {/* </div> */}
@@ -468,7 +535,19 @@ export function CreateUniversity() {
               {isViewMode ? (
                 ""
               ) : (
-                <div>
+                <AddField
+                  open={openSecondCreateUniversityAddModal}
+                  close={() => setOpenSecondCreateUniversityAddModal(false)}
+                  toAdd={SecondCreateUniversityNewFields}
+                  setOpenAddModal={setOpenSecondCreateUniversityAddModal}
+                  setToAdd={setSecondCreateUniversityNewFields}
+                  formsData={formValues}
+                  setFormsData={setFormValues}
+                  handleFormsDataChange={handleChange}
+                  section={"university-SecondCreateUniversity"}
+                />
+              )}
+              {/* <div>
                   <label className="mb-2 block text-sm font-semibold">
                     &nbsp;
                   </label>
@@ -478,8 +557,7 @@ export function CreateUniversity() {
                   >
                     Click to add more field
                   </button>
-                </div>
-              )}
+                </div> */}
             </div>
             {/* </form> */}
           </div>
@@ -567,7 +645,19 @@ export function CreateUniversity() {
               {isViewMode ? (
                 ""
               ) : (
-                <div>
+                <AddField
+                  open={openThirdCreateUniversityAddModal}
+                  close={() => setOpenThirdCreateUniversityAddModal(false)}
+                  toAdd={ThirdCreateUniversityNewFields}
+                  setOpenAddModal={setOpenThirdCreateUniversityAddModal}
+                  setToAdd={setThirdCreateUniversityNewFields}
+                  formsData={formValues}
+                  setFormsData={setFormValues}
+                  handleFormsDataChange={handleChange}
+                  section={"university-ThirdCreateUniversity"}
+                />
+              )}
+              {/* <div>
                   <label className="mb-2 block text-sm font-semibold">
                     &nbsp;
                   </label>
@@ -577,14 +667,27 @@ export function CreateUniversity() {
                   >
                     Click to add more field
                   </button>
-                </div>
-              )}
+                </div> */}
             </div>
           </div>
           {isViewMode ? (
             ""
           ) : (
             <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]">
+              <AddField
+                open={openFourthCreateUniversityAddModal}
+                close={() => setOpenFourthCreateUniversityAddModal(false)}
+                toAdd={FourthCreateUniversityNewFields}
+                setOpenAddModal={setOpenFourthCreateUniversityAddModal}
+                setToAdd={setFourthCreateUniversityNewFields}
+                formsData={formValues}
+                setFormsData={setFormValues}
+                handleFormsDataChange={handleChange}
+                section={"university-FourthCreateUniversity"}
+              />
+            </div>
+          )}
+          {/* <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]">
               <p className="mb-8 text-2xl font-semibold text-[#333333]">
                 Add Campus
               </p>
@@ -594,8 +697,7 @@ export function CreateUniversity() {
               >
                 Click to add more campus
               </button>
-            </div>
-          )}
+            </div> */}
           <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]">
             <p className="mb-8 text-2xl font-semibold text-[#333333]">
               Fees and Commissions
@@ -681,7 +783,19 @@ export function CreateUniversity() {
               {isViewMode ? (
                 ""
               ) : (
-                <div>
+                <AddField
+                  open={openFifthCreateUniversityAddModal}
+                  close={() => setOpenFifthCreateUniversityAddModal(false)}
+                  toAdd={FifthCreateUniversityNewFields}
+                  setOpenAddModal={setOpenFifthCreateUniversityAddModal}
+                  setToAdd={setFifthCreateUniversityNewFields}
+                  formsData={formValues}
+                  setFormsData={setFormValues}
+                  handleFormsDataChange={handleChange}
+                  section={"university-FifthCreateUniversity"}
+                />
+              )}
+              {/* <div>
                   <label className="mb-2 block text-sm font-semibold text-[#333333]">
                     Add More Field
                   </label>
@@ -691,8 +805,7 @@ export function CreateUniversity() {
                   >
                     Click to add more field
                   </button>
-                </div>
-              )}
+                </div> */}
             </div>
           </div>
           {/* <NavLink to="university"> */}

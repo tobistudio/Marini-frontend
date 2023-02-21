@@ -14,7 +14,7 @@ import Userprops from "@/data/user-props";
 // import AddField from "./AddField";
 import { NavLink } from "react-router-dom";
 import DatePicker from "@/components/DatePicker";
-import AddField from "./Addfield";
+import AddField from "@/helpers/Addfield";
 import dropdown from "../../../public/img/dropdown.svg";
 import { useSelector, useDispatch } from "react-redux";
 import FullPageLoader from "@/FullPageLoader/FullPageLoader";
@@ -26,6 +26,18 @@ import { viewUser } from "@/redux/actions/actions";
 import { ENV } from "@/config";
 import Paginate from "@/paginate";
 export function User() {
+  /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
+  // const [openModal, setOpenModal] = useState(false);
+  // const [SettingUserState, setSettingUserState] = useState(true);
+  const [openSettingUserAddModal, setOpenSettingUserAddModal] = useState(false);
+  const [SettingUserNewFields, setSettingUserNewFields] = useState([]);
+  const [allFormsData, setAllFormsData] = useState({});
+  const handleAllFormsDataChange = (e) => {
+    let { name, value } = e.target;
+    setAllFormsData({ ...allFormsData, [name]: value });
+  };
+
+  // End
   const [userstate, setUserstate] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [isViewMode, setIsViewMode] = useState(true);
@@ -571,23 +583,31 @@ export function User() {
               {isViewMode ? (
                 ""
               ) : (
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-[#333333]">
-                    Add Field
-                  </label>
-                  <button
-                    onClick={() => setOpenModal(true)}
-                    type="button"
-                    className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                  >
-                    Click to add more field
-                  </button>
-                  <AddField
-                    open={openModal}
-                    close={() => setOpenModal(false)}
-                  />
-                </div>
+                <AddField
+                  open={openSettingUserAddModal}
+                  close={() => setOpenSettingUserAddModal(false)}
+                  toAdd={SettingUserNewFields}
+                  setOpenAddModal={setOpenSettingUserAddModal}
+                  setToAdd={setSettingUserNewFields}
+                  formsData={formValues}
+                  setFormsData={setFormValues}
+                  handleFormsDataChange={handleChange}
+                  section={"Settings-User"}
+                />
               )}
+              {/* <div>
+                <label className="mb-2 block text-sm font-semibold text-[#333333]">
+                  Add Field
+                </label>
+                <button
+                  onClick={() => setOpenModal(true)}
+                  type="button"
+                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
+                >
+                  Click to add more field
+                </button>
+                <AddField open={openModal} close={() => setOpenModal(false)} />
+              </div> */}
             </div>
 
             {isViewMode ? (

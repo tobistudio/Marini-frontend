@@ -13,13 +13,23 @@ import filterIcon from "../../../public/img/filterIcon.svg";
 import print from "../../../public/img/print.svg";
 import saveIcon from "../../../public/img/saveIcon.svg";
 import Sales_recording_data from "@/data/Sales-recording-data";
-import AddField from "./AddField";
+import AddField from "@/helpers/AddField";
 import { NavLink } from "react-router-dom";
 import dropdown from "../../../public/img/dropdown.svg";
 
 export function Expenses() {
+  /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
+  // const [openModal, setOpenModal] = useState(false);
+  // const [expState, setExpState] = useState(true);
+  // const [openModal, setOpenModal] = useState(false);
   const [expstate, setExpstate] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
+  const [openExpAddModal, setOpenExpAddModal] = useState(false);
+  const [ExpNewFields, setExpNewFields] = useState([]);
+  const [allFormsData, setAllFormsData] = useState({});
+  const handleAllFormsDataChange = (e) => {
+    let { name, value } = e.target;
+    setAllFormsData({ ...allFormsData, [name]: value });
+  };
 
   return (
     <>
@@ -330,7 +340,7 @@ export function Expenses() {
                   required
                 />
               </div>
-              <div>
+              {/* <div>
                 <label className="mb-2 block text-sm font-semibold text-[#333333]">
                   Add Field
                 </label>
@@ -342,8 +352,19 @@ export function Expenses() {
                   Click to add more field
                 </button>
                 <AddField open={openModal} close={() => setOpenModal(false)} />
-              </div>
+              </div> */}
             </div>
+            <AddField
+              open={openExpAddModal}
+              close={() => setOpenExpAddModal(false)}
+              toAdd={ExpNewFields}
+              setOpenAddModal={setOpenExpAddModal}
+              setToAdd={setExpNewFields}
+              formsData={allFormsData}
+              setFormsData={setAllFormsData}
+              handleFormsDataChange={handleAllFormsDataChange}
+              section={"Accounting-Exp"}
+            />
           </form>
         </div>
         <NavLink>

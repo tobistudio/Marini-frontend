@@ -2,8 +2,21 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { Select, Option, Button, Input } from "@material-tailwind/react";
 import saveIcon from "../../../public/img/saveIcon.svg";
+import AddField from "@/helpers/Addfield";
 
 export function CreateMailing() {
+  const [openAddModal, setOpenAddModal] = useState(false);
+  /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
+  // const [openModal, setOpenModal] = useState(false);
+  const [CreateMailingState, setCreateMailingState] = useState(true);
+  const [openCreateMailingAddModal, setOpenCreateMailingAddModal] =
+    useState(false);
+  const [CreateMailingNewFields, setCreateMailingNewFields] = useState([]);
+  const [allFormsData, setAllFormsData] = useState({});
+  const handleAllFormsDataChange = (e) => {
+    let { name, value } = e.target;
+    setAllFormsData({ ...allFormsData, [name]: value });
+  };
   return (
     <div className="mt-[30px] w-full bg-[#E8E9EB]">
       <div className="my-10  grid justify-between md:grid-cols-2">
@@ -78,17 +91,33 @@ export function CreateMailing() {
             <Input className="h-[57px]" label="Email"></Input>
           </div>
 
-          <div>
+          {/* <div>
             <p className=" my-4 text-base font-semibold">Add Field</p>
             <button
-              data-modal-target="defaultModal1"
-              data-modal-toggle="defaultModal"
+              onClick={() => setOpenAddModal(true)}
+              // data-modal-target="defaultModal1"
+              // data-modal-toggle="defaultModal"
               className="block w-full justify-center text-[#BEBFC3]"
               type="button"
             >
               Click to add more field
             </button>
-          </div>
+            <AddField
+              open={openAddModal}
+              close={() => setOpenAddModal(false)}
+            />
+          </div> */}
+          <AddField
+            open={openCreateMailingAddModal}
+            close={() => setOpenCreateMailingAddModal(false)}
+            toAdd={CreateMailingNewFields}
+            setOpenAddModal={setOpenCreateMailingAddModal}
+            setToAdd={setCreateMailingNewFields}
+            formsData={allFormsData}
+            setFormsData={setAllFormsData}
+            handleFormsDataChange={handleAllFormsDataChange}
+            section={"Accounting-CreateMailing"}
+          />
         </div>
       </div>
       <div className="rounded-[34px] bg-white p-[39px]">
@@ -129,17 +158,33 @@ export function CreateMailing() {
             <Input className="h-[57px]" label="Email"></Input>
           </div>
 
-          <div>
+          {/* <div>
             <p className=" my-4 text-base font-semibold">Add Field</p>
             <button
-              data-modal-target="defaultModall"
-              data-modal-toggle="defaultModal"
+              onClick={() => setOpenAddModal(true)}
+              // data-modal-target="defaultModall"
+              // data-modal-toggle="defaultModal"
               className="block w-full justify-center text-[#BEBFC3]"
               type="button"
             >
               Click to add more field
             </button>
-          </div>
+            <AddField
+              open={openAddModal}
+              close={() => setOpenAddModal(false)}
+            />
+          </div> */}
+          <AddField
+            open={openCreateMailingAddModal}
+            close={() => setOpenCreateMailingAddModal(false)}
+            toAdd={CreateMailingNewFields}
+            setOpenAddModal={setOpenCreateMailingAddModal}
+            setToAdd={setCreateMailingNewFields}
+            formsData={allFormsData}
+            setFormsData={setAllFormsData}
+            handleFormsDataChange={handleAllFormsDataChange}
+            section={"Accounting-CreateMailing"}
+          />
         </div>
       </div>
       <div className="rounded-[34px] bg-white p-[39px]">
@@ -161,17 +206,28 @@ export function CreateMailing() {
             <Input className="h-[57px]" label="USD"></Input>
           </div>
         </div>
-        <div className="my-10">
+        {/* <div className="my-10">
           <p className=" my-4 text-base font-semibold">Add row</p>
           <button
-            data-modal-target="defaultModal"
-            data-modal-toggle="defaultModal"
+            onClick={() => setOpenAddModal(true)}
             className="block w-full justify-center text-[#BEBFC3]"
             type="button"
           >
             Click to add more field
           </button>
-        </div>
+          <AddField open={openAddModal} close={() => setOpenAddModal(false)} />
+        </div> */}
+        <AddField
+          open={openCreateMailingAddModal}
+          close={() => setOpenCreateMailingAddModal(false)}
+          toAdd={CreateMailingNewFields}
+          setOpenAddModal={setOpenCreateMailingAddModal}
+          setToAdd={setCreateMailingNewFields}
+          formsData={allFormsData}
+          setFormsData={setAllFormsData}
+          handleFormsDataChange={handleAllFormsDataChange}
+          section={"Accounting-CreateMailing"}
+        />
       </div>
 
       <NavLink to="commission">

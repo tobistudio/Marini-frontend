@@ -19,9 +19,11 @@ import { useNavigate } from "react-router-dom";
 import { viewApplication } from "@/redux/actions/actions";
 import { listApplications } from "@/redux/actions/actions";
 import { data } from "autoprefixer";
+import AddField from "@/helpers/Addfield";
 
 // import [useSelector]
 export function AddNewApplication() {
+  const [openAddModal, setOpenAddModal] = useState(false);
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState("");
@@ -29,6 +31,17 @@ export function AddNewApplication() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isViewMode, setIsViewMode] = useState(true);
+  /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
+  const [NewApplicantState, setNewApplicantState] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+  const [openNewApplicantAddModal, setOpenNewApplicantAddModal] =
+    useState(false);
+  const [NewApplicantNewFields, setNewApplicantNewFields] = useState([]);
+  const [allFormsData, setAllFormsData] = useState({});
+  const handleAllFormsDataChange = (e) => {
+    let { name, value } = e.target;
+    setAllFormsData({ ...allFormsData, [name]: value });
+  };
 
   const applicationsData = useSelector(
     (state) => state?.universitiesReducer?.viewApplications
@@ -58,7 +71,7 @@ export function AddNewApplication() {
   // console.log("applicantData ==>", applicantData);
 
   const handlefileChange = (file) => {
-    console.log("file", file);
+    // console.log("file", file[0]);
     setFile(file);
     //
     let reader = new FileReader();
@@ -66,8 +79,9 @@ export function AddNewApplication() {
       let output = document.getElementById("university-logo");
       output.src = reader.result;
     };
-    if (event.target.files[0]) {
-      reader.readAsDataURL(event.target.files[0]);
+    // console.log("><><><><><><><><><><><><><><><><><><>", file);
+    if (file[0]) {
+      reader.readAsDataURL(file[0]);
     }
   };
   const fileTypes = ["JPEG", "PNG", "GIF"];
@@ -130,6 +144,7 @@ export function AddNewApplication() {
   // ApplicationDetails
 
   const handleSubmit = async (e) => {
+    console.log("submittin the main form");
     e.preventDefault();
     setIsLoading(true);
     const {
@@ -191,8 +206,8 @@ export function AddNewApplication() {
     formData.append("attestationLetter", attestationLetter);
     formData.append("releaseLetter", releaseLetter);
     formData.append("status", status);
-    formData.append("image", file[0]);
-    formData.append("fileUpload", file[0]);
+    formData.append("image", file ? file[0] : {});
+    formData.append("fileUpload", file ? file[0] : {});
 
     const config = {
       headers: { "content-type": "multipart/form-data" },
@@ -458,17 +473,17 @@ export function AddNewApplication() {
               {isViewMode ? (
                 ""
               ) : (
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-[#333333]">
-                    Add Field
-                  </label>
-                  <button
-                    type="button"
-                    className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                  >
-                    Click to add more field
-                  </button>
-                </div>
+                <AddField
+                  open={openNewApplicantAddModal}
+                  close={() => setOpenNewApplicantAddModal(false)}
+                  toAdd={NewApplicantNewFields}
+                  setOpenAddModal={setOpenNewApplicantAddModal}
+                  setToAdd={setNewApplicantNewFields}
+                  formsData={formValues}
+                  setFormsData={setFormValues}
+                  handleFormsDataChange={handleAllFormsDataChange}
+                  section={"Accounting-NewApplicant"}
+                />
               )}
             </div>
           </div>
@@ -773,17 +788,17 @@ export function AddNewApplication() {
               {isViewMode ? (
                 ""
               ) : (
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-[#333333]">
-                    Add Field
-                  </label>
-                  <button
-                    type="button"
-                    className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-                  >
-                    Click to add more field
-                  </button>
-                </div>
+                <AddField
+                  open={openNewApplicantAddModal}
+                  close={() => setOpenNewApplicantAddModal(false)}
+                  toAdd={NewApplicantNewFields}
+                  setOpenAddModal={setOpenNewApplicantAddModal}
+                  setToAdd={setNewApplicantNewFields}
+                  formsData={appDetailValues}
+                  setFormsData={setAppDetailValue}
+                  handleFormsDataChange={handleAllFormsDataChange}
+                  section={"Accounting-NewApplicant"}
+                />
               )}
             </div>
           </div>

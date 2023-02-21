@@ -13,14 +13,21 @@ import filterIcon from "../../../public/img/filterIcon.svg";
 import print from "../../../public/img/print.svg";
 import saveIcon from "../../../public/img/saveIcon.svg";
 import Sales_recording_data from "@/data/Sales-recording-data";
-import AddField from "./AddField";
+import AddField from "../../helpers/AddField";
 import { NavLink } from "react-router-dom";
 import dropdown from "../../../public/img/dropdown.svg";
 
 export function Sales() {
+  /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
+  // const [openModal, setOpenModal] = useState(false);
   const [salesState, setSalesState] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
-
+  const [openSalesAddModal, setOpenSalesAddModal] = useState(false);
+  const [SalesNewFields, setSalesNewFields] = useState([]);
+  const [allFormsData, setAllFormsData] = useState({});
+  const handleAllFormsDataChange = (e) => {
+    let { name, value } = e.target;
+    setAllFormsData({ ...allFormsData, [name]: value });
+  };
   return (
     <>
       <div
@@ -307,7 +314,7 @@ export function Sales() {
                   required
                 />
               </div>
-              <div>
+              {/* <div>
                 <label className="mb-2 block text-sm font-semibold text-[#333333]">
                   Add Field
                 </label>
@@ -319,7 +326,18 @@ export function Sales() {
                   Click to add more field
                 </button>
                 <AddField open={openModal} close={() => setOpenModal(false)} />
-              </div>
+              </div> */}
+              <AddField
+                open={openSalesAddModal}
+                close={() => setOpenSalesAddModal(false)}
+                toAdd={SalesNewFields}
+                setOpenAddModal={setOpenSalesAddModal}
+                setToAdd={setSalesNewFields}
+                formsData={allFormsData}
+                setFormsData={setAllFormsData}
+                handleFormsDataChange={handleAllFormsDataChange}
+                section={"Accounting-Sales"}
+              />
             </div>
           </form>
         </div>

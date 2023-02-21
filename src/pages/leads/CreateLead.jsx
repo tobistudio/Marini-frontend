@@ -603,8 +603,29 @@ import { viewLead } from "@/redux/actions/actions";
 import { useDispatch, useSelector } from "react-redux";
 import FullPageLoader from "@/FullPageLoader/FullPageLoader";
 import { v4 as uuid } from "uuid";
+import AddField from "@/helpers/Addfield";
 
 export function CreateLead() {
+  // Anasite - Edits: Add New Form
+  /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
+  // const [openModal, setOpenModal] = useState(false);
+  // const [CreateLeadState, setCreateLeadState] = useState(true);
+  const [openCreateLeadAddModal, setOpenCreateLeadAddModal] = useState(false);
+  const [openProgramDetailsAddModal, setOpenProgramDetailsAddModal] =
+    useState(false);
+  const [openThirdAddModal, setOpenThirdAddModal] = useState(false);
+
+  const [CreateLeadNewFields, setCreateLeadNewFields] = useState([]);
+  const [ProgrameDetailNewForm, setProgrameDetailNewForm] = useState([]);
+  const [thirdNewForm, setThirdNewForm] = useState([]);
+
+  const [allFormsData, setAllFormsData] = useState({});
+  const handleAllFormsDataChange = (e) => {
+    let { name, value } = e.target;
+    setAllFormsData({ ...allFormsData, [name]: value });
+  };
+  // End
+  const [openAddModal, setOpenAddModal] = useState(false);
   const [isViewMode, setIsViewMode] = useState(true);
   const fileTypes = ["JPEG", "PNG", "GIF"];
   const [file, setFile] = useState(null);
@@ -679,8 +700,8 @@ export function CreateLead() {
       let output = document.getElementById("university-logo");
       output.src = reader.result;
     };
-    if (event.target.files[0]) {
-      reader.readAsDataURL(event.target.files[0]);
+    if (file[0]) {
+      reader.readAsDataURL(file[0]);
     }
   };
 
@@ -982,18 +1003,34 @@ export function CreateLead() {
               {isViewMode ? (
                 ""
               ) : (
-                <div>
+                <AddField
+                  open={openCreateLeadAddModal}
+                  close={() => setOpenCreateLeadAddModal(false)}
+                  toAdd={CreateLeadNewFields}
+                  setOpenAddModal={setOpenCreateLeadAddModal}
+                  setToAdd={setCreateLeadNewFields}
+                  formsData={formValues}
+                  setFormsData={setFormValues}
+                  handleFormsDataChange={handleAllFormsDataChange}
+                  section={"Lead-CreateLead"}
+                />
+              )}
+              {/* <div>
                   <label className="mb-2 block text-sm font-semibold text-[#333333]">
                     Add Field
                   </label>
                   <button
+                    onClick={() => setOpenAddModal(true)}
                     type="button"
                     className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
                   >
                     Click to add more field
                   </button>
-                </div>
-              )}
+                  <Addfield
+                    open={openAddModal}
+                    close={() => setOpenAddModal(false)}
+                  />
+                </div> */}
             </div>
             {/* </form> */}
           </div>
@@ -1124,19 +1161,35 @@ export function CreateLead() {
               ""
             ) : (
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                <div>
+                <AddField
+                  open={openProgramDetailsAddModal}
+                  close={() => setOpenProgramDetailsAddModal(false)}
+                  toAdd={ProgrameDetailNewForm}
+                  setToAdd={setProgrameDetailNewForm}
+                  setOpenAddModal={setOpenProgramDetailsAddModal}
+                  formsData={ProgrameDetailValues}
+                  setFormsData={setProgrameDetailsValues}
+                  handleFormsDataChange={handleAllFormsDataChange}
+                  section={"Lead-ProgramDetails"}
+                />
+              </div>
+            )}
+            {/* <div>
                   <label className="mb-2 block text-sm font-semibold text-[#333333]">
                     Add Field
                   </label>
                   <button
+                    onClick={() => setOpenAddModal(true)}
                     type="button"
                     className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
                   >
                     Click to add more field
                   </button>
-                </div>
-              </div>
-            )}
+                  <Addfield
+                    open={openAddModal}
+                    close={() => setOpenAddModal(false)}
+                  />
+                </div> */}
             {/* </form> */}
           </div>
           <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]">
@@ -1179,18 +1232,34 @@ export function CreateLead() {
               {isViewMode ? (
                 ""
               ) : (
-                <div>
+                <AddField
+                  open={openThirdAddModal}
+                  close={() => setOpenThirdAddModal(false)}
+                  setOpenAddModal={setOpenThirdAddModal}
+                  toAdd={thirdNewForm}
+                  setToAdd={setThirdNewForm}
+                  formsData={allFormsData}
+                  setFormsData={setAllFormsData}
+                  handleFormsDataChange={handleAllFormsDataChange}
+                  section={"Lead-Third"}
+                />
+              )}
+              {/* <div>
                   <label className="mb-2 block text-sm font-semibold text-[#333333]">
                     Add Field
                   </label>
                   <button
+                    onClick={() => setOpenAddModal(true)}
                     type="button"
                     className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
                   >
                     Click to add more field
                   </button>
-                </div>
-              )}
+                  <Addfield
+                    open={openAddModal}
+                    close={() => setOpenAddModal(false)}
+                  />
+                </div> */}
             </div>
             {/* </form> */}
           </div>

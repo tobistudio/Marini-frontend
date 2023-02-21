@@ -1,16 +1,16 @@
 import React from "react";
-import {
-  Button,
-  Dialog,
-  DialogBody,
-} from "@material-tailwind/react";
+import { Button, Dialog, DialogBody } from "@material-tailwind/react";
 import print from "../../../public/img/print01.svg";
 import invoice01 from "../../../public/img/invoice01.png";
 import downloadIcon from "../../../public/img/downloadIcon.svg";
 
-const PreviewInvoice = (props) => {
+const PreviewInvoice = ({ open, close }) => {
   return (
-    <Dialog className="rounded-[24px] h-[96vh] overflow-auto custom-scroll font-display" size="lg" open={props.open}>
+    <Dialog
+      className="custom-scroll h-[96vh] overflow-auto rounded-[24px] font-display"
+      size="lg"
+      open={open}
+    >
       <DialogBody>
         <div className="relative h-full w-full md:h-auto">
           <div className="relative bg-white dark:bg-gray-700">
@@ -18,37 +18,29 @@ const PreviewInvoice = (props) => {
               <h3 className=" pt-3 text-2xl font-semibold text-[#333333] dark:text-white">
                 PDF Preview
               </h3>
-              <Button className="rounded-[15px]  bg-[#280559]" onClick={() => setOpenPreviewModal(true)}>
-            <div className="flex flex-row items-center justify-center">
-              <img src={print} alt="..." />
-              <p className="px-[11px] text-base font-medium normal-case text-white p-1">
-              Print / Preview
-              </p>
-            </div>
-          </Button>
-              
+              <Button className="rounded-[15px]  bg-[#280559]" onClick={close}>
+                <div className="flex flex-row items-center justify-center">
+                  back
+                </div>
+              </Button>
             </div>
 
-            <div className="space-y-6 mx-[50px] py-[54px] bg-[#D9D9D9]">
-              <img
-                className="m-auto w-auto"
-                src={invoice01}
-                alt="..."
-              />
+            <div className="mx-[50px] space-y-6 bg-[#D9D9D9] py-[54px]">
+              <img className="m-auto w-auto" src={invoice01} alt="..." />
             </div>
 
-            <div className="flex  flex-row justify-end space-x-2 rounded-b border-gray-200 p-6 dark:border-gray-600 mx-7">
-              <Button className="rounded-[15px]  bg-[#280559]" onClick={props.close}>
-            <div className="flex flex-row items-center justify-center">
-              <img src={downloadIcon} alt="..." />
-              <p className="px-[11px] text-base font-medium normal-case text-white p-1">
-              Download
-              </p>
-            </div>
-          </Button>
+            <div className="mx-7  flex flex-row justify-end space-x-2 rounded-b border-gray-200 p-6 dark:border-gray-600">
+              <Button className="rounded-[15px]  bg-[#280559]" onClick={close}>
+                <div className="flex flex-row items-center justify-center">
+                  <img src={downloadIcon} alt="..." />
+                  <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                    Download
+                  </p>
+                </div>
+              </Button>
               <Button
                 className=" flex h-[60px] flex-row items-center justify-center rounded-2xl border border-[#280559] bg-white"
-                onClick={props.close}
+                onClick={close}
               >
                 <svg
                   aria-hidden="true"

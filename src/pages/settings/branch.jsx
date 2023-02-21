@@ -11,7 +11,7 @@ import plus from "../../../public/img/plus.svg";
 import filterIcon from "../../../public/img/filterIcon.svg";
 import saveIcon from "../../../public/img/saveIcon.svg";
 import BranchProps from "@/data/branch-props";
-import AddField from "./Addfield";
+import AddField from "@/helpers/Addfield";
 import { NavLink } from "react-router-dom";
 import dropdown from "../../../public/img/dropdown.svg";
 import { useSelector, useDispatch } from "react-redux";
@@ -34,15 +34,23 @@ export function Branch() {
   const navigate = useNavigate();
   const params = useParams();
 
+  /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
+  // const [openModal, setOpenModal] = useState(false);
+  const [BranchState, setBranchState] = useState(true);
+  const [openBranchAddModal, setOpenBranchAddModal] = useState(false);
+  const [BranchNewFields, setBranchNewFields] = useState([]);
+  // const [allFormsData, setAllFormsData] = useState({});
+  // const handleAllFormsDataChange = (e) => {
+  //   let { name, value } = e.target;
+  //   setAllFormsData({ ...allFormsData, [name]: value });
+  // };
+  // End
   const branchDate = useSelector((state) => state?.universitiesReducer?.branch);
 
-
-  
   const pagination = useSelector(
     (state) => state?.universitiesReducer?.branch?.data?.pagination
   );
 
-   
   console.log("branch data branch module", branchDate);
   // viewBranch
 
@@ -547,7 +555,7 @@ export function Branch() {
                   onChange={handleChange}
                 />
               </div>
-              <div>
+              {/* <div>
                 <label className="mb-2 block text-sm font-semibold text-[#333333]">
                   Add Field
                 </label>
@@ -558,8 +566,23 @@ export function Branch() {
                 >
                   Click to add more field
                 </button>
-                <AddField open={openModal} close={() => setOpenModal(false)} />
-              </div>
+                <Addfield open={openModal} close={() => setOpenModal(false)} />
+              </div> */}
+              {isViewMode ? (
+                ""
+              ) : (
+                <AddField
+                  open={openBranchAddModal}
+                  close={() => setOpenBranchAddModal(false)}
+                  toAdd={BranchNewFields}
+                  setOpenAddModal={setOpenBranchAddModal}
+                  setToAdd={setBranchNewFields}
+                  formsData={formValues}
+                  setFormsData={setFormValues}
+                  handleFormsDataChange={handleChange}
+                  section={"Settings-Branch"}
+                />
+              )}
             </div>
 
             {/* <NavLink to=""> */}

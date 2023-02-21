@@ -5,14 +5,23 @@ import saveIcon from "../../../public/img/saveIcon.svg";
 import print from "../../../public/img/print.svg";
 // import AddField from "./AddField";
 import PreviewInvoice from "./PreviewInvoice";
-import AddField from "./Addfield";
+import AddField from "@/helpers/Addfield";
 
 export function CreateInvoice() {
+  const [allFormsData, setAllFormsData] = useState({});
   const [openInvoiceAddModal, setOpenInvoiceAddModal] = useState(false);
   const [openBillingAddModal, setOpenBillingAddModal] = useState(false);
   const [openInvoiceListAddModal, setOpenInvoiceListAddModal] = useState(false);
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
+  const [invoiceMailingInfoNewFields, setInvoiceMailingInfoNewFields] =
+    useState([]);
+  const [billToAddField, setBillToAddField] = useState([]);
+  const [invoiceItemAddField, setInvoiceItemAddField] = useState([]);
 
+  const handleAllFormsDataChange = (e) => {
+    let { name, value } = e.target;
+    setAllFormsData({ ...allFormsData, [name]: value });
+  };
   return (
     <div className="mt-12 w-full bg-[#E8E9EB] font-display">
       <div className="my-10">
@@ -96,6 +105,9 @@ export function CreateInvoice() {
                 type="text"
                 className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Address line 1"
+                name={"addres-line-1"}
+                value={allFormsData["addres-line-1"] || ""}
+                onChange={handleAllFormsDataChange}
                 required
               />
             </div>
@@ -107,6 +119,9 @@ export function CreateInvoice() {
                 type="text"
                 className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Address line 2"
+                name={"addres-line-2"}
+                value={allFormsData["addres-line-2"] || ""}
+                onChange={handleAllFormsDataChange}
                 required
               />
             </div>
@@ -114,8 +129,12 @@ export function CreateInvoice() {
               <label className="mb-2 block text-sm font-semibold text-[#333333]">
                 Country
               </label>
-              <select className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500">
-                <option selected>Select Country</option>
+              <select
+                className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
+                value={""}
+                onChange={() => {}}
+              >
+                <option value={""}>Select Country</option>
               </select>
             </div>
             <div>
@@ -126,6 +145,9 @@ export function CreateInvoice() {
                 type="tel"
                 className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                 placeholder="+91 0123 456 789"
+                name={"tel"}
+                value={allFormsData["tel"] || ""}
+                onChange={handleAllFormsDataChange}
                 required
               />
             </div>
@@ -137,25 +159,24 @@ export function CreateInvoice() {
                 type="email"
                 className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                 placeholder="example@email.com"
+                name={"email"}
+                value={allFormsData["email"] || ""}
+                onChange={handleAllFormsDataChange}
                 required
               />
             </div>
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-[#333333]">
-                Add Field
-              </label>
-              <button
-                onClick={() => setOpenInvoiceAddModal(true)}
-                type="button"
-                className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-[#F8F9FB] p-2.5 font-medium text-[#BEBFC3]"
-              >
-                Click to add more field
-              </button>
-              <AddField
-                open={openInvoiceAddModal}
-                close={() => setOpenInvoiceAddModal(false)}
-              />
-            </div>
+
+            <AddField
+              open={openInvoiceAddModal}
+              close={() => setOpenInvoiceAddModal(false)}
+              toAdd={invoiceMailingInfoNewFields}
+              setOpenAddModal={setOpenInvoiceAddModal}
+              setToAdd={setInvoiceMailingInfoNewFields}
+              formsData={allFormsData}
+              setFormsData={setAllFormsData}
+              handleFormsDataChange={handleAllFormsDataChange}
+              section={"Invoice Mailing"}
+            />
           </div>
         </form>
       </div>
@@ -172,6 +193,9 @@ export function CreateInvoice() {
                 type="text"
                 className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Address line 1"
+                name={"billing-addres-line-1"}
+                value={allFormsData["billing-addres-line-1"] || ""}
+                onChange={handleAllFormsDataChange}
                 required
               />
             </div>
@@ -183,6 +207,9 @@ export function CreateInvoice() {
                 type="text"
                 className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Address line 2"
+                name={"billing-addres-line-2"}
+                value={allFormsData["billing-addres-line-2"] || ""}
+                onChange={handleAllFormsDataChange}
                 required
               />
             </div>
@@ -190,8 +217,12 @@ export function CreateInvoice() {
               <label className="mb-2 block text-sm font-semibold text-[#333333]">
                 Country
               </label>
-              <select className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500">
-                <option selected>Select Country</option>
+              <select
+                className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
+                value={""}
+                onChange={() => {}}
+              >
+                <option value={""}>Select Country</option>
               </select>
             </div>
             <div>
@@ -202,6 +233,9 @@ export function CreateInvoice() {
                 type="tel"
                 className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                 placeholder="+91 0123 456 789"
+                name={"billing-tel"}
+                value={allFormsData["billing-tel"] || ""}
+                onChange={handleAllFormsDataChange}
                 required
               />
             </div>
@@ -213,10 +247,13 @@ export function CreateInvoice() {
                 type="email"
                 className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                 placeholder="example@email.com"
+                name={"billing-email"}
+                value={allFormsData["billing-email"] || ""}
+                onChange={handleAllFormsDataChange}
                 required
               />
             </div>
-            <div>
+            {/* <div>
               <label className="mb-2 block text-sm font-semibold text-[#333333]">
                 Add Field
               </label>
@@ -227,11 +264,18 @@ export function CreateInvoice() {
               >
                 Click to add more field
               </button>
-              <AddField
-                open={openBillingAddModal}
-                close={() => setOpenBillingAddModal(false)}
-              />
-            </div>
+            </div> */}
+            <AddField
+              open={openBillingAddModal}
+              close={() => setOpenBillingAddModal(false)}
+              toAdd={billToAddField}
+              setToAdd={setBillToAddField}
+              setOpenAddModal={setOpenBillingAddModal}
+              formsData={allFormsData}
+              setFormsData={setAllFormsData}
+              handleFormsDataChange={handleAllFormsDataChange}
+              section={"Bill To Middle"}
+            />
           </div>
         </form>
       </div>
@@ -250,6 +294,9 @@ export function CreateInvoice() {
                 type="text"
                 className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Item Name"
+                name={"item-name"}
+                value={allFormsData["item-name"] || ""}
+                onChange={handleAllFormsDataChange}
                 required
               />
             </div>
@@ -261,6 +308,9 @@ export function CreateInvoice() {
                 type="number"
                 className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                 placeholder="1"
+                name={"item-quantity"}
+                value={allFormsData["item-quantity"] || ""}
+                onChange={handleAllFormsDataChange}
                 required
               />
             </div>
@@ -276,13 +326,16 @@ export function CreateInvoice() {
                   type="text"
                   className="block h-full w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 pl-16 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="0.00"
+                  name={"price"}
+                  value={allFormsData["price"] || ""}
+                  onChange={handleAllFormsDataChange}
                   required
                 />
               </div>
             </div>
           </div>
           <div className="mb-6 grid grid-cols-1 gap-6">
-            <div>
+            {/* <div>
               <label className="mb-2 block text-sm font-semibold text-[#333333]">
                 Add Field
               </label>
@@ -293,11 +346,18 @@ export function CreateInvoice() {
               >
                 Click to add more field
               </button>
-              <AddField
-                open={openInvoiceListAddModal}
-                close={() => setOpenInvoiceListAddModal(false)}
-              />
-            </div>
+            </div> */}
+            <AddField
+              open={openInvoiceListAddModal}
+              close={() => setOpenInvoiceListAddModal(false)}
+              toAdd={invoiceItemAddField}
+              setToAdd={setInvoiceItemAddField}
+              setOpenAddModal={setOpenInvoiceListAddModal}
+              formsData={allFormsData}
+              setFormsData={setAllFormsData}
+              handleFormsDataChange={handleAllFormsDataChange}
+              section={"Invoice Item Last"}
+            />
           </div>
         </form>
       </div>
