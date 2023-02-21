@@ -21,8 +21,8 @@ import FullPageLoader from "@/FullPageLoader/FullPageLoader";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
-import { listUsers } from "@/redux/actions/actions";
-import { viewUser } from "@/redux/actions/actions";
+import { listUsers, listBranches } from "@/redux/actions/actions";
+import { viewUser, viewBranch } from "@/redux/actions/actions";
 import { ENV } from "@/config";
 import Paginate from "@/paginate";
 export function User() {
@@ -56,8 +56,13 @@ export function User() {
   };
   const [formValues, setFormValues] = useState(initialValue);
 
+  const branchData = useSelector(
+    (state) => state?.universitiesReducer?.branch?.data?.faqs
+  );
+
   const allUsers = useSelector((state) => state?.universitiesReducer?.users);
   console.log("all users in users module ===>", allUsers);
+  console.log("all branches in users module ===>", branchData);
 
   const viewUsers = useSelector(
     (state) => state?.universitiesReducer?.viewUser
@@ -110,6 +115,7 @@ export function User() {
     }
   };
   useEffect(() => {
+    dispatch(listBranches());
     dispatch(listUsers());
   }, []);
 
@@ -514,27 +520,46 @@ export function User() {
                   onChange={handleChange}
                   disabled={isViewMode}
                 >
-                  <option>Select Role</option>
-                  <option>Manager</option>
-                  <option>Boss</option>
+                  <option value={""}>Select Role</option>
+                  <option value={"manager"}>Manager</option>
+                  <option value={"superadmin hq"}>Superadmin HQ</option>
+                  <option value={"admin hq"}>Admin HQ</option>
+                  <option value={"Boss"}>Boss</option>
+                  <option value={"Counselor HQ"}>Counselor HQ</option>
+                  <option value={"Accountant HQ"}>Accountant HQ</option>
                 </select>
               </div>
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#333333]">
-                  Branch
-                </label>
-                <select
-                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
-                  name="branch"
-                  defaultValue={formValues.branch}
-                  onChange={handleChange}
-                  disabled={isViewMode}
-                >
-                  <option>Select Branch</option>
-                  <option>Mdk</option>
-                  <option>Lahore</option>
-                </select>
-              </div>
+              {formValues.role.toLowerCase() === "superadmin hq" ||
+              formValues.role.toLowerCase() === "admin hq" ||
+              formValues.role.toLowerCase() === "Counselor HQ".toLowerCase() ||
+              formValues.role.toLowerCase() ===
+                "Accountant HQ".toLowerCase() ? (
+                ""
+              ) : (
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-[#333333]">
+                    Branch
+                  </label>
+                  <select
+                    className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
+                    name="branch"
+                    value={formValues.branch}
+                    onChange={handleChange}
+                    disabled={isViewMode}
+                  >
+                    <option value={""}>Select Branch</option>
+                    {/* <option>Mdk</option>
+                      <option>Lahore</option> */}
+                    {branchData?.map(({ id, name }) => {
+                      return (
+                        <option value={id} key={id + name}>
+                          {name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              )}
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#333333]">
                   Position

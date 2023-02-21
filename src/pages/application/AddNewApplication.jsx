@@ -37,6 +37,10 @@ export function AddNewApplication() {
   const [openNewApplicantAddModal, setOpenNewApplicantAddModal] =
     useState(false);
   const [NewApplicantNewFields, setNewApplicantNewFields] = useState([]);
+  const [openSecondNewApplicantAddModal, setOpenSecondNewApplicantAddModal] =
+    useState(false);
+  const [SecondNewApplicantNewFields, setSecondNewApplicantNewFields] =
+    useState([]);
   const [allFormsData, setAllFormsData] = useState({});
   const handleAllFormsDataChange = (e) => {
     let { name, value } = e.target;
@@ -236,9 +240,11 @@ export function AddNewApplication() {
   const handleFullNameChange = (e) => {
     const { name, value } = e.target;
     // console.log(">>>>>>>>>>>>>>>>>>>>>>", value);
-    if (value === "" && name === "fullName")
+    if (value === "" && name === "id") {
+      setAppDetailValue(secondInitialValues);
       return setFormValues(initialValues);
-    if (value === "") return;
+    }
+    // if (value === "") return;
     // Anasite - Edits: showing applicant info.
     let newFormValues = { ...formValues, [name]: value };
     let newAppDetailValues = { ...appDetailValues };
@@ -407,6 +413,9 @@ export function AddNewApplication() {
                   <option value={""}>Select Country</option>
                   <option value={"pakistan"}>pakistan</option>
                   <option value={"india"}>india</option>
+                  <option value={formValues?.country || ""}>
+                    {formValues?.country || ""}
+                  </option>
                 </select>
               </div>
             </div>
@@ -789,15 +798,15 @@ export function AddNewApplication() {
                 ""
               ) : (
                 <AddField
-                  open={openNewApplicantAddModal}
-                  close={() => setOpenNewApplicantAddModal(false)}
-                  toAdd={NewApplicantNewFields}
-                  setOpenAddModal={setOpenNewApplicantAddModal}
-                  setToAdd={setNewApplicantNewFields}
+                  open={openSecondNewApplicantAddModal}
+                  close={() => setOpenSecondNewApplicantAddModal(false)}
+                  toAdd={SecondNewApplicantNewFields}
+                  setOpenAddModal={setOpenSecondNewApplicantAddModal}
+                  setToAdd={setSecondNewApplicantNewFields}
                   formsData={appDetailValues}
                   setFormsData={setAppDetailValue}
                   handleFormsDataChange={handleAllFormsDataChange}
-                  section={"Accounting-NewApplicant"}
+                  section={"Accounting-SecondNewApplicant"}
                 />
               )}
             </div>
