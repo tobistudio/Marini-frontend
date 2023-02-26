@@ -10,8 +10,33 @@ import { ENV } from "../../config";
 import { toast } from "react-toastify";
 import AddProperty from "./AddProperty";
 import PropertyCard from "./PropertyCard";
+import {
+  listApplicationModuleStatuss,
+  listLeadsManagmentModuleStatuss,
+  listInvoiceModuleStatuss,
+} from "@/redux/actions/actions";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export function StatusManagement() {
+  // Anasite - Edits
+  const dispatch = useDispatch();
+
+  const {
+    invoiceModuleStatuss,
+    leadsManagmentModuleStatuss,
+    applicationModuleStatuss,
+  } = useSelector((state) =>
+    state?.universitiesReducer ? state.universitiesReducer : {}
+  );
+  //
+
+  useEffect(() => {
+    dispatch(listApplicationModuleStatuss());
+    dispatch(listLeadsManagmentModuleStatuss());
+    dispatch(listInvoiceModuleStatuss());
+  }, []);
+  // END
   const [statusstate, setStatusstate] = useState(true);
   const [property, setProperty] = useState("");
   const [type, setType] = useState(0);
@@ -36,7 +61,7 @@ export function StatusManagement() {
                     <div className="flex flex-row items-center justify-center">
                       <img src={saveIcon} alt="..." />
                       <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
-                        Save Changes of s
+                        Save Changes
                       </p>
                     </div>
                   </Button>
@@ -57,13 +82,24 @@ export function StatusManagement() {
               </NavLink>
             </div> */}
           </div>
-          <PropertyCard title={"Application Module"} type={1} />
+          <PropertyCard
+            title={"Application Module"}
+            toView={applicationModuleStatuss}
+            type={"applicationmodulestatus"}
+          />
 
-          <PropertyCard title={"Leads Managment Module"} type={2} />
+          <PropertyCard
+            title={"Leads Managment Module"}
+            toView={leadsManagmentModuleStatuss}
+            type={"leadsmanagmentmodulestatus"}
+          />
 
           {/* Inovoice Module */}
-          <PropertyCard title={"Inovoice Module"} type={3} />
-
+          <PropertyCard
+            title={"Inovoice Module"}
+            toView={invoiceModuleStatuss}
+            type={"invoicemodulestatus"}
+          />
         </div>
       </div>
     </>

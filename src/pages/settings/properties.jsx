@@ -5,7 +5,17 @@ import saveIcon from "../../../public/img/saveIcon.svg";
 import PropData from "@/data/Prop-data";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { listProperties } from "@/redux/actions/actions";
+import {
+  listProperties,
+  // Anasite - Edits
+  listProgramLevels,
+  listProgramCategorys,
+  listQualificationTypes,
+  listUniversityTypes,
+  listInterestedPrograms,
+  listLeadGroups,
+  // End
+} from "@/redux/actions/actions";
 import PropertyCard from "./PropertyCard";
 
 export function Properties() {
@@ -18,10 +28,46 @@ export function Properties() {
   const propertiesData = useSelector(
     (state) => state?.universitiesReducer?.properties
   );
+  // Anasite - Edits
+  const programLevels = useSelector(
+    (state) => state?.universitiesReducer?.programLevels
+  );
+  //
+  const programCategorys = useSelector(
+    (state) => state?.universitiesReducer?.programCategorys
+  );
+  //
+  const qualificationTypes = useSelector(
+    (state) => state?.universitiesReducer?.qualificationTypes
+  );
+  //
+  const universityTypes = useSelector(
+    (state) => state?.universitiesReducer?.universityTypes
+  );
+  //
+  const leadGroup = useSelector(
+    (state) => state?.universitiesReducer?.leadGroups
+  );
+  //
+  const interestedPrograms = useSelector(
+    (state) => state?.universitiesReducer?.interestedPrograms
+  );
+  //
+
+  // End
+
   console.log("properties data in properties module 0==>", propertiesData);
 
   useEffect(() => {
     dispatch(listProperties());
+    // Anasite - Edits
+    dispatch(listProgramLevels());
+    dispatch(listProgramCategorys());
+    dispatch(listQualificationTypes());
+    dispatch(listUniversityTypes());
+    dispatch(listLeadGroups());
+    dispatch(listInterestedPrograms());
+    // End
   }, []);
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,7 +89,7 @@ export function Properties() {
           <div className="mb-10">
             <div className="flex items-center justify-between gap-4">
               <p className=" text-4xl font-semibold text-[#280559]">
-                Properties Management
+                Property Management
               </p>
               <div className="hidden md:block">
                 <NavLink to="">
@@ -58,7 +104,9 @@ export function Properties() {
                 </NavLink>
               </div>
             </div>
-            <p className=" font text-base text-[#9898A3]">Status Management</p>
+            <p className=" font text-base text-[#9898A3]">
+              Property Management
+            </p>
             <div className="ml-auto mt-6 block w-full md:hidden">
               <NavLink to="">
                 <Button className="ml-auto flex h-[60px] flex-row items-center rounded-2xl bg-[#280559] p-2 sm:py-3 sm:px-6">
@@ -73,14 +121,36 @@ export function Properties() {
             </div>
           </div>
 
- 
-          <PropertyCard title={"Program Level"} type={4} />
-          <PropertyCard title={"Program Category"} type={5} />
-          <PropertyCard title={"Qualification Type"} type={6} />
-          <PropertyCard title={"University Type"} type={7} />
-          <PropertyCard title={"Lead Group"} type={8} />
-          <PropertyCard title={"Interested Program"} type={9} />
-
+          <PropertyCard
+            title={"Program Level"}
+            toView={programLevels}
+            type={"programlevel"}
+          />
+          <PropertyCard
+            title={"Program Category"}
+            toView={programCategorys}
+            type={"programcategory"}
+          />
+          <PropertyCard
+            title={"Qualification Type"}
+            toView={qualificationTypes}
+            type={"qualificationtype"}
+          />
+          <PropertyCard
+            title={"University Type"}
+            toView={universityTypes}
+            type={"universitytype"}
+          />
+          <PropertyCard
+            title={"Lead Group"}
+            toView={leadGroup}
+            type={"leadgroup"}
+          />
+          <PropertyCard
+            title={"Interested Program"}
+            toView={interestedPrograms}
+            type={"interestedprogram"}
+          />
         </div>
       </div>
 

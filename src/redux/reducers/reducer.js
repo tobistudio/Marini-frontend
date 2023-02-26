@@ -20,6 +20,36 @@ import {
   DELETE_BACKUP_FILE,
   DOWNLOAD_BACKUP_FILE,
   RESTORE_BACKUP_FILE,
+  // Anasite - Edits: adding properties
+  VIEW_PROGRAM_LEVEL,
+  LIST_ALL_PROGRAM_LEVELS,
+  //
+  VIEW_PROGRAM_CATEGORY,
+  LIST_ALL_PROGRAM_CATEGORYS,
+  //
+  VIEW_QUALIFICATION_TYPE,
+  LIST_ALL_QUALIFICATION_TYPES,
+  //
+  VIEW_UNIVERSITY_TYPE,
+  LIST_ALL_UNIVERSITY_TYPES,
+  //
+  VIEW_LEAD_GROUP,
+  LIST_ALL_LEAD_GROUPS,
+  //
+  VIEW_INTERESTED_PROGRAM,
+  LIST_ALL_INTERESTED_PROGRAMS,
+  //
+  // Status
+  LIST_ALL_APPLICATION_MODULE_STATUSS,
+  VIEW_APPLICATION_MODULE_STATUS,
+  //
+  LIST_ALL_LEADS_MANAGMENT_MODULE_STATUS,
+  VIEW_LEADS_MANAGMENT_MODULE_STATUS,
+  //
+  LIST_ALL_INVOICE_MODULE_STATUSS,
+  VIEW_INVOICE_MODULE_STATUS,
+  //
+  // END
 } from "../actions/actionType";
 
 const initialState = {
@@ -45,9 +75,142 @@ const initialState = {
   deleteBackupFile: [null],
   downloadBackupFile: [null],
   restoreBackupFile: [null],
+  // Anasite - Edits: properties
+  programLevels: [null],
+  viewProgramLevel: [null],
+  //
+  programCategorys: [null],
+  viewProgramCategory: [null],
+  //
+  qualificationTypes: [null],
+  viewQualificationType: [null],
+  //
+  universityTypes: [null],
+  viewUniversityType: [null],
+  //
+  leadGroups: [null],
+  viewLeadGroup: [null],
+  //
+  interestedPrograms: [null],
+  viewInterestedGroup: [null],
+  //
+  // Status
+  applicationModuleStatuss: [null],
+  viewApplicationModuleStatus: [null],
+  //
+  leadsManagmentModuleStatuss: [null],
+  viewLeadsManagmentModuleStatus: [null],
+  //
+  invoiceModuleStatuss: [null],
+  viewInvoiceModuleStatus: [null],
+  //
+  // END
 };
 const universitiesReducer = (state = initialState, action) => {
   switch (action.type) {
+    // Anasite - Edits: properties
+
+    case LIST_ALL_PROGRAM_LEVELS:
+      return {
+        ...state,
+        programLevels: action.payload,
+      };
+    case VIEW_PROGRAM_LEVEL:
+      return {
+        ...state,
+        viewProgramLevel: action.payload,
+      };
+    //
+    case LIST_ALL_PROGRAM_CATEGORYS:
+      return {
+        ...state,
+        programCategorys: action.payload,
+      };
+    case VIEW_PROGRAM_CATEGORY:
+      return {
+        ...state,
+        viewProgramCategory: action.payload,
+      };
+    //
+    case LIST_ALL_QUALIFICATION_TYPES:
+      return {
+        ...state,
+        qualificationTypes: action.payload,
+      };
+    case VIEW_QUALIFICATION_TYPE:
+      return {
+        ...state,
+        viewQualificationType: action.payload,
+      };
+    //
+    case LIST_ALL_UNIVERSITY_TYPES:
+      return {
+        ...state,
+        universityTypes: action.payload,
+      };
+    case VIEW_UNIVERSITY_TYPE:
+      return {
+        ...state,
+        viewUniversityType: action.payload,
+      };
+    //
+    case LIST_ALL_LEAD_GROUPS:
+      return {
+        ...state,
+        leadGroups: action.payload,
+      };
+    case VIEW_LEAD_GROUP:
+      return {
+        ...state,
+        viewLeadGroup: action.payload,
+      };
+    //
+    case LIST_ALL_INTERESTED_PROGRAMS:
+      return {
+        ...state,
+        interestedPrograms: action.payload,
+      };
+    case VIEW_INTERESTED_PROGRAM:
+      return {
+        ...state,
+        viewInterestedProgram: action.payload,
+      };
+    //
+    // Status
+    case LIST_ALL_APPLICATION_MODULE_STATUSS:
+      return {
+        ...state,
+        applicationModuleStatuss: action.payload,
+      };
+    case VIEW_APPLICATION_MODULE_STATUS:
+      return {
+        ...state,
+        viewApplicationModuleStatus: action.payload,
+      };
+    //
+    case LIST_ALL_LEADS_MANAGMENT_MODULE_STATUS:
+      return {
+        ...state,
+        leadsManagmentModuleStatuss: action.payload,
+      };
+    case VIEW_LEADS_MANAGMENT_MODULE_STATUS:
+      return {
+        ...state,
+        viewLeadsManagmentModuleStatus: action.payload,
+      };
+    //
+    case LIST_ALL_INVOICE_MODULE_STATUSS:
+      return {
+        ...state,
+        invoiceModuleStatuss: action.payload,
+      };
+    case VIEW_INVOICE_MODULE_STATUS:
+      return {
+        ...state,
+        viewInvoiceModuleStatus: action.payload,
+      };
+    //
+    // END
     case LIST_ALL_UNIVERSITIES:
       return {
         ...state,

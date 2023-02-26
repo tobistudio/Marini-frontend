@@ -21,10 +21,280 @@ import {
   DELETE_BACKUP_FILE,
   DOWNLOAD_BACKUP_FILE,
   RESTORE_BACKUP_FILE,
+  // Anasite - Edits
+  LIST_ALL_PROGRAM_LEVELS,
+  VIEW_PROGRAM_LEVEL,
+  //
+  LIST_ALL_PROGRAM_CATEGORYS,
+  VIEW_PROGRAM_CATEGORY,
+  //
+  LIST_ALL_QUALIFICATION_TYPES,
+  VIEW_QUALIFICATION_TYPE,
+  //
+  LIST_ALL_UNIVERSITY_TYPES,
+  VIEW_UNIVERSITY_TYPE,
+  //
+  LIST_ALL_LEAD_GROUPS,
+  VIEW_LEAD_GROUP,
+  //
+  LIST_ALL_INTERESTED_PROGRAMS,
+  VIEW_INTERESTED_PROGRAM,
+  //
+  LIST_ALL_APPLICATION_MODULE_STATUSS,
+  VIEW_APPLICATION_MODULE_STATUS,
+  //
+  LIST_ALL_LEADS_MANAGMENT_MODULE_STATUS,
+  VIEW_LEADS_MANAGMENT_MODULE_STATUS,
+  //
+  LIST_ALL_INVOICE_MODULE_STATUSS,
+  VIEW_INVOICE_MODULE_STATUS,
+  //
 } from "./actionType";
 import axios from "axios";
 import { ENV } from "@/config";
 
+// Anasite - Edits: Adding list program files
+export const listProgramLevels = (qs) => async (dispatch) => {
+  console.log("api url in action file", ENV.baseUrl);
+  const data = await axios.get(
+    `${ENV.baseUrl}/programlevel/listProgramLevels?${qs}`
+  );
+  console.log("data.data of list program level uni in action file", data);
+  dispatch({
+    type: LIST_ALL_PROGRAM_LEVELS,
+    payload: data.data,
+  });
+};
+export const viewProgramLevel = (id) => async (dispatch) => {
+  console.log(" Umni param id in action method", id);
+  // console.log(" Umni param action in action method", action);
+
+  const data = await axios.get(
+    `${ENV.baseUrl}/programlevel/get/${id}`
+    //
+  );
+  console.log("data of view porgram level in action", data);
+  dispatch({
+    type: VIEW_PROGRAM_LEVEL,
+    payload: data.data,
+  });
+};
+//
+export const listProgramCategorys = (qs) => async (dispatch) => {
+  console.log("api url in action file", ENV.baseUrl);
+  const data = await axios.get(
+    `${ENV.baseUrl}/programcategory/listProgramCategorys?${qs}`
+  );
+  console.log("data.data of list program category uni in action file", data);
+  dispatch({
+    type: LIST_ALL_PROGRAM_CATEGORYS,
+    payload: data.data,
+  });
+};
+export const viewProgramCategory = (id) => async (dispatch) => {
+  console.log(" Umni param id in action method", id);
+  // console.log(" Umni param action in action method", action);
+
+  const data = await axios.get(
+    `${ENV.baseUrl}/programcategory/get/${id}`
+    //
+  );
+  console.log("data of view porgram category in action", data);
+  dispatch({
+    type: VIEW_PROGRAM_CATEGORY,
+    payload: data.data,
+  });
+};
+//
+export const listQualificationTypes = (qs) => async (dispatch) => {
+  console.log("api url in action file", ENV.baseUrl);
+  const data = await axios.get(
+    `${ENV.baseUrl}/qualificationtype/listQualificationTypes?${qs}`
+  );
+  console.log("data.data of list qualification type uni in action file", data);
+  dispatch({
+    type: LIST_ALL_QUALIFICATION_TYPES,
+    payload: data.data,
+  });
+};
+export const viewQualificationType = (id) => async (dispatch) => {
+  console.log(" Umni param id in action method", id);
+  // console.log(" Umni param action in action method", action);
+
+  const data = await axios.get(
+    `${ENV.baseUrl}/qualificationtype/get/${id}`
+    //
+  );
+  console.log("data of view qualification type in action", data);
+  dispatch({
+    type: VIEW_QUALIFICATION_TYPE,
+    payload: data.data,
+  });
+};
+//
+export const listUniversityTypes = (qs) => async (dispatch) => {
+  console.log("api url in action file", ENV.baseUrl);
+  const data = await axios.get(
+    `${ENV.baseUrl}/universitytype/listUniversityTypes?${qs}`
+  );
+  console.log("data.data of list university type uni in action file", data);
+  dispatch({
+    type: LIST_ALL_UNIVERSITY_TYPES,
+    payload: data.data,
+  });
+};
+export const viewUniversityType = (id) => async (dispatch) => {
+  console.log(" Umni param id in action method", id);
+  // console.log(" Umni param action in action method", action);
+
+  const data = await axios.get(
+    `${ENV.baseUrl}/universitytype/get/${id}`
+    //
+  );
+  console.log("data of view qualification type in action", data);
+  dispatch({
+    type: VIEW_UNIVERSITY_TYPE,
+    payload: data.data,
+  });
+};
+//
+export const listLeadGroups = (qs) => async (dispatch) => {
+  console.log("api url in action file", ENV.baseUrl);
+  const data = await axios.get(`${ENV.baseUrl}/leadgroup/listLeadGroups?${qs}`);
+  console.log("data.data of list lead group uni in action file", data);
+  dispatch({
+    type: LIST_ALL_LEAD_GROUPS,
+    payload: data.data,
+  });
+};
+export const viewLeadGroup = (id) => async (dispatch) => {
+  console.log(" Umni param id in action method", id);
+  // console.log(" Umni param action in action method", action);
+
+  const data = await axios.get(
+    `${ENV.baseUrl}/leadgroup/get/${id}`
+    //
+  );
+  console.log("data of view lead group in action", data);
+  dispatch({
+    type: VIEW_LEAD_GROUP,
+    payload: data.data,
+  });
+};
+//
+export const listInterestedPrograms = (qs) => async (dispatch) => {
+  console.log("api url in action file", ENV.baseUrl);
+  const data = await axios.get(
+    `${ENV.baseUrl}/interestedprogram/listInterestedPrograms?${qs}`
+  );
+  console.log("data.data of list interested program uni in action file", data);
+  dispatch({
+    type: LIST_ALL_INTERESTED_PROGRAMS,
+    payload: data.data,
+  });
+};
+export const viewInterestedProgram = (id) => async (dispatch) => {
+  console.log(" Umni param id in action method", id);
+  // console.log(" Umni param action in action method", action);
+
+  const data = await axios.get(
+    `${ENV.baseUrl}/interestedprogram/get/${id}`
+    //
+  );
+  console.log("data of view interested program in action", data);
+  dispatch({
+    type: VIEW_INTERESTED_PROGRAM,
+    payload: data.data,
+  });
+};
+//
+
+// STATUSS
+export const listApplicationModuleStatuss = (qs) => async (dispatch) => {
+  console.log("api url in action file", ENV.baseUrl);
+  const data = await axios.get(
+    `${ENV.baseUrl}/applicationmodulestatus/listApplicationModuleStatuss?${qs}`
+  );
+  console.log("data.data of list interested program uni in action file", data);
+  dispatch({
+    type: LIST_ALL_APPLICATION_MODULE_STATUSS,
+    payload: data.data,
+  });
+};
+export const viewApplicationModuleStatus = (id) => async (dispatch) => {
+  console.log(" Umni param id in action method", id);
+  // console.log(" Umni param action in action method", action);
+
+  const data = await axios.get(
+    `${ENV.baseUrl}/applicationmodulestatus/get/${id}`
+    //
+  );
+  console.log("data of view applicationModuleStatus in action", data);
+  dispatch({
+    type: VIEW_APPLICATION_MODULE_STATUS,
+    payload: data.data,
+  });
+};
+//
+export const listLeadsManagmentModuleStatuss = (qs) => async (dispatch) => {
+  console.log("api url in action file", ENV.baseUrl);
+  const data = await axios.get(
+    `${ENV.baseUrl}/leadsmanagmentmodulestatus/listLeadsManagmentModuleStatuss?${qs}`
+  );
+  console.log(
+    "data.data of list leads managment module status uni in action file",
+    data
+  );
+  dispatch({
+    type: LIST_ALL_LEADS_MANAGMENT_MODULE_STATUS,
+    payload: data.data,
+  });
+};
+export const viewLeadsManagmentModuleStatus = (id) => async (dispatch) => {
+  console.log(" Umni param id in action method", id);
+  // console.log(" Umni param action in action method", action);
+
+  const data = await axios.get(
+    `${ENV.baseUrl}/leadsmanagmentmodulestatus/get/${id}`
+    //
+  );
+  console.log("data of view leads managment module status in action", data);
+  dispatch({
+    type: VIEW_LEADS_MANAGMENT_MODULE_STATUS,
+    payload: data.data,
+  });
+};
+//
+export const listInvoiceModuleStatuss = (qs) => async (dispatch) => {
+  console.log("api url in action file", ENV.baseUrl);
+  const data = await axios.get(
+    `${ENV.baseUrl}/invoicemodulestatus/listInvoiceModuleStatuss?${qs}`
+  );
+  console.log(
+    "data.data of list invoice module status uni in action file",
+    data
+  );
+  dispatch({
+    type: LIST_ALL_INVOICE_MODULE_STATUSS,
+    payload: data.data,
+  });
+};
+export const viewInvoiceModuleStatus = (id) => async (dispatch) => {
+  console.log(" Umni param id in action method", id);
+  // console.log(" Umni param action in action method", action);
+
+  const data = await axios.get(
+    `${ENV.baseUrl}/invoicemodulestatus/get/${id}`
+    //
+  );
+  console.log("data of view invoice module status in action", data);
+  dispatch({
+    type: VIEW_INVOICE_MODULE_STATUS,
+    payload: data.data,
+  });
+};
+//
+// END
 export const listUniversities = (qs) => async (dispatch) => {
   console.log("api url in action file", ENV.baseUrl);
   const data = await axios.get(
@@ -101,6 +371,7 @@ export const listUsers =
     });
   };
 //LIST_ALL_BRANCHES
+
 export const viewUniversity = (id) => async (dispatch) => {
   console.log(" Umni param id in action method", id);
   // console.log(" Umni param action in action method", action);

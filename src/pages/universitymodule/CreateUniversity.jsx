@@ -13,7 +13,7 @@ import FullPageLoader from "@/FullPageLoader/FullPageLoader";
 import { ENV } from "@/config";
 import { useNavigate, useParams } from "react-router-dom";
 // import { viewUniversity } from "@/redux/actions/actions";
-import { viewUniversity } from "@/redux/actions/actions";
+import { viewUniversity, listUniversityTypes } from "@/redux/actions/actions";
 import AddField from "@/helpers/Addfield";
 
 export function CreateUniversity() {
@@ -77,6 +77,13 @@ export function CreateUniversity() {
   const universitieData = useSelector(
     (state) => state?.universitiesReducer?.viewsUniversity
   );
+  const universityTypes = useSelector(
+    (state) => state?.universitiesReducer?.universityTypes
+  );
+  useEffect(() => {
+    dispatch(listUniversityTypes("limit=100000"));
+  }, []);
+  //
   // console.log(
   //   "university data for view form in view Universities component",
   //   universitieData
@@ -369,9 +376,16 @@ export function CreateUniversity() {
                 disabled={isViewMode}
                 // required
               >
-                <option>Select Type</option>
-                <option value={"public"}>Public</option>
-                <option value={"private"}>Private</option>
+                <option value={""}>Select Type</option>
+                {universityTypes?.data?.faqs.map((type) => {
+                  return (
+                    <option value={type.ID} key={type.ID + type.name}>
+                      {type.name}
+                    </option>
+                  );
+                })}
+                {/* <option value={"public"}>Public</option>
+                <option value={"private"}>Private</option> */}
               </select>
             </div>
             <div>

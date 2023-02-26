@@ -411,9 +411,25 @@ import { ENV } from "@/config";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { viewProgramme } from "@/redux/actions/actions";
+import {
+  viewProgramme,
+  listUniversities,
+  listProgramLevels,
+  listProgramCategorys,
+} from "@/redux/actions/actions";
+// import { options } from "prettier-plugin-tailwindcss";
 
 const CreateAcademic = () => {
+  // Anasite - Edits
+  const { programLevels, programCategorys, universities } = useSelector(
+    (state) => (state?.universitiesReducer ? state?.universitiesReducer : {})
+  );
+  useEffect(() => {
+    dispatch(listUniversities("limit=100000"));
+    dispatch(listProgramLevels("limit=100000"));
+    dispatch(listProgramCategorys("limit=100000"));
+  }, []);
+  // End
   /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
   // const [openModal, setOpenModal] = useState(false);
   // const [CreateAcademicState, setCreateAcademicState] = useState(true);
@@ -717,12 +733,24 @@ const CreateAcademic = () => {
                       }
                     }}
                   >
-                    <option value="" disabled>
-                      Select University
-                    </option>
-                    <option>Punjab University</option>
-                    <option>Virtual University</option>
-                    <option>Central punjab University</option>
+                    <option value="">Select University</option>
+                    {universities?.data?.faqs.map((university) => {
+                      return (
+                        <option
+                          value={university.id}
+                          key={
+                            university.id +
+                            university.createdAt +
+                            university.name
+                          }
+                        >
+                          {university.name}
+                        </option>
+                      );
+                    })}
+                    {/* <option>Punjab University</option>
+                  <option>Virtual University</option>
+                  <option>Central punjab University</option> */}
                   </select>
                   <p className="text-red-500">{formErrors.selectUniversity}</p>
                 </div>
@@ -748,10 +776,20 @@ const CreateAcademic = () => {
                     <option value="" disabled>
                       Select Level
                     </option>
-                    <option> Becolar's Degree</option>
+                    {programLevels?.data?.faqs.map((level) => {
+                      return (
+                        <option
+                          value={level.ID}
+                          key={level.ID + level.createdAt + level.name}
+                        >
+                          {level.name}
+                        </option>
+                      );
+                    })}
+                    {/* <option> Becolar's Degree</option>
                     <option>Master's Degree</option>
                     <option>Phd</option>
-                    <option>Diploma</option>
+                    <option>Diploma</option> */}
                   </select>
                   <p className="text-red-500">{formErrors.programmeLevel}</p>
                 </div>
@@ -829,9 +867,19 @@ const CreateAcademic = () => {
                     <option value="" disabled>
                       Select Category
                     </option>
-                    <option>Engineering</option>
+                    {programCategorys?.data?.faqs.map((category) => {
+                      return (
+                        <option
+                          value={category.ID}
+                          key={category.ID + category.createdAt + category.name}
+                        >
+                          {category.name}
+                        </option>
+                      );
+                    })}
+                    {/* <option>Engineering</option>
                     <option>Business</option>
-                    <option>Medicine</option>
+                    <option>Medicine</option> */}
                     {/* Engineering, Business, Medicine, */}
                   </select>
                   <p className="text-red-500">{formErrors.programmeCategory}</p>

@@ -16,13 +16,40 @@ import { ENV } from "@/config";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { viewApplication } from "@/redux/actions/actions";
-import { listApplications } from "@/redux/actions/actions";
+import {
+  viewApplication,
+  listApplicationModuleStatuss,
+} from "@/redux/actions/actions";
+import {
+  listApplications,
+  listInterestedPrograms,
+  listQualificationTypes,
+  listUniversities,
+  listProgramLevels,
+} from "@/redux/actions/actions";
 import { data } from "autoprefixer";
 import AddField from "@/helpers/Addfield";
 
 // import [useSelector]
 export function AddNewApplication() {
+  // Anasite - Edits
+  const {
+    programLevels,
+    qualificationTypes,
+    universities,
+    interestedPrograms,
+    applicationModuleStatuss,
+  } = useSelector((state) =>
+    state?.universitiesReducer ? state?.universitiesReducer : {}
+  );
+  useEffect(() => {
+    dispatch(listInterestedPrograms("limit=100000"));
+    dispatch(listQualificationTypes("limit=100000"));
+    dispatch(listUniversities("limit=100000"));
+    dispatch(listProgramLevels("limit=100000"));
+    dispatch(listApplicationModuleStatuss("limit=100000"));
+  }, []);
+  // End
   const [openAddModal, setOpenAddModal] = useState(false);
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -532,11 +559,26 @@ export function AddNewApplication() {
                   onChange={handleChange}
                 >
                   <option value={""}>Select Programme</option>
-                  <option>Master</option>
+                  {interestedPrograms?.data?.faqs.map((signleProgram) => {
+                    return (
+                      <option
+                        value={signleProgram.ID}
+                        key={
+                          signleProgram.ID +
+                          signleProgram.createdAt +
+                          signleProgram.name +
+                          "create Applicaon t"
+                        }
+                      >
+                        {signleProgram.name}
+                      </option>
+                    );
+                  })}
+                  {/* <option>Master</option>
                   <option>Becholars</option>
                   <option>Intermediate</option>
                   <option>IGSCE</option>
-                  <option>KCSE Diploma</option>
+                  <option>KCSE Diploma</option> */}
                 </select>
               </div>
               <div>
@@ -566,13 +608,28 @@ export function AddNewApplication() {
                   onChange={handleChange}
                 >
                   <option value={""}>Select Type</option>
-                  <option>Somali Cert</option>
+                  {qualificationTypes?.data?.faqs.map((qType) => {
+                    return (
+                      <option
+                        value={qType.ID}
+                        key={
+                          qType.ID +
+                          qType.createdAt +
+                          qType.name +
+                          "add new app"
+                        }
+                      >
+                        {qType.name}
+                      </option>
+                    );
+                  })}
+                  {/* <option>Somali Cert</option>
                   <option>IGCSE</option>
                   <option>KCSE</option>
                   <option>Thanawiya</option>
                   <option>American Diploma</option>
                   <option>Bachelor degree</option>
-                  <option>master degree</option>
+                  <option>master degree</option> */}
                 </select>
               </div>
               <div>
@@ -587,8 +644,23 @@ export function AddNewApplication() {
                   onChange={handleChange}
                 >
                   <option value={""}>Select University</option>
-                  <option>punjab University</option>
-                  <option>virtual University</option>
+                  {universities?.data?.faqs.map((university) => {
+                    return (
+                      <option
+                        value={university.id}
+                        key={
+                          university.id +
+                          university.createdAt +
+                          university.name +
+                          "add new app"
+                        }
+                      >
+                        {university.name}
+                      </option>
+                    );
+                  })}
+                  {/* <option>punjab University</option>
+                  <option>virtual University</option> */}
                 </select>
               </div>
               <div>
@@ -606,7 +678,7 @@ export function AddNewApplication() {
                   onChange={handleChange}
                 />
               </div>
-              <div>
+              {/* <div>
                 <label className="mb-2 block text-sm font-semibold text-[#333333]">
                   Selected University
                 </label>
@@ -621,7 +693,7 @@ export function AddNewApplication() {
                   <option>punjab University</option>
                   <option>virtual University</option>
                 </select>
-              </div>
+              </div> */}
 
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#333333]">
@@ -635,11 +707,26 @@ export function AddNewApplication() {
                   onChange={handleChange}
                 >
                   <option value={""}>Select Programme</option>
-                  <option>Master</option>
+                  {programLevels?.data?.faqs.map((level) => {
+                    return (
+                      <option
+                        value={level.ID}
+                        key={
+                          level.ID +
+                          level.createdAt +
+                          level.name +
+                          "add new app"
+                        }
+                      >
+                        {level.name}
+                      </option>
+                    );
+                  })}
+                  {/* <option>Master</option>
                   <option>Becholars</option>
                   <option>Intermediate</option>
                   <option>IGSCE</option>
-                  <option>KCSE Diploma</option>
+                  <option>KCSE Diploma</option> */}
                 </select>
               </div>
               <div>
@@ -790,8 +877,22 @@ export function AddNewApplication() {
                   onChange={handleChange}
                 >
                   <option value={""}>Select Status</option>
-                  <option>status ok</option>
-                  <option>Status done</option>
+                  {applicationModuleStatuss?.data?.faqs.map((status) => {
+                    return (
+                      <option
+                        value={status.ID}
+                        key={
+                          status.ID +
+                          "hey" +
+                          status.Color +
+                          status.name +
+                          "choose in application module"
+                        }
+                      >
+                        {status.name}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
               {isViewMode ? (

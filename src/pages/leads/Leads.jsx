@@ -8,7 +8,10 @@ import filterIcon from "../../../public/img/filterIcon.svg";
 import down from "../../../public/img/downIcon.svg";
 import dropdown from "../../../public/img/dropdown.svg";
 import { useSelector, useDispatch } from "react-redux";
-import { listLeads } from "@/redux/actions/actions";
+import {
+  listLeads,
+  viewLeadsManagmentModuleStatus,
+} from "@/redux/actions/actions";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Modal from "../universitymodule/Modal";
@@ -17,13 +20,20 @@ import axios from "axios";
 import Paginate from "@/paginate";
 import { NavbarCtx } from "@/App";
 export function Leads() {
-  const { statusColor } = useContext(NavbarCtx);
-  console.log("ooooooooooooo", statusColor);
+  // const { statusColor } = useContext(NavbarCtx);
+  // console.log("ooooooooooooo", statusColor);
   const disptach = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
 
   const leadsData = useSelector((state) => state?.universitiesReducer?.leads);
+  // const status = useSelector(
+  //   (state) => state?.universitiesReducer?.leads?.ProgrameDetail?.status
+  // );
+
+  // useEffect(() => {
+  //   disptach(viewLeadsManagmentModuleStatus(ele?.ProgrameDetail?.status));
+  // }, [ele?.ProgrameDetail?.status]);
 
   const pagination = useSelector(
     (state) => state?.universitiesReducer?.leads?.data?.pagination
@@ -196,16 +206,18 @@ export function Leads() {
                     {leadsData?.data?.faqs.map((ele, ind) => {
                       // console.log("lkllll", ele);
                       // Anasite - Edits (Set Colors and status)
-                      let color = "";
-                      switch (ele?.ProgrameDetail?.status.toLowerCase()) {
-                        case "good":
-                          color = statusColor["hot"];
-                          break;
+                      // let { Color, name: statusName } =
+                      //   ele?.ProgrameDetail?.LeadsManagmentModuleStatus;
+                      // switch (ele?.ProgrameDetail?.status.toLowerCase()) {
+                      //   case "good":
+                      //     color = statusColor["hot"];
+                      //     break;
 
-                        default:
-                          color = statusColor["cold"];
-                          break;
-                      }
+                      //   default:
+                      //     color = statusColor["cold"];
+                      //     break;
+                      // }
+
                       return (
                         <tr key={ind}>
                           {/* {console.log("leadsiddddd", ele.id)} */}
@@ -230,13 +242,22 @@ export function Leads() {
                           </td>
                           <td>
                             <p
-                              className="mx-auto w-fit rounded-2xl px-5 py-2 text-center text-xs font-medium normal-case"
+                              className="neumorphism mx-auto mx-auto w-fit w-fit rounded-2xl rounded-2xl rounded-lg bg-gray-100 p-6 px-5 px-5 py-2 py-2 text-center text-center text-xs text-xs font-medium font-medium normal-case normal-case text-gray-700 shadow-lg dark:bg-gray-800 dark:text-gray-400"
                               style={{
-                                color,
-                                backgroundColor: `${color}1a`,
+                                color:
+                                  ele?.ProgrameDetail
+                                    ?.LeadsManagmentModuleStatus?.Color ||
+                                  "#333",
+                                backgroundColor: `${
+                                  ele?.ProgrameDetail
+                                    ?.LeadsManagmentModuleStatus?.Color ||
+                                  "#333"
+                                }1a`,
                               }}
                             >
-                              {ele?.ProgrameDetail?.status}
+                              {/* {console.log("Statujsjsjnmsjnsjs", status)} */}
+                              {ele?.ProgrameDetail?.LeadsManagmentModuleStatus
+                                ?.name || "GD"}
                             </p>
                           </td>
                           <td>

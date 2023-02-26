@@ -194,23 +194,9 @@ export function Applications() {
                   <tbody className="border-none">
                     {applicationsData?.data?.faqs?.map((ele, ind) => {
                       // Anasite - Edits (Set Colors and status)
-                      let color = "";
-                      switch (ele?.ApplicationDetail?.status.toLowerCase()) {
-                        case "status done":
-                          color = statusColor["hot"];
-                          break;
-                        case "status ok":
-                          color = statusColor["qualified"];
-                          break;
-
-                        default:
-                          color = statusColor["cold"];
-                          break;
-                      }
-                      console.log("cooooloooor", color);
 
                       return (
-                        <tr key={ind}>
+                        <tr key={ind + ele?.createdAt + "serf" + ele?.name}>
                           <td className="whitespace-nowrap py-3 pr-6">
                             <Checkbox />
                           </td>
@@ -230,15 +216,21 @@ export function Applications() {
                           </td>
                           <td>
                             <p
-                              className="mx-auto w-fit rounded-2xl px-5 py-2 text-center text-xs font-medium normal-case"
+                              className="neumorphism mx-auto mx-auto w-fit w-fit rounded-2xl rounded-2xl rounded-lg bg-gray-100 p-6 px-5 px-5 py-2 py-2 text-center text-center text-xs text-xs font-medium font-medium normal-case normal-case text-gray-700 shadow-lg dark:bg-gray-800 dark:text-gray-400"
                               style={{
-                                color,
-                                backgroundColor: `${color}10`,
+                                color:
+                                  ele?.ApplicationDetail
+                                    ?.ApplicationModuleStatus?.Color || "#333",
+                                backgroundColor: `${
+                                  ele?.ApplicationDetail
+                                    ?.ApplicationModuleStatus?.Color || "#333"
+                                }1a`,
                               }}
                             >
                               {/* {ele?.status} */}
                               {/* {applicationsData?.data?.applicantDetail[0].status} */}
-                              {ele?.ApplicationDetail?.status}
+                              {ele?.ApplicationDetail?.ApplicationModuleStatus
+                                ?.name || "GD"}
                             </p>
                           </td>
                           <td>

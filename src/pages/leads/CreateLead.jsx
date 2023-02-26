@@ -599,7 +599,14 @@ import { toast } from "react-toastify";
 import { ENV } from "@/config";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { viewLead } from "@/redux/actions/actions";
+import {
+  viewLead,
+  listUniversities,
+  listInterestedPrograms,
+  listLeadsManagmentModuleStatuss,
+  listQualificationTypes,
+  listLeadGroups,
+} from "@/redux/actions/actions";
 import { useDispatch, useSelector } from "react-redux";
 import FullPageLoader from "@/FullPageLoader/FullPageLoader";
 import { v4 as uuid } from "uuid";
@@ -607,6 +614,24 @@ import AddField from "@/helpers/Addfield";
 
 export function CreateLead() {
   // Anasite - Edits: Add New Form
+  // Anasite - Edits
+  const {
+    interestedPrograms,
+    universities,
+    leadsManagmentModuleStatuss,
+    qualificationTypes,
+    leadGroups,
+  } = useSelector((state) =>
+    state?.universitiesReducer ? state?.universitiesReducer : {}
+  );
+  useEffect(() => {
+    dispatch(listUniversities("limit=100000"));
+    dispatch(listInterestedPrograms("limit=100000"));
+    dispatch(listLeadsManagmentModuleStatuss("limit=100000"));
+    dispatch(listQualificationTypes("limit=100000"));
+    dispatch(listLeadGroups("limit=100000"));
+  }, []);
+  // End
   /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
   // const [openModal, setOpenModal] = useState(false);
   // const [CreateLeadState, setCreateLeadState] = useState(true);
@@ -948,9 +973,27 @@ export function CreateLead() {
                   onChange={handleChange}
                 >
                   <option>Select Group</option>
-                  <option>social media</option>
+                  {/* ****** */}
+                  {/* {console.log("leeeesssadsfwew", leadGroups)} */}
+                  {leadGroups?.data?.faqs.map((group) => {
+                    return (
+                      <option
+                        value={group.ID}
+                        key={
+                          group.ID +
+                          "hey" +
+                          group.Color +
+                          group.name +
+                          "choose in leed group"
+                        }
+                      >
+                        {group.name}
+                      </option>
+                    );
+                  })}
+                  {/* <option>social media</option>
                   <option> Event</option>
-                  <option> Walk In</option>
+                  <option> Walk In</option> */}
                 </select>
               </div>
               <div>
@@ -1066,13 +1109,23 @@ export function CreateLead() {
                   onChange={handleChange}
                   disabled={isViewMode}
                 >
-                  <option>Select Qualification</option>
-                  <option>Somali Cert</option>
+                  <option value={""}>Select Qualification</option>
+                  {qualificationTypes?.data?.faqs.map((type) => {
+                    return (
+                      <option
+                        value={type.ID}
+                        key={type.ID + "jj" + type.name + type.Color + "qType"}
+                      >
+                        {type.name}
+                      </option>
+                    );
+                  })}
+                  {/* <option>Somali Cert</option>
                   <option>IGCSE</option>
                   <option>KCSE</option>
                   <option>American Diploma</option>
                   <option>Bachelor degree</option>
-                  <option>master degree</option>
+                  <option>master degree</option> */}
                 </select>
               </div>
               <div>
@@ -1086,9 +1139,24 @@ export function CreateLead() {
                   onChange={handleChange}
                   disabled={isViewMode}
                 >
-                  <option>Select University</option>
-                  <option>punjab University</option>
-                  <option>virtual University</option>
+                  <option value={""}>Select University</option>
+                  {universities?.data?.faqs.map((university) => {
+                    return (
+                      <option
+                        value={university.id}
+                        key={
+                          university.id +
+                          university.createdAt +
+                          university.name +
+                          "creatLead"
+                        }
+                      >
+                        {university.name}
+                      </option>
+                    );
+                  })}
+                  {/* <option>punjab University</option>
+                  <option>virtual University</option> */}
                 </select>
               </div>
               <div>
@@ -1102,9 +1170,24 @@ export function CreateLead() {
                   onChange={handleChange}
                   disabled={isViewMode}
                 >
-                  <option>Select Program</option>
-                  <option>becholars</option>
-                  <option>masters</option>
+                  <option value={""}>Select Program</option>
+                  {interestedPrograms?.data?.faqs.map((category) => {
+                    return (
+                      <option
+                        value={category.ID}
+                        key={
+                          category.id +
+                          category.createdAt +
+                          category.name +
+                          "createlead"
+                        }
+                      >
+                        {category.name}
+                      </option>
+                    );
+                  })}
+                  {/* <option>becholars</option>
+                  <option>masters</option> */}
                 </select>
               </div>
               <div>
@@ -1118,10 +1201,26 @@ export function CreateLead() {
                   onChange={handleChange}
                   disabled={isViewMode}
                 >
-                  <option>Select Status</option>
-                  <option> Warm </option>
+                  <option value={""}>Select Status</option>
+                  {leadsManagmentModuleStatuss?.data?.faqs.map((status) => {
+                    return (
+                      <option
+                        value={status.ID}
+                        key={
+                          status.ID +
+                          "hey" +
+                          status.Color +
+                          status.name +
+                          "choose in leed"
+                        }
+                      >
+                        {status.name}
+                      </option>
+                    );
+                  })}
+                  {/* <option> Warm </option>
                   <option> Hot</option>
-                  <option> Qualified</option>
+                  <option> Qualified</option> */}
                 </select>
               </div>
               <div>
