@@ -541,9 +541,11 @@ export function AddNewApplication() {
                   onChange={handleChange}
                 >
                   <option value={""}>Select Type</option>
-                  <option>undergraduate</option>
-                  <option>Postgraduate</option>
-                  <option>Transfer Student</option>
+                  <option value={"Diploma"}>Diploma</option>
+                  <option value={"Undergraduate"}>Undergraduate</option>
+                  <option value={"Master"}>Master</option>
+                  <option value={"PhD"}>PhD</option>
+                  <option value={"Postdoc"}>Postdoc</option>
                 </select>
               </div>
 
