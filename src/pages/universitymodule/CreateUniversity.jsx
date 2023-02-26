@@ -227,6 +227,7 @@ export function CreateUniversity() {
         position: toast.POSITION.TOP_RIGHT,
         hideProgressBar: false,
         autoClose: 3000,
+        key: "_" + Math.random() * 1000000 + "_" + Math.random() * 1000000,
       });
     }
     // navigate("university")
@@ -379,7 +380,10 @@ export function CreateUniversity() {
                 <option value={""}>Select Type</option>
                 {universityTypes?.data?.faqs.map((type) => {
                   return (
-                    <option value={type.ID} key={type.ID + type.name}>
+                    <option
+                      value={type.ID}
+                      key={type.ID + type.name + "from create uni"}
+                    >
                       {type.name}
                     </option>
                   );

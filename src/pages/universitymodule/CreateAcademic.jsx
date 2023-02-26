@@ -595,6 +595,7 @@ const CreateAcademic = () => {
         position: toast.POSITION.TOP_RIGHT,
         hideProgressBar: false,
         autoClose: 3000,
+        key: "_" + Math.random() * 1000000 + "_" + Math.random() * 1000000,
       });
     }
   };

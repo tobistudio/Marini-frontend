@@ -57,10 +57,10 @@ export function University() {
     if (universitiesData?.success == true && !displayed) {
       let { message } = universitiesData;
 
-      const key = message;
+      const key = message + "_";
 
       toast.success(message, {
-        key,
+        // key,
         position: toast.POSITION.TOP_RIGHT,
         hideProgressBar: false,
         autoClose: 3000,

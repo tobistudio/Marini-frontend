@@ -169,7 +169,14 @@ export function Academic() {
                 </thead>
                 <tbody className="border-none">
                   {programmsData?.data?.faqs?.map((ele, ind) => (
-                    <tr>
+                    <tr
+                      key={
+                        ele.name +
+                        ele.programmeIntake +
+                        ind +
+                        ele.programmeLevel
+                      }
+                    >
                       <td className="whitespace-nowrap px-6 py-4 text-lg font-medium text-[#333]">
                         {ele?.name}
                       </td>
