@@ -234,7 +234,7 @@ export function Academic() {
                           <option value={"3"}>delete</option>
                         </select> */}
                       {/* </td> */}
-                    
+
                       <td className="whitespace-nowrap px-6 py-4 text-center text-lg font-medium">
                         <button
                           className="rounded-full text-[#636363]/50 hover:text-[#7a7a7a]"
@@ -256,10 +256,10 @@ export function Academic() {
                         <div
                           // id="dropdown"
                           id={`dropdown${ind}`}
-                          class="z-10 hidden w-24 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700"
+                          className="z-10 hidden w-24 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700"
                         >
                           <ul
-                            class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                            className="py-2 text-sm text-gray-700 dark:text-gray-200"
                             // aria-labelledby="dropdownDefaultButton"
                             aria-labelledby={`dropdownDefaultButton${ind}`}
                           >
