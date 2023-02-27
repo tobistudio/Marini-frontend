@@ -49,6 +49,12 @@ import {
   LIST_ALL_INVOICE_MODULE_STATUSS,
   VIEW_INVOICE_MODULE_STATUS,
   //
+  // Module: Invoice (1)
+  LIST_ALL_COMMISSION_INVOICES,
+  VIEW_COMMISSION_INVOICE,
+  DELETE_COMMISSION_INVOICE,
+  EDIT_COMMISSION_INVOICE,
+  //
 } from "./actionType";
 import axios from "axios";
 import { ENV } from "@/config";
@@ -293,6 +299,35 @@ export const viewInvoiceModuleStatus = (id) => async (dispatch) => {
     payload: data.data,
   });
 };
+//
+// Module: Invoice (1)
+export const listCommissionInvoices = (qs) => async (dispatch) => {
+  console.log("api url in action file", ENV.baseUrl);
+  const data = await axios.get(`${ENV.baseUrl}/commissioninvoice/list?${qs}`);
+  console.log(
+    "data.data of list invoice module status commissioninvoice in action file",
+    data
+  );
+  dispatch({
+    type: LIST_ALL_COMMISSION_INVOICES,
+    payload: data.data,
+  });
+};
+export const viewCommissionInvoice = (id) => async (dispatch) => {
+  console.log(" commisionInvoice param id in action method", id);
+  // console.log(" Umni param action in action method", action);
+
+  const data = await axios.get(
+    `${ENV.baseUrl}/commissioninvoice/get/${id}`
+    //
+  );
+  console.log("data of view invoice module status in action", data);
+  dispatch({
+    type: VIEW_COMMISSION_INVOICE,
+    payload: data.data,
+  });
+};
+// The Edit and Delete will be on the module page itself
 //
 // END
 export const listUniversities = (qs) => async (dispatch) => {

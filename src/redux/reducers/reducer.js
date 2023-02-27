@@ -49,6 +49,9 @@ import {
   LIST_ALL_INVOICE_MODULE_STATUSS,
   VIEW_INVOICE_MODULE_STATUS,
   //
+  // Module: Invoice (1)
+  LIST_ALL_COMMISSION_INVOICES,
+  VIEW_COMMISSION_INVOICE,
   // END
 } from "../actions/actionType";
 
@@ -103,6 +106,10 @@ const initialState = {
   //
   invoiceModuleStatuss: [null],
   viewInvoiceModuleStatus: [null],
+  //
+  // Module: Invoice (1)
+  commissionInvoices: [null],
+  viewCommissionInvoice: [null],
   //
   // END
 };
@@ -208,6 +215,18 @@ const universitiesReducer = (state = initialState, action) => {
       return {
         ...state,
         viewInvoiceModuleStatus: action.payload,
+      };
+    //
+    // Module: Invoice (1)
+    case LIST_ALL_COMMISSION_INVOICES:
+      return {
+        ...state,
+        commissionInvoices: action.payload,
+      };
+    case VIEW_COMMISSION_INVOICE:
+      return {
+        ...state,
+        viewCommissionInvoice: action.payload,
       };
     //
     // END
