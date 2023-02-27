@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import {
   Button,
@@ -15,13 +15,23 @@ import Commission_voice_data from "@/data/Commission-voice-data";
 import print from "../../../public/img/print.svg";
 import dropdown from "../../../public/img/dropdown.svg";
 import useWindowWidth from "@/hooks/useWindowWidth";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  listCommissionInvoices,
+  viewCommissionInvoice,
+} from "@/redux/actions/actions";
 
 export function Commission() {
   const windowWidth = useWindowWidth();
-  const universiteies = useSelector((state) =>
-    console.log("ssssssstttta", state)
+  // Anasite - Edits: adding commissionInvoice
+  const dispatch = useDispatch();
+  const { commissionInvoices } = useSelector(
+    (state) => state?.universitiesReducer
   );
+  console.log("Commission Invoices from Module:", commissionInvoices);
+  useEffect(() => {
+    dispatch(listCommissionInvoices());
+  }, []);
 
   return (
     <div className="mt-[30px] w-full bg-[#E8E9EB] font-display">
