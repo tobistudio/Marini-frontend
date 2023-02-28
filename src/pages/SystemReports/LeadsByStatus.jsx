@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Menu,
   MenuHandler,
@@ -9,9 +9,23 @@ import {
 import filterIcon from "../../../public/img/filterIcon.svg";
 import down from "../../../public/img/downIcon.svg";
 import { ApplicationLeadsData } from "@/data/application-leads-data";
-import dropdown from "../../../public/img/dropdown.svg";
+// Anasite - Edits
+import { listLeads } from "@/redux/actions/actions";
+
+import { useDispatch, useSelector } from "react-redux";
+
+// END
+// import dropdown from "../../../public/img/dropdown.svg";
 
 export function LeadsByStatus() {
+  // Anasite - Edits
+  const dispatch = useDispatch();
+  const { leads } = useSelector((state) => state?.universitiesReducer);
+  console.log("Leads from SystemReports ====>", leads);
+  useEffect(() => {
+    dispatch(listLeads());
+  }, []);
+  // END
   return (
     <div className="mt-[30px] w-full bg-[#E8E9EB] font-display">
       <div>
@@ -114,51 +128,53 @@ export function LeadsByStatus() {
                 </tr>
               </thead>
               <tbody className="border-none">
-                {ApplicationLeadsData.map(
-                  ({
-                    date,
-                    name,
-                    program,
-                    university,
-                    branch,
-                    status,
-                    color,
-                  }) => (
-                    <tr key={name}>
-                      <td className="whitespace-nowrap py-3 pr-6">
-                        <Checkbox />
-                      </td>
-                      <td className="whitespace-nowrap py-4 text-lg font-normal text-[#333]">
-                        {new Date(date).toLocaleDateString(undefined, {
-                          dateStyle: "medium",
-                        })}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-lg font-bold text-[#333]">
-                        {name}
-                      </td>
-                      <td className="px-6 py-4 text-lg font-normal text-[#333]">
-                        {program}
-                      </td>
-                      <td className="px-6 py-4 text-lg font-normal text-[#333]">
-                        {university}
-                      </td>
-                      <td className="px-6 py-4 text-lg font-normal text-[#333]">
-                        {branch}
-                      </td>
-                      <td>
-                        <p
-                          className="mx-auto w-fit rounded-2xl px-5 py-2 text-center text-xs font-medium normal-case"
-                          style={{
-                            color,
-                            backgroundColor: `${color}10`,
-                          }}
-                        >
-                          {status}
-                        </p>
-                      </td>
-                    </tr>
-                  )
-                )}
+                {leads?.data?.faqs.map((lead) => (
+                  <tr
+                    key={
+                      lead.name +
+                      lead.id +
+                      lead.createAt +
+                      "ojoj" +
+                      lead.updatedAt
+                    }
+                  >
+                    <td className="whitespace-nowrap py-3 pr-6">
+                      <Checkbox />
+                    </td>
+                    <td className="whitespace-nowrap py-4 text-lg font-normal text-[#333]">
+                      {new Date(lead.createdAt).toLocaleDateString(undefined, {
+                        dateStyle: "medium",
+                      })}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 text-lg font-bold text-[#333]">
+                      {lead.name}
+                    </td>
+                    <td className="px-6 py-4 text-lg font-normal text-[#333]">
+                      {lead?.Programme?.name
+                        ? lead.Programme.name
+                        : "No Program Found"}
+                    </td>
+                    <td className="px-6 py-4 text-lg font-normal text-[#333]">
+                      {lead?.University?.name}
+                    </td>
+                    <td className="px-6 py-4 text-lg font-normal text-[#333]">
+                      {lead?.Branch?.name}
+                    </td>
+                    <td>
+                      <p
+                        className="neumorphism mx-auto mx-auto w-fit w-fit rounded-2xl rounded-2xl rounded-lg bg-gray-100 p-6 px-5 px-5 py-2 py-2 text-center text-center text-xs text-xs font-medium font-medium normal-case normal-case text-gray-700 shadow-lg dark:bg-gray-800 dark:text-gray-400"
+                        style={{
+                          color:
+                            lead?.ProgrameDetail?.LeadsManagmentModuleStatus
+                              ?.Color,
+                          backgroundColor: `${lead?.ProgrameDetail?.LeadsManagmentModuleStatus?.Color}10`,
+                        }}
+                      >
+                        {lead?.ProgrameDetail?.LeadsManagmentModuleStatus?.name}
+                      </p>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
