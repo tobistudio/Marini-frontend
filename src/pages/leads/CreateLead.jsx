@@ -780,7 +780,7 @@ export function CreateLead() {
     formData.append("status", status);
     formData.append("cert", cert);
     formData.append("comments", comments);
-    formData.append("logo", file[0]);
+    formData.append("logo", file && file[0] ? file[0] : "");
 
     const config = {
       headers: { "content-type": "multipart/form-data" },

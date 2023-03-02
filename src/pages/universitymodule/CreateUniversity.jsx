@@ -166,7 +166,7 @@ export function CreateUniversity() {
   };
 
   const handlefileChange = (file) => {
-    // console.log("file image", file);
+    console.log("file image", file);
     setFile(file);
 
     let reader = new FileReader();
@@ -174,8 +174,8 @@ export function CreateUniversity() {
       let output = document.getElementById("university-logo");
       output.src = reader.result;
     };
-    if (event.target.files[0]) {
-      reader.readAsDataURL(event.target.files[0]);
+    if (file[0]) {
+      reader.readAsDataURL(file[0]);
     }
   };
 
@@ -208,7 +208,7 @@ export function CreateUniversity() {
     formData.append("addmissionFee", addmissionFee);
     formData.append("qetcFee", qetcFee);
     formData.append("commisionDuration", commisionDuration);
-    formData.append("logo", file[0]);
+    formData.append("logo", file && file[0] ? file[0] : "");
 
     const config = {
       headers: { "content-type": "multipart/form-data" },
