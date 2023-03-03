@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import loginimg from "../../../public/img/login/loginimg.svg";
 import logo from "../../../public/img/loginlogo.svg";
 import XIcon from "../../../public/img/XIcon.svg";
 import hideIcon from "../../../public/img/hideIcon.svg";
+import { loginUser } from '../../redux/actions/actions';
+import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from 'react-toastify';
 import {
   Checkbox,
   Button,
@@ -11,7 +14,23 @@ import {
 } from "@material-tailwind/react";
 
 export function SignIn() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [authType, setAuthType] = useState("main");
+  const [mail, setMail] = useState("");
+  const [password, setPassword] = useState("");
+  
+  const handleSubmit = async () => {
+    const data = await dispatch(loginUser({mail, password}));
+    
+    if (data.success) {
+      toast("welcome to our site!");
+      navigate("/dashboard");
+    } else {
+      toast(data.error);
+    }
+  }
+  
   return (
     <div className=" flex h-full flex-row bg-white ">
       <div className=" my-10 ml-16 lg-max:hidden">
@@ -33,6 +52,8 @@ export function SignIn() {
                 type="email"
                 className="w-full rounded-[8px] border border-[#D0D5DD]"
                 placeholder="Email"
+                value={mail}
+                onChange={e => setMail(e.target.value)}
               />
               <img
                 className="cursor-pointer absolute right-4 bottom-2 h-[24px] w-[24px]"
@@ -48,6 +69,8 @@ export function SignIn() {
                 type="password"
                 className="w-full rounded-[8px] border border-[#D0D5DD]"
                 placeholder="Password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
               />
               <img
                 className="cursor-pointer absolute right-4 bottom-2 h-[24px] w-[24px]"
@@ -68,14 +91,13 @@ export function SignIn() {
                 </Typography>
               </Link>
             </div>
-            <Link to={ authType === "main" ? "dashboard" : "applicant" }>
               <Button
                 className="bg-[#280559] text-[16px] font-[500] normal-case"
                 fullWidth
+                onClick={handleSubmit}
               >
                 Sign In
               </Button>
-            </Link>
             <p
               className="text-normal cursor-pointer p-10 text-center text-[#280559] underline"
               onClick={() => {

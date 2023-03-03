@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { Routes, Route, redirect  } from "react-router-dom";
 import { Sidenav } from "@/widgets/layout";
 import routes from "@/routes";
 import CreateAcademic from "@/pages/universitymodule/CreateAcademic";
@@ -24,7 +25,6 @@ import AddProperty from "@/pages/settings/AddProperty";
 // import Academi
 // import Academic from "@pages/"
 // import Aca
-const defaultRoleType = "superAdmin";
 
 export const roles = {
   superAdmin: [
@@ -87,11 +87,19 @@ export const roles = {
     "reports",
     "currency",
   ],
-  applicant: ["applicant_dashboard"],
+  applicant: ["dashboard"],
 };
 
 export function Dashboard() {
   const { navbar } = useContext(NavbarCtx);
+  // const [name, setName] = React.useState('4');
+  const [defaultRoleType, setDefaultRoleType] = React.useState("counselor");
+  useEffect(() => {
+    
+    setDefaultRoleType(localStorage.access !== "user" ? localStorage.access : "counselor")
+  }, [])
+  
+  
 
   return (
     <div className="min-h-screen overflow-y-auto bg-[#E8E9EB]">

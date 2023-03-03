@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import menuIcon from "../../../public/img/menuIcon.svg";
 import {
   Typography
@@ -9,10 +9,13 @@ import logout from "../../../public/img/sidebar/logout.svg";
 import menu from '../../../public/img/burger-2.png';
 import { NavbarCtx } from "@/App";
 import { useContext } from "react";
+import { useDispatch } from "react-redux";
+import { signOut } from '../../redux/actions/actions';
 import bubble from '../../../public/img/bubble.png'
 export function Sidenav({ brandImg, brandName, routes, role, lay }) {
 
   const { navbar, setNavbar } = useContext(NavbarCtx);
+  const dispatch = useDispatch();
   
   return (
     <>
@@ -98,16 +101,18 @@ export function Sidenav({ brandImg, brandName, routes, role, lay }) {
               </ul>
             ))}
             <div className="flex justify-around py-5">
-            <NavLink to="/">
+            <Link to="/" onClick={() => dispatch(signOut({name: localStorage.name, role: localStorage.access}))}>
             <div className="flex flex-row">
               <img src={userpt} />
               <div className={`left-5 mx-4 ${(!navbar.isMobile && navbar.desktopExpand) || (navbar.isMobile && navbar.mobileExpand) ? 'block' : 'hidden'}`}>
                 <p className={` text-white ${(!navbar.isMobile && navbar.desktopExpand) || (navbar.isMobile && navbar.mobileExpand) ? 'block' : 'hidden'}`}>USER</p>
-                <p className={`text-[#AAABAF] ${(!navbar.isMobile && navbar.desktopExpand) || (navbar.isMobile && navbar.mobileExpand) ? 'block' : 'hidden'}`}>user@email.com</p>
+                <p className={`text-[#AAABAF] ${(!navbar.isMobile && navbar.desktopExpand) || (navbar.isMobile && navbar.mobileExpand) ? 'block' : 'hidden'}`}>
+                  { localStorage.name }
+                  </p>
               </div>
               <img className={`ml-6  ${(!navbar.isMobile && navbar.desktopExpand) || (navbar.isMobile && navbar.mobileExpand) ? 'block' : 'hidden'}`} src={logout} />
             </div>
-          </NavLink>
+          </Link>
           </div>
           </div>
         </div>

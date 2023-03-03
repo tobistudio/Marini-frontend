@@ -90,6 +90,7 @@ export function Branch() {
       country,
       manager,
       id,
+      Uname: localStorage.name, role: localStorage.access
     };
 
     const apiCall = await axios[params.action == 2 ? "put" : "post"](

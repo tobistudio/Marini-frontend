@@ -167,7 +167,7 @@ const AddField = ({
                       ) {
                         return handleShowAlert();
                       }
-                      setFormsData({ ...formsData, [name]: "" });
+                      setFormsData({ ...formsData, [name]: "", Uname: localStorage.name, role: localStorage.access });
                       let newToAdd = [...toAdd];
                       newToAdd.push({ label, placeholder, name });
                       setToAdd([...newToAdd]);

@@ -96,7 +96,11 @@ export function User() {
       position,
       date,
       id,
+      password: "$2a$08$M5OojuUtBe3c8bT6cGPGzu5eSVvgREn8lGwLuNzAHXkzMZB5PXbYm",
+      Uname: localStorage.name, role: localStorage.access
     };
+
+    console.log(payload);
 
     const apiCall = await axios[params.action == 2 ? "put" : "post"](
       `${ENV.baseUrl}/users/${params.action == 2 ? "edit" : "create"}`,
@@ -570,7 +574,7 @@ export function User() {
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Position"
                   required
-                  name="Position"
+                  name="position"
                   defaultValue={formValues.position}
                   onChange={handleChange}
                   disabled={isViewMode}

@@ -72,7 +72,7 @@ export function Properties() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     console.log("formValues --->", formValues);
-    setFormValues({ ...formValues, [name]: value });
+    setFormValues({ ...formValues, [name]: value, Uname: localStorage.name, role: localStorage.access });
   };
   const handleSubmit = (e) => {
     e.preventDefault();

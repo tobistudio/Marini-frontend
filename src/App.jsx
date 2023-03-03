@@ -1,9 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import { Dashboard, Auth } from "@/layouts";
-import { SignIn } from "./pages/auth";
+import { SignIn, SignUp } from "./pages/auth";
 import { createContext, useState, useEffect } from "react";
 import useWindowSize from "./hooks/useWindowSize";
 import ApplicantDashboard from "./layouts/ApplicantDashboard";
+import 'react-toastify/dist/ReactToastify.css';
 
 export const NavbarCtx = createContext();
 const initialStatusColor = {
@@ -52,6 +53,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<SignIn />} />
+      <Route path="/signup" element={<SignUp />} />
       <Route
         path="/applicant/*"
         element={

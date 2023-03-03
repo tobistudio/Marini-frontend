@@ -225,6 +225,8 @@ export function AddNewApplication() {
     formData.append("selectUniversity", selectUniversity);
     formData.append("completionLetter", completionLetter);
     formData.append("programmeLevel", programmeLevel);
+    formData.append("Uname", localStorage.name);
+    formData.append("role", localStorage.access);
     if (params.id) formData.append("id", params.id);
 
     formData.append("healthForm", healthForm);

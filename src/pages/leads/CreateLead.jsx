@@ -768,6 +768,8 @@ export function CreateLead() {
     formData.append("leadGroup", leadGroup);
     formData.append("country", country);
     formData.append("phoneNo", phoneNo);
+    formData.append("Uname", localStorage.name);
+    formData.append("role", localStorage.access);
 
     if (params.id) formData.append("id", params.id);
     formData.append("email", email);

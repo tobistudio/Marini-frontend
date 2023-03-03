@@ -55,6 +55,8 @@ import {
   DELETE_COMMISSION_INVOICE,
   EDIT_COMMISSION_INVOICE,
   //
+  // login
+  SING_IN 
 } from "./actionType";
 import axios from "axios";
 import { ENV } from "@/config";
@@ -589,3 +591,41 @@ export const listProperties = () => async (dispatch) => {
     payload: data.data,
   });
 };
+
+// Login API
+
+export const loginUser = ( user ) => async (dispatch) => {
+  try {
+    let data = await axios.post(`${ENV.baseUrl}/users/login`, user);
+      dispatch({
+        type: LIST_ALL_USERS,
+        payload: data.data
+      });
+      localStorage.setItem('access', data.data.roles);
+      localStorage.setItem('name', data.data.username);
+      return {success: true};
+  } catch (err) {
+    return {error: err.response.data.message};
+  }
+}
+
+export const signUp = user => async (dispatch) => {
+  try {
+    let data = await axios.post(`${ENV.baseUrl}/users/signup`, user);
+    if(data) {
+      return {success: true};
+    }
+  } catch (error) {
+    return {error: err.response.data.message};
+  }
+}
+
+export const signOut = (user) => async (dispatch) => {
+  try {
+    console.log(user);
+    localStorage.clear();
+    let data = await axios.post(`${ENV.baseUrl}/users/signout`, user);
+  } catch (error) {
+    return {error: err.response.data.message};
+  }
+}

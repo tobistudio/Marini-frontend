@@ -201,6 +201,10 @@ export function CreateUniversity() {
     formData.append("counserllerName", counserllerName);
     formData.append("phone", phone);
     formData.append("email", email);
+    formData.append("Uname", localStorage.name);
+    formData.append("role", localStorage.access);
+    formData.append("Uname", localStorage.name);
+    formData.append("role", localStorage.access);
 
     if (params.id) formData.append("id", params.id);
     formData.append("campuses", JSON.stringify(campusValues));

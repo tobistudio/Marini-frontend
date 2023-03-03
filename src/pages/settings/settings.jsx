@@ -151,12 +151,12 @@ export function Settings() {
                     </td>
                     <td className="px-6 py-4">&nbsp;</td>
                     <td className="whitespace-nowrap px-6 py-4 text-lg font-semibold text-[#333]">
-                      {/* {name} */}
-                      name
+                      {ele?.name}
+                      {/* name */}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-lg font-normal text-[#333]">
-                      {/* {role} */}
-                      role
+                      {ele?.role}
+                      {/* role */}
                     </td>
                   </tr>
                 ))}

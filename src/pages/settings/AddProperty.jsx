@@ -26,6 +26,8 @@ export function AddProperty() {
     const formData = new FormData();
     formData.append("name", property);
     formData.append("Color", color);
+    formData.append("Uname", localStorage.name);
+    formData.append("role", localStorage.access);
     // formData.append("username", "John");
     // formData.append("email", "john@example.com");
     // formData.append("Color", "#000");

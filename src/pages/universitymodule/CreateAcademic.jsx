@@ -578,6 +578,7 @@ const CreateAcademic = () => {
       engRequirement,
       entryRequirement,
       id,
+      Uname: localStorage.name, role: localStorage.access
     };
 
     const apiCall = await axios[params.action == 2 ? "put" : "post"](
