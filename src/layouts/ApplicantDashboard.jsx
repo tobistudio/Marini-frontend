@@ -5,7 +5,7 @@ import { Route } from "react-router-dom";
 import { Routes } from "react-router-dom";
 import routes from "@/routes";
 import { Sidenav } from "@/widgets/layout";
-import { roles } from ".";
+import { roles } from "./dashboard";
 
 const ApplicantDashboard = () => {
   const { navbar } = useContext(NavbarCtx);

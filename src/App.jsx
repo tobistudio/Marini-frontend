@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { Dashboard, Auth } from "@/layouts";
 import { SignIn, SignUp } from "./pages/auth";
+import ApplicantHome from "./pages/Applicant/ApplicantHome";
 import { createContext, useState, useEffect } from "react";
 import useWindowSize from "./hooks/useWindowSize";
 import ApplicantDashboard from "./layouts/ApplicantDashboard";

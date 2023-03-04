@@ -53,6 +53,7 @@ export function User() {
     branch: "",
     position: "",
     date: "",
+    password: ""
   };
   const [formValues, setFormValues] = useState(initialValue);
 
@@ -82,25 +83,22 @@ export function User() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log("submit clicked");
     const id = params.id;
 
-    const { name, email, number, role, branch, position, date } = formValues;
+    const { name, email, number, role, branch, position, date, password } = formValues;
 
     const payload = {
       name,
       email,
       number,
-      role,
       branch,
       position,
       date,
       id,
-      password: "$2a$08$M5OojuUtBe3c8bT6cGPGzu5eSVvgREn8lGwLuNzAHXkzMZB5PXbYm",
-      Uname: localStorage.name, role: localStorage.access
+      password,
+      Uname: localStorage.name, 
+      role
     };
-
-    console.log(payload);
 
     const apiCall = await axios[params.action == 2 ? "put" : "post"](
       `${ENV.baseUrl}/users/${params.action == 2 ? "edit" : "create"}`,
@@ -515,6 +513,21 @@ export function User() {
               </div>
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#333333]">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
+                  placeholder=""
+                  name="password"
+                  value={formValues.password}
+                  onChange={handleChange}
+                  disabled={isViewMode}
+                  required
+                />
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-[#333333]">
                   Role
                 </label>
                 <select
@@ -525,12 +538,14 @@ export function User() {
                   disabled={isViewMode}
                 >
                   <option value={""}>Select Role</option>
-                  <option value={"manager"}>Manager</option>
-                  <option value={"superadmin hq"}>Superadmin HQ</option>
-                  <option value={"admin hq"}>Admin HQ</option>
-                  <option value={"Boss"}>Boss</option>
-                  <option value={"Counselor HQ"}>Counselor HQ</option>
-                  <option value={"Accountant HQ"}>Accountant HQ</option>
+                  <option value={"superAdmin"}>Super Admin</option>
+                  <option value={"admin"}>Admin HQ</option>
+                  <option value={"counselor"}>Counselor HQ</option>
+                  <option value={"accountant"}>Accountant HQ</option>
+                  <option value={"adminBranch"}>Admin Branch</option>
+                  <option value={"accountantBranch"}>Counselor Branch</option>
+                  <option value={"applicant"}>Accountant Branch</option>
+                  
                 </select>
               </div>
               {formValues.role.toLowerCase() === "superadmin hq" ||

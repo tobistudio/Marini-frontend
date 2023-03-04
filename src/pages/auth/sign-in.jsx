@@ -25,7 +25,11 @@ export function SignIn() {
     
     if (data.success) {
       toast("welcome to our site!");
-      navigate("/dashboard");
+      if(authType !== "applicant"){
+        navigate("/dashboard");
+      } else {
+        navigate("/applicant");
+      }
     } else {
       toast(data.error);
     }
