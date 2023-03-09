@@ -20,6 +20,7 @@ export const VIEW_ALL_USERS = "VIEW_ALL_USERS";
 export const DELETE_BACKUP_FILE = "DELETE_BACKUP_FILE";
 export const DOWNLOAD_BACKUP_FILE = "DOWNLOAD_BACKUP_FILE";
 export const RESTORE_BACKUP_FILE = "RESTORE_BACKUP_FILE";
+export const VIEW_ALL_CURRECY = "VIEW_ALL_CURRECY";
 
 // http://localhost:8080/v1/front/activities/list
 
@@ -34,8 +35,8 @@ export const VIEW_QUALIFICATION_TYPE = "VIEW_QUALIFICATION_TYPE";
 export const LIST_ALL_QUALIFICATION_TYPES = "LIST_ALL_QUALIFICATION_TYPES";
 //
 export const VIEW_UNIVERSITY_TYPE = "VIEW_UNIVERSITY_TYPE";
-export const LIST_ALL_UNIVERSITY_TYPES = "LIST_ALL_UNIVERSITY_TYPES";
 //
+export const LIST_ALL_UNIVERSITY_TYPES = "LIST_ALL_UNIVERSITY_TYPES";
 export const VIEW_LEAD_GROUP = "VIEW_LEAD_GROUP";
 export const LIST_ALL_LEAD_GROUPS = "LIST_ALL_LEAD_GROUPS";
 //
@@ -65,3 +66,20 @@ export const DELETE_COMMISSION_INVOICE = "DELETE_ALL_COMMISSION_INVOICES";
 // Login type
 
 export const SING_IN = "SING_IN";
+
+// Module: Accounting (Sale)
+export const VIEW_SALE = "VIEW_SALE";
+export const LIST_ALL_SALES = "LIST_ALL_SALES";
+//
+// Module: Accounting (CostOfSale)
+export const VIEW_COST_OF_SALE = "VIEW_COST_OF_SALE";
+export const LIST_ALL_COST_OF_SALES = "LIST_ALL_COST_OF_SALES";
+//
+// Module: Accounting (Expenses)
+export const VIEW_EXPENSE = "VIEW_EXPENSE";
+export const LIST_ALL_EXPENSES = "LIST_ALL_EXPENSES";
+//
+// Module: Accounting (DepitAndCredit)
+export const VIEW_DEPIT_AND_CREDIT = "VIEW_DEPIT_AND_CREDIT";
+export const LIST_ALL_DEPIT_AND_CREDITS = "LIST_ALL_DEPIT_AND_CREDITS";
+//

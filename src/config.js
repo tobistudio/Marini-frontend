@@ -1,7 +1,9 @@
 export const ENV = {
-  imageUrl: "http://127.0.0.1:8080/images/",
-  baseUrl: "http://127.0.0.1:8080/v1/front",
-
+  // baseUrl: "https://qetcbackend.projects.anasite.me/v1/front",
+  // imageUrl: "https://qetcbackend.projects.anasite.me/images/",
+  baseUrl: "http://localhost:8080/v1/front",
+  imageUrl: "http://localhost:8080/images/",
+  
   decimalNumberValidator: function (e) {
     // Allow: backspace, delete, tab, escape, enter and .
     let specialKeys = [46, 8, 9, 27, 13, 110, 190];

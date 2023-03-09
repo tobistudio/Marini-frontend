@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Menu,
   MenuHandler,
@@ -10,8 +10,18 @@ import filterIcon from "../../../public/img/filterIcon.svg";
 import Userprops from "@/data/user-props";
 import dropdown from "../../../public/img/dropdown.svg";
 import Paginate from "@/paginate";
+import { useDispatch, useSelector } from "react-redux";
+import { listActivities } from "@/redux/actions/actions";
 
 export function LogActivities() {
+  // Anasite - Edits
+  const dispatch = useDispatch();
+  const { activities } = useSelector((state) => state?.universitiesReducer);
+  console.log("Acitvities from SystemReports ====>", activities);
+  useEffect(() => {
+    dispatch(listActivities());
+  }, []);
+  // END
   return (
     <div className="mt-[30px] w-full bg-[#E8E9EB] font-display">
       <div>
@@ -74,7 +84,7 @@ export function LogActivities() {
                   >
                     Action
                   </th>
-                  <tr scope="col" className="w-[200px] px-6 py-3" />
+                  <th scope="col" className="w-[200px] px-6 py-3" />
                   <th
                     scope="col"
                     className="w-[113px] px-6 py-3 text-left text-base font-medium text-[#92929D]"
@@ -90,37 +100,47 @@ export function LogActivities() {
                 </tr>
               </thead>
               <tbody className="border-none">
-                {Userprops.map(({ date, time, action, name, role }) => (
-                  <tr key={name}>
-                    <td className="whitespace-nowrap py-3 pr-6">
-                      <Checkbox />
-                    </td>
-                    <td className="whitespace-nowrap py-4 text-lg font-normal text-[#333]">
-                      {new Date(date).toLocaleDateString(undefined, {
-                        dateStyle: "medium",
-                      })}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-lg font-normal text-[#333]">
-                      {time}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-lg text-[#333]">
-                      {action}
-                    </td>
-                    <td className="px-6 py-4">&nbsp;</td>
-                    <td className="whitespace-nowrap px-6 py-4 text-lg font-semibold text-[#333]">
-                      {name}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-lg font-normal text-[#333]">
-                      {role}
-                    </td>
-                  </tr>
-                ))}
+                {activities?.data?.faqs.map(
+                  ({
+                    id,
+                    createdAt: date,
+                    createdAt: time,
+                    action,
+                    User,
+                    name,
+                    role,
+                  }) => (
+                    <tr key={id + "_" + time + "ojivasd" + date}>
+                      <td className="whitespace-nowrap py-3 pr-6">
+                        <Checkbox />
+                      </td>
+                      <td className="whitespace-nowrap py-4 text-lg font-normal text-[#333]">
+                        {new Date(date).toLocaleDateString(undefined, {
+                          dateStyle: "medium",
+                        })}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-lg font-normal text-[#333]">
+                        {new Date(time).toLocaleTimeString()}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-lg text-[#333]">
+                        {action}
+                      </td>
+                      <td className="px-6 py-4">&nbsp;</td>
+                      <td className="whitespace-nowrap px-6 py-4 text-lg font-semibold text-[#333]">
+                        {User?.name || name || "No Name"}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-lg font-normal text-[#333]">
+                        {User?.role || role || "No Role"}
+                      </td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           </div>
           {/* <Paginate pagination={pagination} method={listUniversities} /> */}
 
-          <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-[20px] bg-[#F8F9FB] py-4 px-6 md:flex-row md:gap-0">
+          {/* <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-[20px] bg-[#F8F9FB] py-4 px-6 md:flex-row md:gap-0">
             <p className="px-5 text-base text-[#92929D]">
               <span className="text-[#280559]">1</span>-5 of 56
             </p>
@@ -180,7 +200,13 @@ export function LogActivities() {
                 </svg>
               </button>
             </div>
-          </div>
+          </div> */}
+          <Paginate
+            method={listActivities}
+            pagination={activities?.data?.pagination}
+          >
+            List Application By Level
+          </Paginate>
         </div>
       </div>
     </div>

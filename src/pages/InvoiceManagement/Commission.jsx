@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
   Button,
@@ -19,11 +19,14 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   listCommissionInvoices,
   viewCommissionInvoice,
+  filterlistCommissionInvoices
 } from "@/redux/actions/actions";
+import { read, utils, writeFile } from 'xlsx';
 
 export function Commission() {
   const windowWidth = useWindowWidth();
   // Anasite - Edits: adding commissionInvoice
+  const [search, setSearch] = useState("");
   const dispatch = useDispatch();
   const { commissionInvoices } = useSelector(
     (state) => state?.universitiesReducer
@@ -32,6 +35,29 @@ export function Commission() {
   useEffect(() => {
     dispatch(listCommissionInvoices());
   }, []);
+  const handleExportXlsx = () => {
+    const headings = [[
+      ...Object.keys(Commission_voice_data[0])
+    ]];
+    const wb = utils.book_new();
+    const ws = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, headings);
+    utils.sheet_add_json(ws, Commission_voice_data, { origin: 'A2', skipHeader: true });
+    utils.book_append_sheet(wb, ws, 'Report');
+    writeFile(wb, 'Movie Report.xlsx');
+  }
+
+  const handleExportCsv = () => {
+    const headings = [[
+      ...Object.keys(Commission_voice_data[0])
+    ]];
+    const wb = utils.book_new();
+    const ws = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, headings);
+    utils.sheet_add_json(ws, Commission_voice_data, { origin: 'A2', skipHeader: true });
+    utils.book_append_sheet(wb, ws, 'Report');
+    writeFile(wb, 'Movie Report.csv');
+  }
 
   return (
     <div className="mt-[30px] w-full bg-[#E8E9EB] font-display">
@@ -69,13 +95,16 @@ export function Commission() {
                 </svg>
                 <input
                   type="text"
+                  // onKeyDown={handleKeyDown}
+                  onChange={(e) => setSearch(e.target.value)}
+                  value={search}
                   placeholder="Search"
                   className="w-full rounded-[15px] border-[1px] border-[#cbd2dc]/50 bg-white py-3 pt-4 pl-12 pr-4 text-gray-500 shadow-md focus:bg-white"
                 />
               </div>
             </form>
-            <div className="flex h-full w-full flex-wrap justify-center gap-3 sm:flex-nowrap lg:w-auto lg:justify-start">
-              <button className="flex h-[57px] w-[135px] flex-row items-center justify-center rounded-2xl border-[1px] border-[#cbd2dc]/50 bg-white shadow-md">
+            <div className="flex h-full w-full justify-between gap-3 md:w-auto md:justify-start">
+              <button className="flex w-[135px] flex-row items-center justify-center rounded-2xl border-[1px] border-[#cbd2dc]/50 bg-white shadow-md" onClick={() => dispatch(filterlistCommissionInvoices({ name: search }))}>
                 <img className="w-[20px]" src={filterIcon} alt="..." />
                 <p className="mx-3 text-[16px] ">Filters</p>
               </button>
@@ -88,10 +117,10 @@ export function Commission() {
                   </button>
                 </MenuHandler>
                 <MenuList>
-                  <MenuItem className="text-base font-medium text-[#280559] hover:bg-[#F2F4F8] hover:text-[#280559]">
+                  <MenuItem onClick={() => handleExportCsv()} className="text-base font-medium text-[#280559] hover:bg-[#F2F4F8] hover:text-[#280559]">
                     Export as .csv
                   </MenuItem>
-                  <MenuItem className="text-base font-medium text-[#280559] hover:bg-[#F2F4F8] hover:text-[#280559]">
+                  <MenuItem onClick={() => handleExportXlsx()} className="text-base font-medium text-[#280559] hover:bg-[#F2F4F8] hover:text-[#280559]">
                     Export as .xlsx
                   </MenuItem>
                 </MenuList>
@@ -103,9 +132,8 @@ export function Commission() {
             </div>
           </div>
           <div
-            className={`flex flex-col ${
-              windowWidth ? "overflow-x-hidden" : "overflow-x-auto"
-            }`}
+            className={`flex flex-col ${windowWidth ? "overflow-x-hidden" : "overflow-x-auto"
+              }`}
           >
             <table className=" w-full border-none">
               <thead>

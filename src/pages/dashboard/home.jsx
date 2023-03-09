@@ -33,7 +33,7 @@ export function Home() {
       {statisticsCardsData.map((item, id) =>
         item.state === state &&
         (
-          <div key={id} className={`mb-12 mr-10 grid grid-cols-1 gap-y-10 gap-x-6 lg:grid-cols-${item.data.length} 2xl:grid-cols-${item.data.length}`} >
+          <div key={id} className={`mb-12 mr-10 grid grid-cols-1 gap-y-10 gap-x-6 lg:grid-cols-${item.data.length} xl:grid-cols-${item.data.length} 2xl:grid-cols-${item.data.length}`} >
             {item.data.map(items => <StatisticsCard key={items.title} value={items.value} title={items.title} />)}
           </div>
         )

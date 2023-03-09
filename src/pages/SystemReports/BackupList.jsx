@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Backup from "@/data/backup-props";
 import fileIcon from "../../../public/img/fileIcon.svg";
+import Paginate from "@/paginate";
+import { listBackups } from "@/redux/actions/actions";
+import { useDispatch, useSelector } from "react-redux";
+// import axios from "axios";
 
 export function Leads() {
+  const { backups } = useSelector((state) => state?.universitiesReducer);
+  console.log("Backups from System Reports", backups);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(listBackups());
+  }, []);
   return (
     <div className="mt-[30px] w-full bg-[#E8E9EB]">
       <div>
@@ -35,7 +46,7 @@ export function Leads() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {Backup.map((items, index) => (
+                {backups?.backups?.map((item, index) => (
                   <tr key={index} className="border-hidden">
                     <td className="flex flex-row whitespace-nowrap py-4 text-lg font-medium text-[#333]">
                       <img
@@ -43,19 +54,24 @@ export function Leads() {
                         src={fileIcon}
                         alt="..."
                       />
-                      <p className="mx-6">{items.name}</p>
+                      <p className="mx-6">{item?.file}</p>
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-lg text-[#333]">
-                      {items.date}
+                      {new Date(item?.time).toLocaleDateString(undefined, {
+                        dateStyle: "medium",
+                      })}
                     </td>
-                    <td className="whitespace-nowrap font-semibold px-6 py-4 text-lg text-[#333]">
-                      {items.size}
+                    <td className="whitespace-nowrap px-6 py-4 text-lg font-semibold text-[#333]">
+                      {item.size || "N/A"}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          {/* <Paginate method={listBackups} pagination={backups?.data?.pagination}>
+            List Application By Level
+          </Paginate> */}
         </div>
       </div>
     </div>

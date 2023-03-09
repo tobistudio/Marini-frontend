@@ -4,6 +4,7 @@
   "version": "2.0.0",
   "type": "module",
   "scripts": {
+    "start": "react-scripts start",
     "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview"
@@ -35,7 +36,8 @@
     "redux-thunk": "^2.4.2",
     "tw-elements": "^1.0.0-alpha13",
     "use-gauge": "^0.5.0",
-    "uuidv4": "^6.2.13"
+    "uuidv4": "^6.2.13",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/react": "18.0.17",

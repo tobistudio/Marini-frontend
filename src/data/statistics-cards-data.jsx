@@ -28,10 +28,10 @@ export const statisticsCardsData = [
         value: "34",
         title: "Number of Universities"
       },
-      {
-        value: "3,024",
-        title: "Overall Invoices"
-      },
+      // {
+      //   value: "3,024",
+      //   title: "Overall Invoices"
+      // },
       {
         value: "$19,216",
         title: "Annual revenue"
@@ -68,14 +68,14 @@ export const statisticsCardsData = [
       value: "34",
       title: "Number of Universities"
     },
-    {
-      value: "3,024",
-      title: "Overall Invoices"
-    },
+    // {
+    //   value: "3,024",
+    //   title: "Overall Invoices"
+    // },
     {
       value: "$19,216",
       title: "Annual revenue"
-    }],
+    }],  
     charts: {
       length: 4,
       data:(

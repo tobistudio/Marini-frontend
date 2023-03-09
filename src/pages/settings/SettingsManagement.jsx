@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Branch from "./branch";
 import Properties from "./properties";
+import { useParams } from 'react-router-dom';
 import Settings from "./settings";
 import StatusManagement from "./statusmanagement";
 import User from "./user";
@@ -13,6 +14,11 @@ import Profiles from "./profiles";
 
 export function SettingsManagement() {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const { id } = useParams();
+  console.log(id)
+  useEffect(()=>{
+    id === '*' ? setActiveTabIndex(0) : setActiveTabIndex(id)
+  },[id])
   const tabsData = [
     {
       label: "User",
@@ -22,10 +28,10 @@ export function SettingsManagement() {
       label: "Branch",
       content: <Branch />,
     },
-    {
-      label: "Profile",
-      content: <Profiles />,
-    },
+    // {
+    //   label: "Profile",
+    //   content: <Profiles />,
+    // },
     {
       label: "Status",
       content: <StatusManagement />,

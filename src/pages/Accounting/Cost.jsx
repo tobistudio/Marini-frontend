@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   Menu,
@@ -13,11 +13,67 @@ import filterIcon from "../../../public/img/filterIcon.svg";
 import saveIcon from "../../../public/img/saveIcon.svg";
 import Sales_recording_data from "@/data/Sales-recording-data";
 import AddField from "@/helpers/Addfield";
-import { NavLink } from "react-router-dom";
+// import { NavLink } from "react-router-dom";
 import print from "../../../public/img/print.svg";
 import dropdown from "../../../public/img/dropdown.svg";
+// Anasite - Edits
+import { NavLink, useParams } from "react-router-dom";
+import { listCostOfSales } from "@/redux/actions/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { ENV } from "@/config";
+import axios from "axios";
+import { toast } from "react-toastify";
+import Paginate from "@/paginate";
+//
 
 export function Cost() {
+  // Anasite - Edits
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  const { costOfSales } = useSelector((state) => state?.universitiesReducer);
+  console.log("sales from accounting ====>", costOfSales);
+  useEffect(() => {
+    dispatch(listCostOfSales());
+  }, []);
+  const handleSubmit = async () => {
+    setCostState(true);
+    // console.log("handle submit", formValues);
+    const { name, description, amount, date } = allFormsData;
+    let formData = new FormData();
+    formData.append("name", name);
+    formData.append("amount", amount);
+    formData.append("description", description);
+    formData.append("date", date);
+
+    if (params.id) formData.append("id", params.id);
+
+    const config = {
+      headers: { "content-type": "multipart/form-data" },
+    };
+
+    const apiCall = await axios[params.action == 2 ? "put" : "post"](
+      `${ENV.baseUrl}/costofsales/${params.action == 2 ? "edit" : "create"}`,
+      formData,
+      config
+    );
+    dispatch(listCostOfSales());
+
+    // setIsLoading(false);
+
+    if (apiCall.data?.success) {
+      let { message } = apiCall.data;
+      toast.success(message, {
+        position: toast.POSITION.TOP_RIGHT,
+        hideProgressBar: false,
+        autoClose: 3000,
+        // key: "_" + Math.random() * 1000000 + "_" + Math.random() * 1000000,
+      });
+    }
+    // navigate("university")
+  };
+  // END
+
   /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
   // const [openModal, setOpenModal] = useState(false);
   const [costState, setCostState] = useState(true);
@@ -148,20 +204,23 @@ export function Cost() {
                   </tr>
                 </thead>
                 <tbody className="border-none">
-                  {Sales_recording_data.map(
+                  {costOfSales?.data?.faqs.map(
                     ({
+                      ID,
                       date,
                       name,
                       description,
-                      costAmount,
-                      costAmountColor,
+                      amount: salesAmount,
+                      salesAmountColor,
                     }) => (
-                      <tr key={name}>
+                      <tr key={name + ID + "lkj" + description}>
                         <td className="whitespace-nowrap py-3 pr-6">
                           <Checkbox />
                         </td>
                         <td className="whitespace-nowrap py-4 text-lg font-normal text-[#333]">
-                          {date}
+                          {new Date(date).toLocaleDateString(undefined, {
+                            dateStyle: "medium",
+                          })}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-lg font-semibold text-[#333]">
                           {name}
@@ -170,8 +229,8 @@ export function Cost() {
                           {description}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-lg font-semibold text-[#333]">
-                          <span style={{ color: costAmountColor }}>
-                            {costAmount}
+                          <span style={{ color: salesAmountColor || "#333" }}>
+                            ${salesAmount}
                           </span>
                         </td>
                         <td>
@@ -203,7 +262,7 @@ export function Cost() {
                 </tbody>
               </table>
             </div>
-            <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-[20px] bg-[#F8F9FB] py-4 px-6 md:flex-row md:gap-0">
+            {/* Anasite - Edits <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-[20px] bg-[#F8F9FB] py-4 px-6 md:flex-row md:gap-0">
               <p className="px-5 text-base text-[#92929D]">
                 <span className="text-[#280559]">1</span>-5 of 56
               </p>
@@ -263,7 +322,13 @@ export function Cost() {
                   </svg>
                 </button>
               </div>
-            </div>
+            </div> */}
+            <Paginate
+              pagination={costOfSales?.data?.pagination}
+              method={listCostOfSales}
+            >
+              List Cost
+            </Paginate>
           </div>
         </div>
       </div>
@@ -297,6 +362,9 @@ export function Cost() {
                   type="text"
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Cost of Sales Name"
+                  name="name"
+                  onChange={handleAllFormsDataChange}
+                  value={allFormsData.name || ""}
                   required
                 />
               </div>
@@ -308,6 +376,9 @@ export function Cost() {
                   type="text"
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Small Description"
+                  name="description"
+                  onChange={handleAllFormsDataChange}
+                  value={allFormsData.description || ""}
                   required
                 />
               </div>
@@ -323,6 +394,9 @@ export function Cost() {
                     type="text"
                     className="block h-full w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 pl-16 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                     placeholder="0.00"
+                    name="amount"
+                    onChange={handleAllFormsDataChange}
+                    value={allFormsData.amount || ""}
                     required
                   />
                 </div>
@@ -335,6 +409,9 @@ export function Cost() {
                   type="date"
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="DD/MM/YYYY"
+                  name="date"
+                  onChange={handleAllFormsDataChange}
+                  value={allFormsData.date || ""}
                   required
                 />
               </div>
@@ -351,29 +428,44 @@ export function Cost() {
                 </button>
                 <AddField open={openModal} close={() => setOpenModal(false)} />
               </div> */}
-              <AddField
-                open={openCostAddModal}
-                close={() => setOpenCostAddModal(false)}
-                toAdd={costNewFields}
-                setOpenAddModal={setOpenCostAddModal}
-                setToAdd={setCostNewFields}
-                formsData={allFormsData}
-                setFormsData={setAllFormsData}
-                handleFormsDataChange={handleAllFormsDataChange}
-                section={"Accounting-Cost"}
-              />
+              {costState ? (
+                ""
+              ) : (
+                <AddField
+                  open={openCostAddModal}
+                  close={() => setOpenCostAddModal(false)}
+                  toAdd={costNewFields}
+                  setOpenAddModal={setOpenCostAddModal}
+                  setToAdd={setCostNewFields}
+                  formsData={allFormsData}
+                  setFormsData={setAllFormsData}
+                  handleFormsDataChange={handleAllFormsDataChange}
+                  section={"Accounting-Cost"}
+                />
+              )}
             </div>
           </form>
         </div>
         <NavLink>
           <Button
-            onClick={() => setCostState(true)}
+            onClick={handleSubmit}
             className="rounded-[15px]  bg-[#280559]"
           >
             <div className="flex flex-row items-center justify-center px-[33px] py-[10px]">
               <img src={saveIcon} alt="..." />
               <p className="px-[11px] text-base font-medium normal-case text-white ">
                 Save Changes
+              </p>
+            </div>
+          </Button>
+          {"   "}
+          <Button
+            onClick={() => setCostState(true)}
+            className="rounded-[15px]  bg-[#280559]"
+          >
+            <div className="flex flex-row items-center justify-center px-[33px] py-[10px]">
+              <p className="px-[11px] text-base font-medium normal-case text-white ">
+                Back
               </p>
             </div>
           </Button>

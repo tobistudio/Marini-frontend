@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Menu,
   MenuHandler,
@@ -10,8 +10,44 @@ import filterIcon from "../../../public/img/filterIcon.svg";
 import down from "../../../public/img/downIcon.svg";
 import { ApplicationLeadsData } from "@/data/application-leads-data";
 import dropdown from "../../../public/img/dropdown.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { listApplications } from "@/redux/actions/actions";
+import { read, utils, writeFile } from 'xlsx';
+import Paginate from "@/paginate";
 
 export function ApplicationByLevel() {
+  // Anasite - Edits
+  const dispatch = useDispatch();
+  const { applications } = useSelector((state) => state?.universitiesReducer);
+  console.log("applications from SystemReports ====>", applications);
+  useEffect(() => {
+    dispatch(listApplications());
+  }, []);
+
+  const handleExportXlsx = () => {
+    const headings = [[
+      ...Object.keys(applications?.data?.faqs[0])
+    ]];
+    const wb = utils.book_new();
+    const ws = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, headings);
+    utils.sheet_add_json(ws, applications?.data?.faqs, { origin: 'A2', skipHeader: true });
+    utils.book_append_sheet(wb, ws, 'Report');
+    writeFile(wb, 'Movie Report.xlsx');
+  }
+
+  const handleExportCsv = () => {
+    const headings = [[
+      ...Object.keys(applications?.data?.faqs[0])
+    ]];
+    const wb = utils.book_new();
+    const ws = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, headings);
+    utils.sheet_add_json(ws, applications?.data?.faqs, { origin: 'A2', skipHeader: true });
+    utils.book_append_sheet(wb, ws, 'Report');
+    writeFile(wb, 'Movie Report.csv');
+  }
+  // END
   return (
     <div className="mt-[30px] w-full bg-[#E8E9EB] font-display">
       <div>
@@ -120,11 +156,13 @@ export function ApplicationByLevel() {
                 </tr>
               </thead>
               <tbody className="border-none">
-                {ApplicationLeadsData.map(
+                {applications?.data?.faqs.map(
                   ({
-                    name,
-                    date,
-                    application,
+                    id,
+                    fullName: name,
+                    createdAt: date,
+                    fullName: application,
+                    ApplicationDetail,
                     level,
                     category,
                     university,
@@ -132,7 +170,7 @@ export function ApplicationByLevel() {
                     status,
                     color,
                   }) => (
-                    <tr key={name}>
+                    <tr key={name + id + "_ooehnv_" + date}>
                       <td className="whitespace-nowrap py-3 pr-6">
                         <Checkbox />
                       </td>
@@ -145,26 +183,28 @@ export function ApplicationByLevel() {
                         {application}
                       </td>
                       <td className="px-6 py-4 text-lg font-normal text-[#333]">
-                        {level}
+                        {ApplicationDetail?.applicationLevel}
                       </td>
                       <td className="px-6 py-4 text-lg font-normal text-[#333]">
-                        {category}
+                        {ApplicationDetail?.category || "No Category"}
                       </td>
                       <td className="px-6 py-4 text-lg font-normal text-[#333]">
-                        {university}
+                        {ApplicationDetail?.selectUniversity || "No University"}
                       </td>
                       <td className="px-6 py-4 text-lg font-normal text-[#333]">
-                        {branch}
+                        {ApplicationDetail?.Branch?.name || "No Branch"}
                       </td>
                       <td>
                         <p
-                          className="mx-auto w-fit rounded-2xl px-5 py-2 text-center text-xs font-medium normal-case"
+                          className="neumorphism mx-auto w-fit rounded-2xl rounded-lg bg-gray-100 p-6 px-5 py-2 text-center text-xs font-medium normal-case text-gray-700 shadow-lg dark:bg-gray-800 dark:text-gray-400"
                           style={{
-                            color,
-                            backgroundColor: `${color}10`,
+                            color:
+                              ApplicationDetail?.ApplicationModuleStatus?.Color,
+                            backgroundColor: `${ApplicationDetail?.ApplicationModuleStatus?.Color}10`,
                           }}
                         >
-                          {status}
+                          {ApplicationDetail?.ApplicationModuleStatus?.name ||
+                            "No status"}
                         </p>
                       </td>
                     </tr>
@@ -173,7 +213,7 @@ export function ApplicationByLevel() {
               </tbody>
             </table>
           </div>
-          <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-[20px] bg-[#F8F9FB] py-4 px-6 md:flex-row md:gap-0">
+          {/* <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-[20px] bg-[#F8F9FB] py-4 px-6 md:flex-row md:gap-0">
             <p className="px-5 text-base text-[#92929D]">
               <span className="text-[#280559]">1</span>-5 of 56
             </p>
@@ -233,7 +273,13 @@ export function ApplicationByLevel() {
                 </svg>
               </button>
             </div>
-          </div>
+          </div> */}
+          <Paginate
+            method={listApplications}
+            pagination={applications?.data?.pagination}
+          >
+            List Application By Level
+          </Paginate>
         </div>
       </div>
     </div>

@@ -1,13 +1,17 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { Dashboard, Auth } from "@/layouts";
 import { SignIn, SignUp } from "./pages/auth";
+import { useNavigate } from "react-router-dom";
 import ApplicantHome from "./pages/Applicant/ApplicantHome";
 import { createContext, useState, useEffect } from "react";
 import useWindowSize from "./hooks/useWindowSize";
 import ApplicantDashboard from "./layouts/ApplicantDashboard";
+import SettingsManagement from "./pages/settings/SettingsManagement";
 import 'react-toastify/dist/ReactToastify.css';
 
+
 export const NavbarCtx = createContext();
+
 const initialStatusColor = {
   hot: "#56ba6c",
   cold: "#0263FF",
@@ -16,7 +20,8 @@ const initialStatusColor = {
 };
 
 function App() {
-  const Navigate = useNavigate();
+
+  const navigate = useNavigate();
   const [navbar, setNavbar] = useState({
     isMobile: false,
     mobileExpand: false,
@@ -50,40 +55,33 @@ function App() {
         overlap: true,
       });
     }
-    if(!localStorage.name ) Navigate('/');
+    if(!localStorage?.access) navigate("/");
   }, [windowSize]);
 
   return (
-    <>
-      {
-          <Routes>
-            <Route path="/" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route
-              path="/applicant/*"
-              element={
-                <NavbarCtx.Provider value={{ navbar, setNavbar, statusColor }}>
-                  {" "}
-                  <ApplicantDashboard />{" "}
-                </NavbarCtx.Provider>
-              }
-            />
-            <Route
-              path="/dashboard/*"
-              element={
-                <NavbarCtx.Provider value={{ navbar, setNavbar, statusColor }}>
-                  {" "}
-                  <Dashboard />{" "}
-                </NavbarCtx.Provider>
-              }
-            />
-            <Route path="/auth/*" element={<Auth />} />
-
-          </Routes>
-      }
-
-    </>
-
+    <Routes>
+      <Route path="/" element={<SignIn />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route
+        path="/applicant/*"
+        element={
+          <NavbarCtx.Provider value={{ navbar, setNavbar, statusColor }}>
+            {" "}
+            <ApplicantDashboard />{" "}
+          </NavbarCtx.Provider>
+        }
+      />
+      <Route
+        path="/dashboard/*"
+        element={
+          <NavbarCtx.Provider value={{ navbar, setNavbar, statusColor }}>
+            {" "}
+            <Dashboard />{" "}
+          </NavbarCtx.Provider>
+        }
+      />
+      <Route path="/auth/*" element={<Auth />} />
+    </Routes>
   );
 }
 

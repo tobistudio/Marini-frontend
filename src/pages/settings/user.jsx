@@ -22,9 +22,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
 import { listUsers, listBranches } from "@/redux/actions/actions";
-import { viewUser, viewBranch } from "@/redux/actions/actions";
+import { viewUser, viewBranch, filterViewUser } from "@/redux/actions/actions";
 import { ENV } from "@/config";
 import Paginate from "@/paginate";
+import Modal from "../universitymodule/Modal";
 export function User() {
   /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
   // const [openModal, setOpenModal] = useState(false);
@@ -42,6 +43,7 @@ export function User() {
   const [openModal, setOpenModal] = useState(false);
   const [isViewMode, setIsViewMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const params = useParams();
   const dispatch = useDispatch();
@@ -53,7 +55,7 @@ export function User() {
     branch: "",
     position: "",
     date: "",
-    password: ""
+    password: "",
   };
   const [formValues, setFormValues] = useState(initialValue);
 
@@ -62,8 +64,19 @@ export function User() {
   );
 
   const allUsers = useSelector((state) => state?.universitiesReducer?.users);
+
+  const [allUser, setAllUser] = useState([]);
+
   console.log("all users in users module ===>", allUsers);
   console.log("all branches in users module ===>", branchData);
+
+  useEffect(() => {
+    if (localStorage.access === "adminBranch" || localStorage.access === "counselorBranch" || localStorage.access === "accountantBranch") {
+      setAllUser({ ...allUsers?.data?.faqs?.filter(item => item.role === localStorage.access) });
+    } else {
+      setAllUser({ ...allUsers });
+    }
+  }, [allUsers]);
 
   const viewUsers = useSelector(
     (state) => state?.universitiesReducer?.viewUser
@@ -81,38 +94,43 @@ export function User() {
     setFormValues({ ...formValues, [name]: value });
   };
   const handleSubmit = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     setIsLoading(true);
     // const id = params.id;
 
-    const { name, email, number, role, branch, position, date, password } = formValues;
+    const { name, email, number, role, branch, position, date, password } =
+      formValues;
 
     const payload = {
       name,
       email,
       number,
+      role,
       branch,
       position,
       date,
       password,
       Uname: localStorage.name,
-      role
+      // role,
     };
+    if ((name, email, number, role, branch, position, date, password)) {
+      const apiCall = await axios[params.action == 2 ? "put" : "post"](
+        `${ENV.baseUrl}/users/${params.action == 2 ? "edit" : "create"}`,
+        payload
+      );
+      console.log("apiCall");
 
-    const apiCall = await axios[params.action == 2 ? "put" : "post"](
-      `${ENV.baseUrl}/users/${params.action == 2 ? "edit" : "create"}`,
-      payload
-    );
-    console.log("apiCall");
-
-    setIsLoading(false);
-    if (apiCall.data?.success) {
-      let { message } = apiCall.data;
-      toast.success(message, {
-        position: toast.POSITION.TOP_RIGHT,
-        hideProgressBar: false,
-        autoClose: 3000,
-      });
+      setIsLoading(false);
+      if (apiCall.data?.success) {
+        let { message } = apiCall.data;
+        toast.success(message, {
+          position: toast.POSITION.TOP_RIGHT,
+          hideProgressBar: false,
+          autoClose: 3000,
+        });
+        setUserstate(true);
+        dispatch(listUsers());
+      }
     }
   };
   useEffect(() => {
@@ -128,11 +146,11 @@ export function User() {
     if (viewUsers?.user) setFormValues(viewUsers?.user);
   }, [viewUsers.user]);
   useEffect(() => {
-    if (params.id) dispatch(viewUser(params.id));
+    if (params.id && params.id !== "*") dispatch(viewUser(params.id));
 
     if (params.action == 1) {
       setUserstate(false);
-      setIsViewMode(true);
+      setIsViewMode(false);
     } else if (params.action == 2) {
       setUserstate(false);
       setIsViewMode(false);
@@ -143,10 +161,48 @@ export function User() {
     }
   }, [params.id, params.action]);
 
+  // Anasite - Edits: for 'edit'/'delete'
+
+  const [idToDelete, setIdToDelete] = useState("");
+  const [dropdownID, setDropdownID] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const onConfirmation = async () => {
+    // here we will delete call
+    console.log("User deleted");
+    console.log(params.id);
+    const data = await axios.delete(
+      `${ENV.baseUrl}/users/delete/${idToDelete}`
+    );
+    console.log("deleted data", data);
+    // // alert("whppp");
+    // here we will delete call
+    dispatch(listUsers(pagination));
+    setDropdownID("");
+    // // alert("whppp");
+  };
+  const toggleDropdown = (ind) => {
+    // console.log("toggle dropdown ", dropdownID, " _ ", ind);
+
+    // ***
+    return () => {
+      // const dropdown = document.getElementById(`dropdown${ind}`);
+      // dropdown.classList.toggle("hidden");
+      // dropdown.classList.toggle("block");
+      if (ind === dropdownID) return setDropdownID("");
+      setDropdownID(ind);
+    };
+  };
+  // END
   return (
     <>
       {isLoading && <FullPageLoader />}
 
+      <Modal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        onConfirmation={onConfirmation}
+      />
       <div
         className={`mt-[30px] flex w-full flex-col gap-8 bg-[#E8E9EB] font-display ${userstate ? "" : "hidden"
           }`}
@@ -157,12 +213,14 @@ export function User() {
               <p className=" text-3xl font-semibold text-[#280559]">Users</p>
               <Button
                 onClick={() => setUserstate(false)}
-                className="ml-auto flex h-[60px] flex-row items-center rounded-2xl bg-[#280559] p-2 sm:py-3 sm:px-6"
+                className="rounded-[15px]  bg-[#280559]"
               >
-                <img className="m-1 w-[20px]" src={plus} alt="..." />
-                <p className="m-1 text-sm font-medium normal-case text-white sm:text-base">
-                  Create New User
-                </p>
+                <div className="flex flex-row items-center justify-center">
+                  <img className="m-1 w-[20px]" src={plus} alt="..." />
+                  <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                    Create New User
+                  </p>
+                </div>
               </Button>
             </div>
             <div className="my-3 flex flex-col items-center justify-between gap-3 rounded-[20px] bg-[#F8F9FB] p-5 md:flex-row">
@@ -184,12 +242,16 @@ export function User() {
                   </svg>
                   <input
                     type="text"
+                    // onKeyDown={handleKeyDown}
+                    onChange={(e) => setSearch(e.target.value)}
+                    value={search}
                     placeholder="Search"
                     className="w-full rounded-[15px] border-[1px] border-[#cbd2dc]/50 bg-white py-3 pt-4 pl-12 pr-4 text-gray-500 shadow-md focus:bg-white"
                   />
                 </div>
               </form>
-              <button className="flex h-[57px] w-[135px] items-center justify-center rounded-2xl border-[1px] border-[#cbd2dc]/50 bg-white shadow-md">
+
+              <button className="flex h-[57px] w-[135px] items-center justify-center rounded-2xl border-[1px] border-[#cbd2dc]/50 bg-white shadow-md" onClick={() => dispatch(filterViewUser({ name: search }))}>
                 <img className="w-[20px]" src={filterIcon} alt="..." />
                 <p className="mx-3 text-[16px] ">Filters</p>
               </button>
@@ -255,7 +317,7 @@ export function User() {
                   </tr>
                 </thead>
                 <tbody className="border-none">
-                  {allUsers?.data?.faqs?.map((ele, ind) => (
+                  {allUser && allUser?.data?.faqs?.map((ele, ind) => (
                     <tr key={ind}>
                       <td className="whitespace-nowrap py-3 pr-6">
                         <Checkbox />
@@ -324,6 +386,7 @@ export function User() {
                           id={`dropdownDefaultButton${ind}`}
                           data-dropdown-toggle={`dropdown${ind}`}
                           type="button"
+                          onClick={toggleDropdown(ele?.id)}
                         >
                           <svg
                             className="h-8 w-8 fill-current"
@@ -337,7 +400,10 @@ export function User() {
                         <div
                           // id="dropdown"
                           id={`dropdown${ind}`}
-                          className="z-10 hidden w-24 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700"
+                          className={
+                            "z-10 w-24 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700" +
+                            (dropdownID === ele?.id ? "" : " hidden ")
+                          }
                         >
                           <ul
                             className="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -358,6 +424,10 @@ export function User() {
                             </li>
                             <li>
                               <button
+                                onClick={() => {
+                                  setShowModal(true);
+                                  setIdToDelete(ele?.id);
+                                }}
                               // onClick={
                               //   // () => setShowModal(true)
                               //   // navigate(
@@ -461,7 +531,7 @@ export function User() {
           <p className="mb-8 text-2xl font-semibold text-[#333333]">
             User Details
           </p>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="mt-4 mb-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#333333]">
@@ -471,7 +541,6 @@ export function User() {
                   type="text"
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Name"
-                  required
                   name="name"
                   value={formValues.name}
                   onChange={handleChange}
@@ -520,21 +589,34 @@ export function User() {
                   disabled={isViewMode}
                 >
                   <option value={""}>Select Role</option>
-                  <option value={"superAdmin"}>Super Admin</option>
+
+                  <option value={"SuperAdmin"}>Super Admin</option>
+                  <option value={"AdminHQ"}>Admin HQ</option>
+                  <option value={"CounselorHQ"}>Counselor HQ</option>
+                  <option value={"AccountantHQ"}>Accountant HQ</option>
+                  <option value={"AdminBranch"}>Admin Branch</option>
+                  <option value={"CounselorBranch"}>Counselor Branch</option>
+                  <option value={"AccountantBranch"}>Accountant Branch</option>
+
+                  {/*     <option value={"superAdmin"}>Super Admin</option>
                   <option value={"admin"}>Admin HQ</option>
                   <option value={"counselor"}>Counselor HQ</option>
                   <option value={"accountant"}>Accountant HQ</option>
                   <option value={"adminBranch"}>Admin Branch</option>
                   <option value={"accountantBranch"}>Counselor Branch</option>
                   <option value={"applicant"}>Accountant Branch</option>
-
+                  */}
                 </select>
               </div>
-              {formValues.role.toLowerCase() === "superAdmin" ||
-                formValues.role.toLowerCase() === "admin" ||
-                formValues.role.toLowerCase() === "counselor".toLowerCase() ||
-                formValues.role.toLowerCase() ===
-                "accountant".toLowerCase() ? (
+              {formValues.role.split(" ").join("").toLowerCase() ===
+                "superadminhq" ||
+                formValues.role.split(" ").join("").toLowerCase() ===
+                "superadmin" ||
+                formValues.role.split(" ").join("").toLowerCase() === "adminhq" ||
+                formValues.role.split(" ").join("").toLowerCase() ===
+                "counselorHQ".toLowerCase() ||
+                formValues.role.split(" ").join("").toLowerCase() ===
+                "accountanthq".toLowerCase() ? (
                 ""
               ) : (
                 <div>
@@ -565,12 +647,12 @@ export function User() {
                 <label className="mb-2 block text-sm font-semibold text-[#333333]">
                   Position
                 </label>
-                {/* Anasite - Edits: Turn Position input into "text" instead of "select" & Adding Calender to "Date" Input */}
+                {/* Anasite - Edits: Turn Position input required into "text" instead of "select" & Adding Calender to "Date" Input required */}
                 <input
+                  required
                   type="text"
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Position"
-                  required
                   name="position"
                   defaultValue={formValues.position}
                   onChange={handleChange}
@@ -594,10 +676,10 @@ export function User() {
                   Date
                 </label>
                 <input
+                  required
                   type="date"
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="DD/MM/YYYY"
-                  required
                   name="date"
                   defaultValue={formValues.date}
                   onChange={handleChange}
@@ -635,20 +717,13 @@ export function User() {
                 <AddField open={openModal} close={() => setOpenModal(false)} />
               </div> */}
             </div>
-
-
-          </form>
-
-        </div>
-        <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]">
-          <p className="mb-8 text-2xl font-semibold text-[#333333]">Password</p>
-          <form>
             <div className="mt-12 mb-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#333333]">
                   Password
                 </label>
                 <input
+                  required
                   type="password"
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder=""
@@ -656,7 +731,6 @@ export function User() {
                   value={formValues.password}
                   onChange={handleChange}
                   disabled={isViewMode}
-                  required
                 />
               </div>
               <div>
@@ -667,49 +741,87 @@ export function User() {
                   type="password"
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="***********"
-                  required
                 />
               </div>
             </div>
-          </form>
-        </div>
-        {isViewMode ? (
-          <Button
-            onClick={() => {navigate(-1); handleSubmit();}}
-            className="rounded-[15px] w-[14%] bg-[#280559]"
-          >
-            <div className="flex flex-row items-center justify-center">
-              <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
-                Back
-              </p>
-            </div>
-          </Button>
-        ) : (
-          <>
-            {/* <NavLink to=""> */}
-            <Button
-              className="rounded-[15px] w-[14%] bg-[#280559]"
-              type="submit"
-              onClick={() => {handleSubmit()}}
-              disabled={isViewMode}
-            >
-              <div className="flex flex-row items-center justify-center">
-                <img src={saveIcon} alt="..." />
-                {/* <button
+            {isViewMode ? (
+              ""
+            ) : (
+              <>
+                {/* <NavLink to=""> */}
+                <Button
+                  className="rounded-[15px]  bg-[#280559]"
+                  type="submit"
+                  // onClick={(e) => {
+                  //   handleSubmit(e);
+                  // }}
+                  disabled={isViewMode}
+                >
+                  <div className="flex flex-row items-center justify-center">
+                    <img src={saveIcon} alt="..." />
+                    {/* <button
                   className="p-1 px-[11px] text-base font-medium normal-case text-white"
                   type="submit"
                   disabled={isViewMode}
                 > */}
+                    <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                      Save Changes
+                    </p>
+                    {/* </button> */}
+                  </div>
+                </Button>
+                {/* </NavLink> */}
+              </>
+            )}{" "}
+            <Button
+              onClick={() => setUserstate(true)}
+              className="rounded-[15px]  bg-[#280559]"
+            >
+              <div className="flex flex-row items-center justify-center">
                 <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
-                  Save Changes
+                  Back
                 </p>
-                {/* </button> */}
               </div>
             </Button>
-            {/* </NavLink> */}
-          </>
-        )}
+          </form>
+        </div>
+        {/* <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]">
+          <p className="mb-8 text-2xl font-semibold text-[#333333]">Password</p>
+          <form>
+            <div className="mt-12 mb-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-[#333333]">
+                  Password
+                </label>
+                <input
+                  required
+                  type="password"
+                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
+                  placeholder=""
+                  name="password"
+                  value={formValues.password}
+                  onChange={handleChange}
+                  disabled={isViewMode}
+                />
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-[#333333]">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="***********"
+                />
+              </div>
+            </div>
+          </form>
+        </div> */}
+        {/* <div className="my-[30px] mr-8 rounded-[34px] bg-white p-[39px]"> */}
       </div>
+      {/* </form> */}
+      {/* </div> */}
+      {/* </div> */}
     </>
   );
 }

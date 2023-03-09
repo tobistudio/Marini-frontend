@@ -494,9 +494,12 @@ const CreateAcademic = () => {
 
   useEffect(() => {
     if (params.id) dispatch(viewProgramme(params.id));
-    if (params.action == 1) {
+    if (params.action != 1) {
       setIsViewMode(true);
     } else {
+      setIsViewMode(false);
+    }
+    if(!params.action) {
       setIsViewMode(false);
     }
   }, [params.id]);
@@ -578,7 +581,8 @@ const CreateAcademic = () => {
       engRequirement,
       entryRequirement,
       id,
-      Uname: localStorage.name, role: localStorage.access
+      Uname: localStorage.name,
+      role: localStorage.access,
     };
 
     const apiCall = await axios[params.action == 2 ? "put" : "post"](
@@ -598,6 +602,7 @@ const CreateAcademic = () => {
         autoClose: 3000,
         key: "_" + Math.random() * 1000000 + "_" + Math.random() * 1000000,
       });
+      navigate(-1);
     }
   };
 
@@ -1086,16 +1091,7 @@ const CreateAcademic = () => {
               </div> */}
             {/* <NavLink to="university"> */}
             {isViewMode ? (
-              <Button
-                onClick={() => navigate(-1)}
-                className="rounded-[15px]  bg-[#280559]"
-              >
-                <div className="flex flex-row items-center justify-center">
-                  <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
-                    Back
-                  </p>
-                </div>
-              </Button>
+              ""
             ) : (
               <Button
                 className="rounded-[15px]  bg-[#280559]"
@@ -1109,7 +1105,17 @@ const CreateAcademic = () => {
                   </p>
                 </div>
               </Button>
-            )}
+            )}{" "}
+            <Button
+              onClick={() => navigate(-1)}
+              className="rounded-[15px]  bg-[#280559]"
+            >
+              <div className="flex flex-row items-center justify-center">
+                <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
+                  Back
+                </p>
+              </div>
+            </Button>
           </div>
         </form>
         {/* </NavLink> */}

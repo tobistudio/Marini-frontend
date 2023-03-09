@@ -59,14 +59,14 @@ export function Properties() {
   console.log("properties data in properties module 0==>", propertiesData);
 
   useEffect(() => {
-    dispatch(listProperties());
+    dispatch(listProperties("limit=5"));
     // Anasite - Edits
-    dispatch(listProgramLevels());
-    dispatch(listProgramCategorys());
-    dispatch(listQualificationTypes());
-    dispatch(listUniversityTypes());
-    dispatch(listLeadGroups());
-    dispatch(listInterestedPrograms());
+    dispatch(listProgramLevels("limit=5"));
+    dispatch(listProgramCategorys("limit=5"));
+    dispatch(listQualificationTypes("limit=5"));
+    dispatch(listUniversityTypes("limit=5"));
+    dispatch(listLeadGroups("limit=5"));
+    dispatch(listInterestedPrograms("limit=5"));
     // End
   }, []);
   const handleChange = (e) => {
@@ -91,18 +91,20 @@ export function Properties() {
               <p className=" text-4xl font-semibold text-[#280559]">
                 Property Management
               </p>
-              <div className="hidden md:block">
+    {/* ** See This */}
+             <div className="hidden md:block">
                 <NavLink to="">
-                  <Button className="ml-auto flex h-[60px] flex-row items-center rounded-2xl bg-[#280559] p-2 sm:py-3 sm:px-6">
+                  {/* <Button className="ml-auto flex h-[60px] flex-row items-center rounded-2xl bg-[#280559] p-2 sm:py-3 sm:px-6">
                     <div className="flex flex-row items-center justify-center">
                       <img src={saveIcon} alt="..." />
                       <p className="p-1 px-[11px] text-base font-medium normal-case text-white">
                         Save Changes
                       </p>
                     </div>
-                  </Button>
+                  </Button> */}
                 </NavLink>
               </div>
+
             </div>
             <p className=" font text-base text-[#9898A3]">
               Property Management
@@ -124,21 +126,25 @@ export function Properties() {
           <PropertyCard
             title={"Program Level"}
             toView={programLevels}
+            method={listProgramLevels}
             type={"programlevel"}
           />
           <PropertyCard
             title={"Program Category"}
             toView={programCategorys}
+            method={listProgramCategorys}
             type={"programcategory"}
           />
           <PropertyCard
             title={"Qualification Type"}
             toView={qualificationTypes}
+            method={listQualificationTypes}
             type={"qualificationtype"}
           />
           <PropertyCard
             title={"University Type"}
             toView={universityTypes}
+            method={listUniversityTypes}
             type={"universitytype"}
           />
           <PropertyCard

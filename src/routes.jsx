@@ -33,6 +33,7 @@ import SystemReports from "./pages/SystemReports/SystemReports";
 import System from "./pages/systembackup/system";
 import ApplicantHome from "./pages/Applicant/ApplicantHome";
 import AddProperty from "./pages/settings/AddProperty";
+import Properties from "./pages/settings/properties";
 
 const icon = {
   className: "w-5 h-5 xl:w-5 xl:h-5 text-inherit",
@@ -172,6 +173,18 @@ export const routes = [
         ),
         name: "Settings",
         path: "/settingsManagement/*",
+        element: <SettingsManagement />,
+      },
+      {
+        id: "settings1",
+        icon1: (
+          <img style={{ maxWidth: "20px", height: "20px" }} src={setting1} />
+        ),
+        icon2: (
+          <img style={{ maxWidth: "20px", height: "20px" }} src={setting2} />
+        ),
+        name: "Settings",
+        path: "/settingsManagement/:id",
         element: <SettingsManagement />,
       },
       {

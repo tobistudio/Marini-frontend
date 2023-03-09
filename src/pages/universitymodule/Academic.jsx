@@ -13,16 +13,46 @@ import filterIcon from "../../../public/img/filterIcon.svg";
 import down from "../../../public/img/downIcon.svg";
 import dropdown from "../../../public/img/dropdown.svg";
 import { useSelector, useDispatch } from "react-redux";
-import { listProgramms } from "@/redux/actions/actions";
+import { listProgramms, filterProgramms } from "@/redux/actions/actions";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Modal from "./Modal";
+import { read, utils, writeFile } from 'xlsx';
 import axios from "axios";
 import Paginate from "@/paginate";
+import { ENV } from "@/config";
 
 export function Academic() {
   const [showModal, setShowModal] = useState(false);
+  // Anasite - Edits: for 'edit'/'delete'
+  const [idToDelete, setIdToDelete] = useState("");
+  const [dropdownID, setDropdownID] = useState("");
+  const [search, setSearch] = useState("");
+  const onConfirmation = async () => {
+    // here we will delete call
+    console.log("Academic deleted");
+    console.log("academic delete", params.id);
+    const data = await axios.delete(
+      `${ENV.baseUrl}/programme/delete/${idToDelete}`
+    );
+    console.log("deleted data", data);
+    disptach(listProgramms(pagination));
+    // // alert("whppp");
+  };
+  const toggleDropdown = (ind) => {
+    // console.log("toggle dropdown ", dropdownID, " _ ", ind);
+
+    // ***
+    return () => {
+      // const dropdown = document.getElementById(`dropdown${ind}`);
+      // dropdown.classList.toggle("hidden");
+      // dropdown.classList.toggle("block");
+      if (ind === dropdownID) return setDropdownID("");
+      setDropdownID(ind);
+    };
+  };
+  // END
 
   const disptach = useDispatch();
   const navigate = useNavigate();
@@ -35,30 +65,43 @@ export function Academic() {
     (state) => state?.universitiesReducer?.programms?.data?.pagination
   );
 
+  const handleExportXlsx = () => {
+    const headings = [[
+      ...Object.keys(programmsData?.data?.faqs[0])
+    ]];
+    const wb = utils.book_new();
+    const ws = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, headings);
+    utils.sheet_add_json(ws, programmsData?.data?.faqs, { origin: 'A2', skipHeader: true });
+    utils.book_append_sheet(wb, ws, 'Report');
+    writeFile(wb, 'Movie Report.xlsx');
+  }
+
+  const handleExportCsv = () => {
+    const headings = [[
+      ...Object.keys(programmsData?.data?.faqs[0])
+    ]];
+    const wb = utils.book_new();
+    const ws = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, headings);
+    utils.sheet_add_json(ws, programmsData?.data?.faqs, { origin: 'A2', skipHeader: true });
+    utils.book_append_sheet(wb, ws, 'Report');
+    writeFile(wb, 'Movie Report.csv');
+  }
+
   // list all programms
   useEffect(() => {
     disptach(listProgramms());
 
-    if (programmsData?.success == true) {
-      let { message } = programmsData;
-      toast.success(message, {
-        position: toast.POSITION.TOP_RIGHT,
-        hideProgressBar: false,
-        autoClose: 3000,
-      });
-    }
+    // if (programmsData?.success == true) {
+    //   let { message } = programmsData;
+    //   toast.success(message, {
+    //     position: toast.POSITION.TOP_RIGHT,
+    //     hideProgressBar: false,
+    //     autoClose: 3000,
+    //   });
+    // }
   }, []);
-
-  const onConfirmation = async () => {
-    // here we will delete call
-    console.log("academic deleted");
-    console.log("academic delte", params.id);
-    const data = await axios.delete(
-      `${ENV.baseUrl}/programme/delete/${params.id}`
-    );
-    console.log("deleted data", data);
-    // // alert("whppp");
-  };
 
   return (
     <>
@@ -106,17 +149,19 @@ export function Academic() {
                   </svg>
                   <input
                     type="text"
+                    // onKeyDown={handleKeyDown}
+                    onChange={(e) => setSearch(e.target.value)}
+                    value={search}
                     placeholder="Search"
                     className="w-full rounded-[15px] border-[1px] border-[#cbd2dc]/50 bg-white py-3 pt-4 pl-12 pr-4 text-gray-500 shadow-md focus:bg-white"
                   />
                 </div>
               </form>
               <div className="flex h-full w-full justify-between gap-3 md:w-auto md:justify-start">
-                <button className="flex w-[135px] flex-row items-center justify-center rounded-2xl border-[1px] border-[#cbd2dc]/50 bg-white shadow-md">
+                <button className="flex w-[135px] flex-row items-center justify-center rounded-2xl border-[1px] border-[#cbd2dc]/50 bg-white shadow-md" onClick={() => disptach(filterProgramms({ name: search }))}>
                   <img className="w-[20px]" src={filterIcon} alt="..." />
                   <p className="mx-3 text-[16px] ">Filters</p>
                 </button>
-
                 <Menu>
                   <MenuHandler>
                     <button className="flex h-[57px] w-[135px] flex-row items-center justify-center rounded-2xl border-[1px] border-[#cbd2dc]/50 bg-white shadow-md">
@@ -125,10 +170,10 @@ export function Academic() {
                     </button>
                   </MenuHandler>
                   <MenuList>
-                    <MenuItem className="text-base font-medium text-[#280559] hover:bg-[#F2F4F8] hover:text-[#280559]">
+                    <MenuItem onClick={() => handleExportCsv()} className="text-base font-medium text-[#280559] hover:bg-[#F2F4F8] hover:text-[#280559]">
                       Export as .csv
                     </MenuItem>
-                    <MenuItem className="text-base font-medium text-[#280559] hover:bg-[#F2F4F8] hover:text-[#280559]">
+                    <MenuItem onClick={() => handleExportXlsx()} className="text-base font-medium text-[#280559] hover:bg-[#F2F4F8] hover:text-[#280559]">
                       Export as .xlsx
                     </MenuItem>
                   </MenuList>
@@ -254,6 +299,7 @@ export function Academic() {
                           id={`dropdownDefaultButton${ind}`}
                           data-dropdown-toggle={`dropdown${ind}`}
                           type="button"
+                          onClick={toggleDropdown(ele?.id)}
                         >
                           <svg
                             className="h-8 w-8 fill-current"
@@ -267,7 +313,11 @@ export function Academic() {
                         <div
                           // id="dropdown"
                           id={`dropdown${ind}`}
-                          className="z-10 hidden w-24 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700"
+                          // className="z-10 hidden w-24 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700"
+                          className={
+                            "z-10 w-24 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700" +
+                            (dropdownID === ele?.id ? "" : " hidden ")
+                          }
                         >
                           <ul
                             className="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -289,7 +339,10 @@ export function Academic() {
                             <li>
                               <button
                                 onClick={
-                                  () => setShowModal(true)
+                                  () => {
+                                    setShowModal(true);
+                                    setIdToDelete(ele?.id);
+                                  }
                                   // navigate(
                                   //   `/dashboard/Leadsmodule/${ele?.id}`
                                   // )

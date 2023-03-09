@@ -16,10 +16,13 @@ import Academic from "@/pages/universitymodule/Academic";
 import AddNewApplication from "@/pages/application/AddNewApplication";
 import Applications from "@/pages/application/Applications";
 import Currency from "@/pages/currency/currency";
+import Profile from '@/pages/settings/profiles';
 import Branch from "@/pages/settings/branch";
 import System from "@/pages/systembackup/system";
 import User from "@/pages/settings/user";
 import AddProperty from "@/pages/settings/AddProperty";
+import Properties from "@/pages/settings/properties";
+import SettingsManagement from "@/pages/settings/SettingsManagement";
 // importi
 // import Acad
 // import Academi
@@ -124,6 +127,7 @@ export function Dashboard() {
       >
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
           {routes.map(
             ({ layout, pages }) =>
               layout === "dashboard" &&
@@ -133,6 +137,7 @@ export function Dashboard() {
                   <Route path={path} element={element} />
                 ))
           )}
+          
           <Route
             path="/university_module/createUniversity"
             element={<CreateUniversity />}
@@ -150,7 +155,7 @@ export function Dashboard() {
           <Route path="/university_module/:id" element={<University />} />
           <Route path="/Leadsmodule/:action/:id" element={<CreateLead />} />
           <Route
-            path="/settingsManagement/property/:action/:id"
+            path="/settingsManagement/property/:action/:id/:title"
             element={<AddProperty />}
           />
           ,
@@ -166,10 +171,18 @@ export function Dashboard() {
             path="/settingsManagement/branch/:action/:id"
             element={<Branch />}
           />
+          <Route
+            path="/settingsManagement/:id"
+            element={<SettingsManagement />}
+          />
           {/* <Route path="/settingsManagement/branch" element={<Branch />} /> */}
           <Route
             path="/settingsManagement/user/:action/:id"
             element={<User />}
+          />
+          <Route
+            path="/settingsManagement/property"
+            element={<Properties />}
           />
           {/* CreateLead */}
           <Route

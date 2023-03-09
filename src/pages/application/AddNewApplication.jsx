@@ -22,6 +22,7 @@ import {
 } from "@/redux/actions/actions";
 import {
   listApplications,
+  listLeads,
   listInterestedPrograms,
   listQualificationTypes,
   listUniversities,
@@ -39,11 +40,13 @@ export function AddNewApplication() {
     universities,
     interestedPrograms,
     applicationModuleStatuss,
+    leads,
   } = useSelector((state) =>
     state?.universitiesReducer ? state?.universitiesReducer : {}
   );
   useEffect(() => {
     dispatch(listInterestedPrograms("limit=100000"));
+    dispatch(listLeads("limit=100000"));
     dispatch(listQualificationTypes("limit=100000"));
     dispatch(listUniversities("limit=100000"));
     dispatch(listProgramLevels("limit=100000"));
@@ -52,6 +55,7 @@ export function AddNewApplication() {
   // End
   const [openAddModal, setOpenAddModal] = useState(false);
   const [file, setFile] = useState(null);
+  const [documentFile, setDocumentFile] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState("");
   const params = useParams();
@@ -81,17 +85,18 @@ export function AddNewApplication() {
     "applications datta in create application module",
     applicationsData
   );
+  console.log("Leads datta in create application module", leads);
   // list all applications
   useEffect(() => {
     dispatch(listApplications());
 
     if (applicationsData?.success == true) {
       let { message } = applicationsData;
-      toast.success(message, {
-        position: toast.POSITION.TOP_RIGHT,
-        hideProgressBar: false,
-        autoClose: 3000,
-      });
+      // toast.success(message, {
+      //   position: toast.POSITION.TOP_RIGHT,
+      //   hideProgressBar: false,
+      //   autoClose: 3000,
+      // });
     }
   }, []);
 
@@ -102,7 +107,7 @@ export function AddNewApplication() {
   // console.log("applicantData ==>", applicantData);
 
   const handlefileChange = (file) => {
-    // console.log("file", file[0]);
+    console.log("file", file[0]);
     setFile(file);
     //
     let reader = new FileReader();
@@ -110,13 +115,18 @@ export function AddNewApplication() {
       let output = document.getElementById("university-logo");
       output.src = reader.result;
     };
-    // console.log("><><><><><><><><><><><><><><><><><><>", file);
+    console.log("><><><><><><><><><><><><><><><><><><>", file);
     if (file[0]) {
       reader.readAsDataURL(file[0]);
     }
   };
   const fileTypes = ["JPEG", "PNG", "GIF"];
 
+  const handleDocumentFileChange = (file) => {
+    console.log("file", file);
+    setDocumentFile(documentFile => [file, ...documentFile]);
+    console.log(documentFile.name)
+  };
   const initialValues = {
     fullName: "",
     email: "",
@@ -155,10 +165,14 @@ export function AddNewApplication() {
   const [appDetailValues, setAppDetailValue] = useState(secondInitialValues);
 
   useEffect(() => {
+    console.log("121212132",params);
     if (params.id) dispatch(viewApplication(params.id));
-    if (params.action == 1) {
+    if (params.action != 1) {
       setIsViewMode(true);
     } else {
+      setIsViewMode(false);
+    }
+    if(!params.action) {
       setIsViewMode(false);
     }
   }, [params.id]);
@@ -177,7 +191,7 @@ export function AddNewApplication() {
   const handleSubmit = async (e) => {
     console.log("submittin the main form");
     e.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
     const {
       fullName,
       email,
@@ -240,15 +254,14 @@ export function AddNewApplication() {
     formData.append("releaseLetter", releaseLetter);
     formData.append("status", status);
     formData.append("image", file ? file[0] : {});
-    formData.append("fileUpload", file ? file[0] : {});
+    formData.append("fileUpload", documentFile ? documentFile[0] : {});
 
     const config = {
       headers: { "content-type": "multipart/form-data" },
     };
 
     const apiCall = await axios[params.action == 2 ? "put" : "post"](
-      `${ENV.baseUrl}/applicants/${
-        params.action == 2 ? "edit" : "createApplicant"
+      `${ENV.baseUrl}/applicants/${params.action == 2 ? "edit" : "createApplicant"
       }`,
       formData,
       config
@@ -265,6 +278,7 @@ export function AddNewApplication() {
         autoClose: 3000,
       });
     }
+    navigate(-1)
   };
   const handleFullNameChange = (e) => {
     const { name, value } = e.target;
@@ -277,25 +291,35 @@ export function AddNewApplication() {
     // Anasite - Edits: showing applicant info.
     let newFormValues = { ...formValues, [name]: value };
     let newAppDetailValues = { ...appDetailValues };
-    fetch(`${ENV.baseUrl}/applicants/get/${value}`)
+    fetch(`${ENV.baseUrl}/lead/get/${value}`)
       .then((res) => res.json())
       .then((data) => {
-        const { applicant } = data;
+        const { lead } = data;
+        console.log("dataaa", data);
         Object.keys(newFormValues).forEach((key) => {
           newFormValues[key] =
-            applicant[key] !== undefined && applicant[key] !== null
-              ? applicant[key]
-              : "";
+            lead[key] !== undefined && lead[key] !== null ? lead[key] : "";
         });
-        setFormValues(newFormValues);
+        setFormValues({
+          ...newFormValues,
+          fullName: lead["name"],
+          phoneNumber: lead["phoneNo"],
+        });
         Object.keys(newAppDetailValues).forEach((key) => {
+          console.log("newAppDetailValues KEY", key);
           newAppDetailValues[key] =
-            (applicant["programmeDetails"][key] !== undefined) &
-            (applicant["programmeDetails"][key] !== null)
-              ? applicant["programmeDetails"][key]
+            (lead["programmeDetails"][key] !== undefined) &
+            (lead["programmeDetails"][key] !== null)
+              ? lead["programmeDetails"][key]
               : "";
+         // ** See This   (applicant["programmeDetails"][key] !== undefined) &
+         //     (applicant["programmeDetails"][key] !== null)
+           //   ? applicant["programmeDetails"][key]
+
+
         });
-        setAppDetailValue(newAppDetailValues);
+
+        setAppDetailValue({ ...newAppDetailValues, leadID: lead["id"] });
       })
       .catch((err) => {
         //
@@ -323,16 +347,16 @@ export function AddNewApplication() {
             {params.action == 1
               ? "View Application"
               : params.action == 2
-              ? "Edit Application"
-              : "Create Application"}
+                ? "Edit Application"
+                : "Create Application"}
           </p>
           <p className=" font text-base text-[#9898A3]">
             {/* Create or edit application */}
             {params.action == 1
               ? "View Application"
               : params.action == 2
-              ? "Edit Application"
-              : "Create Application"}
+                ? "Edit Application"
+                : "Create Application"}
           </p>
         </div>
         <form onSubmit={handleSubmit}>
@@ -356,13 +380,13 @@ export function AddNewApplication() {
                   data-index={formValues?.index}
                 >
                   <option value="">Select Option</option>
-                  {applicantData?.data?.faqs?.map((ele, ind) => (
+                  {leads?.data?.faqs?.map((ele, ind) => (
                     <option
-                      key={ele?.fullName + ind}
+                      key={ele?.name + ind + ele?.id}
                       value={ele?.id}
                       data-index={ind}
                     >
-                      {ele?.fullName}
+                      {ele?.name}
                     </option>
                   ))}
                 </select>
@@ -389,7 +413,7 @@ export function AddNewApplication() {
                 <input
                   type="tel"
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
-                  placeholder="+91 123 456 789"
+                  placeholder="+60123456789"
                   // pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                   required
                   name="phoneNumber"
@@ -439,12 +463,259 @@ export function AddNewApplication() {
                   disabled={isViewMode}
                   onChange={handleChange}
                 >
-                  <option value={""}>Select Country</option>
-                  <option value={"pakistan"}>pakistan</option>
-                  <option value={"india"}>india</option>
-                  <option value={formValues?.country || ""}>
-                    {formValues?.country || ""}
-                  </option>
+                   <option>Select Country</option>
+                <option value="Afghanistan">Afghanistan</option>
+    <option value="Aland Islands">Åland Islands</option>
+    <option value="Albania">Albania</option>
+    <option value="Algeria">Algeria</option>
+    <option value="American Samoa">American Samoa</option>
+    <option value="Andorra">Andorra</option>
+    <option value="Angola">Angola</option>
+    <option value="Anguilla">Anguilla</option>
+    <option value="Antarctica">Antarctica</option>
+    <option value="Antigua and Barbuda">Antigua & Barbuda</option>
+    <option value="Argentina">Argentina</option>
+    <option value="Armenia">Armenia</option>
+    <option value="Aruba">Aruba</option>
+    <option value="Australia">Australia</option>
+    <option value="Austria">Austria</option>
+    <option value="Azerbaijan">Azerbaijan</option>
+    <option value="Bahamas">Bahamas</option>
+    <option value="Bahrain">Bahrain</option>
+    <option value="Bangladesh">Bangladesh</option>
+    <option value="Barbados">Barbados</option>
+    <option value="Belarus">Belarus</option>
+    <option value="Belgium">Belgium</option>
+    <option value="Belize">Belize</option>
+    <option value="Benin">Benin</option>
+    <option value="Bermuda">Bermuda</option>
+    <option value="Bhutan">Bhutan</option>
+    <option value="Bolivia">Bolivia</option>
+    <option value="Bonaire, Sint Eustatius and Saba">Caribbean Netherlands</option>
+    <option value="Bosnia and Herzegovina">Bosnia & Herzegovina</option>
+    <option value="Botswana">Botswana</option>
+    <option value="Bouvet Island">Bouvet Island</option>
+    <option value="Brazil">Brazil</option>
+    <option value="British Indian Ocean Territory">British Indian Ocean Territory</option>
+    <option value="Brunei Darussalam">Brunei</option>
+    <option value="Bulgaria">Bulgaria</option>
+    <option value="Burkina Faso">Burkina Faso</option>
+    <option value="Burundi">Burundi</option>
+    <option value="Cambodia">Cambodia</option>
+    <option value="Cameroon">Cameroon</option>
+    <option value="Canada">Canada</option>
+    <option value="Cape Verde">Cape Verde</option>
+    <option value="Cayman Islands">Cayman Islands</option>
+    <option value="Central African Republic">Central African Republic</option>
+    <option value="Chad">Chad</option>
+    <option value="Chile">Chile</option>
+    <option value="China">China</option>
+    <option value="Christmas Island">Christmas Island</option>
+    <option value="Cocos (Keeling) Islands">Cocos (Keeling) Islands</option>
+    <option value="Colombia">Colombia</option>
+    <option value="Comoros">Comoros</option>
+    <option value="Congo">Congo - Brazzaville</option>
+    <option value="Congo, Democratic Republic of the Congo">Congo - Kinshasa</option>
+    <option value="Cook Islands">Cook Islands</option>
+    <option value="Costa Rica">Costa Rica</option>
+    <option value="Cote D'Ivoire">Côte d’Ivoire</option>
+    <option value="Croatia">Croatia</option>
+    <option value="Cuba">Cuba</option>
+    <option value="Curacao">Curaçao</option>
+    <option value="Cyprus">Cyprus</option>
+    <option value="Czech Republic">Czechia</option>
+    <option value="Denmark">Denmark</option>
+    <option value="Djibouti">Djibouti</option>
+    <option value="Dominica">Dominica</option>
+    <option value="Dominican Republic">Dominican Republic</option>
+    <option value="Ecuador">Ecuador</option>
+    <option value="Egypt">Egypt</option>
+    <option value="El Salvador">El Salvador</option>
+    <option value="Equatorial Guinea">Equatorial Guinea</option>
+    <option value="Eritrea">Eritrea</option>
+    <option value="Estonia">Estonia</option>
+    <option value="Ethiopia">Ethiopia</option>
+    <option value="Falkland Islands (Malvinas)">Falkland Islands (Islas Malvinas)</option>
+    <option value="Faroe Islands">Faroe Islands</option>
+    <option value="Fiji">Fiji</option>
+    <option value="Finland">Finland</option>
+    <option value="France">France</option>
+    <option value="French Guiana">French Guiana</option>
+    <option value="French Polynesia">French Polynesia</option>
+    <option value="French Southern Territories">French Southern Territories</option>
+    <option value="Gabon">Gabon</option>
+    <option value="Gambia">Gambia</option>
+    <option value="Georgia">Georgia</option>
+    <option value="Germany">Germany</option>
+    <option value="Ghana">Ghana</option>
+    <option value="Gibraltar">Gibraltar</option>
+    <option value="Greece">Greece</option>
+    <option value="Greenland">Greenland</option>
+    <option value="Grenada">Grenada</option>
+    <option value="Guadeloupe">Guadeloupe</option>
+    <option value="Guam">Guam</option>
+    <option value="Guatemala">Guatemala</option>
+    <option value="Guernsey">Guernsey</option>
+    <option value="Guinea">Guinea</option>
+    <option value="Guinea-Bissau">Guinea-Bissau</option>
+    <option value="Guyana">Guyana</option>
+    <option value="Haiti">Haiti</option>
+    <option value="Heard Island and Mcdonald Islands">Heard & McDonald Islands</option>
+    <option value="Holy See (Vatican City State)">Vatican City</option>
+    <option value="Honduras">Honduras</option>
+    <option value="Hong Kong">Hong Kong</option>
+    <option value="Hungary">Hungary</option>
+    <option value="Iceland">Iceland</option>
+    <option value="India">India</option>
+    <option value="Indonesia">Indonesia</option>
+    <option value="Iran, Islamic Republic of">Iran</option>
+    <option value="Iraq">Iraq</option>
+    <option value="Ireland">Ireland</option>
+    <option value="Isle of Man">Isle of Man</option>
+    <option value="Israel">Israel</option>
+    <option value="Italy">Italy</option>
+    <option value="Jamaica">Jamaica</option>
+    <option value="Japan">Japan</option>
+    <option value="Jersey">Jersey</option>
+    <option value="Jordan">Jordan</option>
+    <option value="Kazakhstan">Kazakhstan</option>
+    <option value="Kenya">Kenya</option>
+    <option value="Kiribati">Kiribati</option>
+    <option value="Korea, Democratic People's Republic of">North Korea</option>
+    <option value="Korea, Republic of">South Korea</option>
+    <option value="Kosovo">Kosovo</option>
+    <option value="Kuwait">Kuwait</option>
+    <option value="Kyrgyzstan">Kyrgyzstan</option>
+    <option value="Lao People's Democratic Republic">Laos</option>
+    <option value="Latvia">Latvia</option>
+    <option value="Lebanon">Lebanon</option>
+    <option value="Lesotho">Lesotho</option>
+    <option value="Liberia">Liberia</option>
+    <option value="Libyan Arab Jamahiriya">Libya</option>
+    <option value="Liechtenstein">Liechtenstein</option>
+    <option value="Lithuania">Lithuania</option>
+    <option value="Luxembourg">Luxembourg</option>
+    <option value="Macao">Macao</option>
+    <option value="Macedonia, the Former Yugoslav Republic of">North Macedonia</option>
+    <option value="Madagascar">Madagascar</option>
+    <option value="Malawi">Malawi</option>
+    <option value="Malaysia" selected>Malaysia</option>
+    <option value="Maldives">Maldives</option>
+    <option value="Mali">Mali</option>
+    <option value="Malta">Malta</option>
+    <option value="Marshall Islands">Marshall Islands</option>
+    <option value="Martinique">Martinique</option>
+    <option value="Mauritania">Mauritania</option>
+    <option value="Mauritius">Mauritius</option>
+    <option value="Mayotte">Mayotte</option>
+    <option value="Mexico">Mexico</option>
+    <option value="Micronesia, Federated States of">Micronesia</option>
+    <option value="Moldova, Republic of">Moldova</option>
+    <option value="Monaco">Monaco</option>
+    <option value="Mongolia">Mongolia</option>
+    <option value="Montenegro">Montenegro</option>
+    <option value="Montserrat">Montserrat</option>
+    <option value="Morocco">Morocco</option>
+    <option value="Mozambique">Mozambique</option>
+    <option value="Myanmar">Myanmar (Burma)</option>
+    <option value="Namibia">Namibia</option>
+    <option value="Nauru">Nauru</option>
+    <option value="Nepal">Nepal</option>
+    <option value="Netherlands">Netherlands</option>
+    <option value="Netherlands Antilles">Curaçao</option>
+    <option value="New Caledonia">New Caledonia</option>
+    <option value="New Zealand">New Zealand</option>
+    <option value="Nicaragua">Nicaragua</option>
+    <option value="Niger">Niger</option>
+    <option value="Nigeria">Nigeria</option>
+    <option value="Niue">Niue</option>
+    <option value="Norfolk Island">Norfolk Island</option>
+    <option value="Northern Mariana Islands">Northern Mariana Islands</option>
+    <option value="Norway">Norway</option>
+    <option value="Oman">Oman</option>
+    <option value="Pakistan">Pakistan</option>
+    <option value="Palau">Palau</option>
+    <option value="Palestinian Territory, Occupied">Palestine</option>
+    <option value="Panama">Panama</option>
+    <option value="Papua New Guinea">Papua New Guinea</option>
+    <option value="Paraguay">Paraguay</option>
+    <option value="Peru">Peru</option>
+    <option value="Philippines">Philippines</option>
+    <option value="Pitcairn">Pitcairn Islands</option>
+    <option value="Poland">Poland</option>
+    <option value="Portugal">Portugal</option>
+    <option value="Puerto Rico">Puerto Rico</option>
+    <option value="Qatar">Qatar</option>
+    <option value="Reunion">Réunion</option>
+    <option value="Romania">Romania</option>
+    <option value="Russian Federation">Russia</option>
+    <option value="Rwanda">Rwanda</option>
+    <option value="Saint Barthelemy">St. Barthélemy</option>
+    <option value="Saint Helena">St. Helena</option>
+    <option value="Saint Kitts and Nevis">St. Kitts & Nevis</option>
+    <option value="Saint Lucia">St. Lucia</option>
+    <option value="Saint Martin">St. Martin</option>
+    <option value="Saint Pierre and Miquelon">St. Pierre & Miquelon</option>
+    <option value="Saint Vincent and the Grenadines">St. Vincent & Grenadines</option>
+    <option value="Samoa">Samoa</option>
+    <option value="San Marino">San Marino</option>
+    <option value="Sao Tome and Principe">São Tomé & Príncipe</option>
+    <option value="Saudi Arabia">Saudi Arabia</option>
+    <option value="Senegal">Senegal</option>
+    <option value="Serbia">Serbia</option>
+    <option value="Serbia and Montenegro">Serbia</option>
+    <option value="Seychelles">Seychelles</option>
+    <option value="Sierra Leone">Sierra Leone</option>
+    <option value="Singapore">Singapore</option>
+    <option value="Sint Maarten">Sint Maarten</option>
+    <option value="Slovakia">Slovakia</option>
+    <option value="Slovenia">Slovenia</option>
+    <option value="Solomon Islands">Solomon Islands</option>
+    <option value="Somalia">Somalia</option>
+    <option value="South Africa">South Africa</option>
+    <option value="South Georgia and the South Sandwich Islands">South Georgia & South Sandwich Islands</option>
+    <option value="South Sudan">South Sudan</option>
+    <option value="Spain">Spain</option>
+    <option value="Sri Lanka">Sri Lanka</option>
+    <option value="Sudan">Sudan</option>
+    <option value="Suriname">Suriname</option>
+    <option value="Svalbard and Jan Mayen">Svalbard & Jan Mayen</option>
+    <option value="Swaziland">Eswatini</option>
+    <option value="Sweden">Sweden</option>
+    <option value="Switzerland">Switzerland</option>
+    <option value="Syrian Arab Republic">Syria</option>
+    <option value="Taiwan, Province of China">Taiwan</option>
+    <option value="Tajikistan">Tajikistan</option>
+    <option value="Tanzania, United Republic of">Tanzania</option>
+    <option value="Thailand">Thailand</option>
+    <option value="Timor-Leste">Timor-Leste</option>
+    <option value="Togo">Togo</option>
+    <option value="Tokelau">Tokelau</option>
+    <option value="Tonga">Tonga</option>
+    <option value="Trinidad and Tobago">Trinidad & Tobago</option>
+    <option value="Tunisia">Tunisia</option>
+    <option value="Turkey">Turkey</option>
+    <option value="Turkmenistan">Turkmenistan</option>
+    <option value="Turks and Caicos Islands">Turks & Caicos Islands</option>
+    <option value="Tuvalu">Tuvalu</option>
+    <option value="Uganda">Uganda</option>
+    <option value="Ukraine">Ukraine</option>
+    <option value="United Arab Emirates">United Arab Emirates</option>
+    <option value="United Kingdom">United Kingdom</option>
+    <option value="United States">United States</option>
+    <option value="United States Minor Outlying Islands">U.S. Outlying Islands</option>
+    <option value="Uruguay">Uruguay</option>
+    <option value="Uzbekistan">Uzbekistan</option>
+    <option value="Vanuatu">Vanuatu</option>
+    <option value="Venezuela">Venezuela</option>
+    <option value="Viet Nam">Vietnam</option>
+    <option value="Virgin Islands, British">British Virgin Islands</option>
+    <option value="Virgin Islands, U.s.">U.S. Virgin Islands</option>
+    <option value="Wallis and Futuna">Wallis & Futuna</option>
+    <option value="Western Sahara">Western Sahara</option>
+    <option value="Yemen">Yemen</option>
+    <option value="Zambia">Zambia</option>
+    <option value="Zimbabwe">Zimbabwe</option>
                 </select>
               </div>
             </div>
@@ -476,14 +747,14 @@ export function AddNewApplication() {
                     multiple={true}
                     handleChange={handlefileChange}
                     name="file"
-                    // disabled={isViewMode }
-                    // style={{border:"2px solid red"}}
-                    // types={fileTypes}
+                  // disabled={isViewMode }
+                  // style={{border:"2px solid red"}}
+                  // types={fileTypes}
                   >
                     <button className="w-[200px]">
                       <p
                         className="rounded-2xl border-[1px] border-[#cbd2dc]/50 py-3 text-sm font-semibold text-[#333333] shadow-md"
-                        // style={{ border: "none" }}
+                      // style={{ border: "none" }}
                       >
                         Upload
                       </p>
@@ -925,46 +1196,39 @@ export function AddNewApplication() {
                 Upload Document
               </p>
               <div className="grid grid-cols-1 gap-[20px] xl:grid-cols-2">
-                <img
-                  className="h-full w-auto rounded-lg object-cover"
-                  src={upload}
-                  alt="..."
+                <FileUploader
+                  fileOrFiles
+                  multiple={true}
+                  handleChange={handleDocumentFileChange}
+                  name="documentFile"
+                  types={fileTypes}
+                >
+                  <img
+                    className="h-full w-auto rounded-lg object-cover"
+                    src={upload}
+                    alt="..."
                   // src={
                   //   preview ||
                   //   (formValues?.image &&
                   //     `${ENV.imageUrl}${formValues?.image}`) ||
                   //   universityLogo
                   // }
-                />
+                  />
+                </FileUploader>
 
                 <div className="w-full items-center">
-                  <div className=" border-b-4 border-deep-purple-900">
+                  <div className="">
                     <p className=" text-sm font-semibold text-[#92929D]">
-                      Uploading - 3/3 files
+                      Uploading - {documentFile.length}/3 files
                     </p>
-                    <div className=" relative my-7 flex flex-row items-center justify-between rounded-lg p-3 outline outline-1 outline-[#E3E3E3]">
-                      <p className="text-sm text-black ">your-file-here.PDF</p>
-                      <button>
-                        <img className="flex justify-end" src={esc} alt="..." />
-                      </button>
-                    </div>
+
                   </div>
                   <div className="my-5">
-                    {isViewMode ? (
-                      ""
-                    ) : (
-                      <p className=" text-sm font-semibold text-[#92929D]">
-                        Uploading{" "}
-                      </p>
-                    )}
-                    <div className="my-7 flex flex-row items-center justify-between rounded-lg p-3 outline outline-1 outline-[#11AF22]">
-                      <p className="text-xs text-black ">document-name.PDF</p>
-                    </div>
-                    <div className="my-7 flex flex-row items-center justify-between rounded-lg p-3 outline outline-1 outline-[#11AF22]">
-                      <p className="text-xs text-black ">
-                        image-name-goes-here.png
-                      </p>
-                    </div>
+                    {documentFile.length > 0 ? (documentFile.map(files => (
+                      <div className="my-7 flex flex-row items-center justify-between rounded-lg p-3 outline outline-1 outline-[#11AF22]">
+                        <p className="text-xs text-black ">{files[0].name}</p>
+                      </div>
+                    ))) : (<p>Not Document Uploaded.</p>)}
                   </div>
                   {isViewMode ? (
                     ""
@@ -975,11 +1239,10 @@ export function AddNewApplication() {
                     >
                       <div className="flex flex-row items-center justify-center">
                         <img src={up} alt="..." />
-
                         <FileUploader
                           multiple={true}
-                          handleChange={handlefileChange}
-                          name="file"
+                          handleChange={handleDocumentFileChange}
+                          name="documentFile"
                           types={fileTypes}
                         >
                           <p className="p-1 px-[11px] text-base font-medium normal-case text-white">

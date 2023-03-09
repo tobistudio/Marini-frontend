@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   Menu,
@@ -13,13 +13,79 @@ import filterIcon from "../../../public/img/filterIcon.svg";
 import print from "../../../public/img/print.svg";
 import saveIcon from "../../../public/img/saveIcon.svg";
 import Sales_recording_data from "@/data/Sales-recording-data";
-import AddField from "../../helpers/AddField";
-import { NavLink } from "react-router-dom";
-import dropdown from "../../../public/img/dropdown.svg";
+import AddField from "@/helpers/AddField";
+// import dropdown from "../../../public/img/dropdown.svg";
+// Anasite - Edits
+import { NavLink, useParams } from "react-router-dom";
+import { listSales } from "@/redux/actions/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { ENV } from "@/config";
+import axios from "axios";
+import { toast } from "react-toastify";
+import Paginate from "@/paginate";
+//
 
 export function Sales() {
   /*{ toAdd, setToAdd,  open,close,  setOpenAddModal,  formsData,  setFormsData,  handleFormsDataChange,  section,} */
   // const [openModal, setOpenModal] = useState(false);
+
+  // Anasite - Edits
+  const dispatch = useDispatch();
+  const params = useParams();
+  const [action, setAction] = useState(0); // 0: create, 1: edit
+  const { sales } = useSelector((state) => state?.universitiesReducer);
+  console.log("sales from accounting ====>", sales);
+  useEffect(() => {
+    dispatch(listSales());
+  }, []);
+  const handleSubmit = async () => {
+    setSalesState(true);
+    // console.log("handle submit", formValues);
+    const { name, description, amount, date } = allFormsData;
+    let formData = new FormData();
+    formData.append("name", name);
+    formData.append("amount", amount);
+    formData.append("description", description);
+    formData.append("date", date);
+
+    if (params.id) formData.append("id", params.id);
+
+    const config = {
+      headers: { "content-type": "multipart/form-data" },
+    };
+
+    const apiCall = await axios[params.action == 2 ? "put" : "post"](
+      `${ENV.baseUrl}/sales/${params.action == 2 ? "edit" : "create"}`,
+      formData,
+      config
+    );
+    dispatch(listSales());
+
+    // setIsLoading(false);
+
+    if (apiCall.data?.success) {
+      let { message } = apiCall.data;
+      toast.success(message, {
+        position: toast.POSITION.TOP_RIGHT,
+        hideProgressBar: false,
+        autoClose: 3000,
+        // key: "_" + Math.random() * 1000000 + "_" + Math.random() * 1000000,
+      });
+    }
+    // navigate("university")
+  };
+  // END
+  // Anasite - Edits: for view on click
+  const [idToView, setIdToView] = useState("");
+  const viewOnClick = ({ ID, name, description, amount, date }) => {
+    return () => {
+      setAction(1);
+      setSalesState(false);
+      setAllFormsData({ name, description, amount, date });
+      setIdToView(ID);
+    };
+  };
+  // END
   const [salesState, setSalesState] = useState(true);
   const [openSalesAddModal, setOpenSalesAddModal] = useState(false);
   const [SalesNewFields, setSalesNewFields] = useState([]);
@@ -147,20 +213,23 @@ export function Sales() {
                   </tr>
                 </thead>
                 <tbody className="border-none">
-                  {Sales_recording_data.map(
+                  {sales?.data?.faqs.map(
                     ({
+                      ID,
                       date,
                       name,
                       description,
-                      salesAmount,
+                      amount: salesAmount,
                       salesAmountColor,
                     }) => (
-                      <tr key={name}>
+                      <tr key={name + ID + "lkj" + description}>
                         <td className="whitespace-nowrap py-3 pr-6">
                           <Checkbox />
                         </td>
                         <td className="whitespace-nowrap py-4 text-lg font-normal text-[#333]">
-                          {date}
+                          {new Date(date).toLocaleDateString(undefined, {
+                            dateStyle: "medium",
+                          })}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-lg font-medium text-[#333]">
                           {name}
@@ -169,8 +238,8 @@ export function Sales() {
                           {description}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-lg font-medium text-[#333]">
-                          <span style={{ color: salesAmountColor }}>
-                            {salesAmount}
+                          <span style={{ color: salesAmountColor || "#333" }}>
+                            ${salesAmount}
                           </span>
                         </td>
                         <td>
@@ -178,6 +247,13 @@ export function Sales() {
                             variant="outlined"
                             className="mx-auto h-[28px] w-[78px] rounded-[15px] border border-[#280559] p-0 text-[#280559] ease-in hover:bg-[#280559] hover:text-white hover:opacity-100"
                             fullWidth
+                            onClick={viewOnClick({
+                              date,
+                              ID,
+                              amount: salesAmount,
+                              name,
+                              description,
+                            })}
                           >
                             <p className="text-center text-xs font-medium capitalize">
                               view
@@ -240,6 +316,9 @@ export function Sales() {
               </button>
             </div>
           </div> */}
+            <Paginate pagination={sales?.data?.pagination} method={listSales}>
+              List Sales
+            </Paginate>
           </div>
         </div>
       </div>
@@ -253,7 +332,7 @@ export function Sales() {
       >
         <div className="my-5">
           <p className=" mb-2 text-4xl font-semibold text-[#280559]">
-            Create Sales
+            {action === 1 ? "Edit" : "Create"} Sales
           </p>
           <p className=" font text-base text-[#9898A3]">
             Create or edit program
@@ -272,7 +351,10 @@ export function Sales() {
                 <input
                   type="text"
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
+                  name="name"
+                  onChange={handleAllFormsDataChange}
                   placeholder="Sale Name"
+                  value={allFormsData.name || ""}
                   required
                 />
               </div>
@@ -284,6 +366,9 @@ export function Sales() {
                   type="text"
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Small Description"
+                  name="description"
+                  onChange={handleAllFormsDataChange}
+                  value={allFormsData.description || ""}
                   required
                 />
               </div>
@@ -299,6 +384,9 @@ export function Sales() {
                     type="text"
                     className="block h-full w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 pl-16 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                     placeholder="0.00"
+                    name="amount"
+                    onChange={handleAllFormsDataChange}
+                    value={allFormsData.amount || ""}
                     required
                   />
                 </div>
@@ -311,6 +399,9 @@ export function Sales() {
                   type="date"
                   className="block w-full rounded-xl border-2 border-[#CBD2DC80] bg-white p-2.5 text-gray-900 placeholder:text-[#BEBFC3] focus:border-blue-500 focus:ring-blue-500"
                   placeholder="DD/MM/YYYY"
+                  name="date"
+                  onChange={handleAllFormsDataChange}
+                  value={allFormsData.date || ""}
                   required
                 />
               </div>
@@ -327,29 +418,44 @@ export function Sales() {
                 </button>
                 <AddField open={openModal} close={() => setOpenModal(false)} />
               </div> */}
-              <AddField
-                open={openSalesAddModal}
-                close={() => setOpenSalesAddModal(false)}
-                toAdd={SalesNewFields}
-                setOpenAddModal={setOpenSalesAddModal}
-                setToAdd={setSalesNewFields}
-                formsData={allFormsData}
-                setFormsData={setAllFormsData}
-                handleFormsDataChange={handleAllFormsDataChange}
-                section={"Accounting-Sales"}
-              />
+              {salesState ? (
+                ""
+              ) : (
+                <AddField
+                  open={openSalesAddModal}
+                  close={() => setOpenSalesAddModal(false)}
+                  toAdd={SalesNewFields}
+                  setOpenAddModal={setOpenSalesAddModal}
+                  setToAdd={setSalesNewFields}
+                  formsData={allFormsData}
+                  setFormsData={setAllFormsData}
+                  handleFormsDataChange={handleAllFormsDataChange}
+                  section={"Accounting-Sales"}
+                />
+              )}
             </div>
           </form>
         </div>
         <NavLink>
           <Button
-            onClick={() => setSalesState(true)}
+            onClick={handleSubmit}
             className="rounded-[15px]  bg-[#280559]"
           >
             <div className="flex flex-row items-center justify-center px-[33px] py-[10px]">
               <img src={saveIcon} alt="..." />
               <p className="px-[11px] text-base font-medium normal-case text-white ">
                 Save Changes
+              </p>
+            </div>
+          </Button>
+          {"   "}
+          <Button
+            onClick={() => setSalesState(true)}
+            className="rounded-[15px]  bg-[#280559]"
+          >
+            <div className="flex flex-row items-center justify-center px-[33px] py-[10px]">
+              <p className="px-[11px] text-base font-medium normal-case text-white ">
+                Back
               </p>
             </div>
           </Button>

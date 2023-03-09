@@ -14,10 +14,35 @@ import down from "../../../public/img/downIcon.svg";
 import Commission_voice_data from "@/data/Commission-voice-data";
 import print from "../../../public/img/print.svg";
 import dropdown from "../../../public/img/dropdown.svg";
+import { read, utils, writeFile } from 'xlsx';
 import useWindowWidth from "@/hooks/useWindowWidth";
 
 export function General() {
   const windowWidth = useWindowWidth();
+
+  const handleExportXlsx = () => {
+    const headings = [[
+      ...Object.keys(Commission_voice_data[0])
+    ]];
+    const wb = utils.book_new();
+    const ws = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, headings);
+    utils.sheet_add_json(ws, Commission_voice_data, { origin: 'A2', skipHeader: true });
+    utils.book_append_sheet(wb, ws, 'Report');
+    writeFile(wb, 'Movie Report.xlsx');
+  }
+
+  const handleExportCsv = () => {
+    const headings = [[
+      ...Object.keys(Commission_voice_data[0])
+    ]];
+    const wb = utils.book_new();
+    const ws = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, headings);
+    utils.sheet_add_json(ws, Commission_voice_data, { origin: 'A2', skipHeader: true });
+    utils.book_append_sheet(wb, ws, 'Report');
+    writeFile(wb, 'Movie Report.csv');
+  }
 
   return (
     <div className="mt-[30px] w-full bg-[#E8E9EB] font-display">
@@ -74,10 +99,10 @@ export function General() {
                   </button>
                 </MenuHandler>
                 <MenuList>
-                  <MenuItem className="text-base font-medium text-[#280559] hover:bg-[#F2F4F8] hover:text-[#280559]">
+                  <MenuItem onClick={() => handleExportCsv()} className="text-base font-medium text-[#280559] hover:bg-[#F2F4F8] hover:text-[#280559]">
                     Export as .csv
                   </MenuItem>
-                  <MenuItem className="text-base font-medium text-[#280559] hover:bg-[#F2F4F8] hover:text-[#280559]">
+                  <MenuItem onClick={() => handleExportXlsx()} className="text-base font-medium text-[#280559] hover:bg-[#F2F4F8] hover:text-[#280559]">
                     Export as .xlsx
                   </MenuItem>
                 </MenuList>
@@ -89,9 +114,8 @@ export function General() {
             </div>
           </div>
           <div
-            className={`flex flex-col ${
-              windowWidth ? "overflow-x-hidden" : "overflow-x-auto"
-            }`}
+            className={`flex flex-col ${windowWidth ? "overflow-x-hidden" : "overflow-x-auto"
+              }`}
           >
             <table className=" w-full border-none">
               <thead>
