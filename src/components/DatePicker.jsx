@@ -1,6 +1,3 @@
-// import Datepicker from "tailwind-datepicker-react";
-
-
 const options = {
 	autoHide: true,
 	todayBtn: false,
@@ -14,9 +11,8 @@ const options = {
 
 const DatePicker = ({ops, handleChange, show, setShow}) => {
     return (
-		<h2>Zaman</h2>
+		<h2>Zamanon</h2>
 	)
-	// <Datepicker options={{...options, ...ops}} onChange={handleChange} show={show} setShow={setShow} />;
 }
 
 export default DatePicker;
