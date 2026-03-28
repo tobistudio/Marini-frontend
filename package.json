@@ -33,7 +33,7 @@
     "react-uploader": "^3.3.0",
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
-    "tw-elements": "^1.0.0-alpha13",
+    "tw-elements": "^2.0.0",
     "use-gauge": "^0.5.0",
     "uuidv4": "^6.2.13"
   },
